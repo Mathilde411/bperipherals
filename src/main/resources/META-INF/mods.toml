@@ -1,0 +1,31 @@
+modLoader="javafml"
+loaderVersion="[31,)"
+
+#issueTrackerURL="http://my.issue.tracker/"
+
+[[mods]]
+modId="bperipherals"
+version="0.3"
+displayName="BPeripherals"
+#updateJSONURL="http://myurl.me/"
+#displayURL="http://example.com/"
+#logoFile="examplemod.png"
+#credits="Thanks for this example mod goes to Java"
+#authors="Love, Cheese and small house plants"
+description='''
+This is a mod that adds peripherals to CC:Tweaked.
+'''
+
+[[dependencies.bperipherals]]
+    modId="forge"
+    mandatory=true
+    versionRange="[31,)"
+    ordering="NONE"
+    side="BOTH"
+
+[[dependencies.bperipherals]]
+    modId="minecraft"
+    mandatory=true
+    versionRange="[1.15.2]"
+    ordering="NONE"
+    side="BOTH"

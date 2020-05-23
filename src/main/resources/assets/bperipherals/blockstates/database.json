@@ -1,0 +1,8 @@
+{
+	"variants": {
+		"facing=north": { "model": "bperipherals:database" },
+        "facing=south": { "model": "bperipherals:database", "y": 180 },
+        "facing=west": { "model": "bperipherals:database", "y": 270 },
+        "facing=east": { "model": "bperipherals:database", "y": 90 }
+	}
+}

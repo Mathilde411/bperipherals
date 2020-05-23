@@ -1,0 +1,8 @@
+{
+	"variants": {
+		"facing=north": { "model": "bperipherals:rf_meter" },
+        "facing=south": { "model": "bperipherals:rf_meter", "y": 180 },
+        "facing=west": { "model": "bperipherals:rf_meter", "y": 270 },
+        "facing=east": { "model": "bperipherals:rf_meter", "y": 90 }
+	}
+}
