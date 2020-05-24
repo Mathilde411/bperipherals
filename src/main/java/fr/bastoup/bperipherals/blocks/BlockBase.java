@@ -1,17 +1,15 @@
 package fr.bastoup.bperipherals.blocks;
 
-import fr.bastoup.bperipherals.BPeripherals;
 import fr.bastoup.bperipherals.init.ModBlocks;
 import fr.bastoup.bperipherals.init.ModItems;
 import fr.bastoup.bperipherals.util.BPeripheralsProperties;
-import fr.bastoup.bperipherals.util.IHasModel;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
 
-public class BlockBase extends Block implements IHasModel{
+public class BlockBase extends Block {
 
 	public BlockBase(String name, Material material) {
 		super(Properties.create(material));
@@ -27,11 +25,6 @@ public class BlockBase extends Block implements IHasModel{
 
 		ModBlocks.BLOCKS.add(this);
 		ModItems.ITEMS.add(new BlockItem(this, new Item.Properties()).setRegistryName(this.getRegistryName()));
-	}
-
-	@Override
-	public void registerModels() {
-
 	}
 
 }

@@ -1,8 +1,8 @@
 {
 	"variants": {
-		"facing=north": { "model": "bperipherals:database" },
-        "facing=south": { "model": "bperipherals:database", "y": 180 },
-        "facing=west": { "model": "bperipherals:database", "y": 270 },
-        "facing=east": { "model": "bperipherals:database", "y": 90 }
+		"facing=north": { "model": "bperipherals:block/database" },
+        "facing=south": { "model": "bperipherals:block/database", "y": 180 },
+        "facing=west": { "model": "bperipherals:block/database", "y": 270 },
+        "facing=east": { "model": "bperipherals:block/database", "y": 90 }
 	}
 }
