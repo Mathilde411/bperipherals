@@ -13,7 +13,7 @@ displayName="BPeripherals"
 #credits="Thanks for this example mod goes to Java"
 #authors="Love, Cheese and small house plants"
 description='''
-This is a mod that adds peripherals to CC:Tweaked.
+This is a mod that adds peripherals to ComputerCraft.
 '''
 
 [[dependencies.bperipherals]]
@@ -27,5 +27,12 @@ This is a mod that adds peripherals to CC:Tweaked.
     modId="minecraft"
     mandatory=true
     versionRange="[1.15.2]"
+    ordering="NONE"
+    side="BOTH"
+
+[[dependencies.bperipherals]]
+    modId="computercraft"
+    mandatory=true
+    versionRange="[1.88,)"
     ordering="NONE"
     side="BOTH"

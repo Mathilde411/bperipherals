@@ -1,0 +1,6 @@
+{
+  "itemGroup.bperipherals": "BPeripherals",
+  "block.bperipherals.fe_meter": "FE Meter",
+  "block.bperipherals.database": "Database",
+  "item.bperipherals.database_disk": "Database Disk"
+}

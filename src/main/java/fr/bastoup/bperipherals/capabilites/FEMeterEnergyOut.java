@@ -1,6 +1,6 @@
 package fr.bastoup.bperipherals.capabilites;
 
-import fr.bastoup.bperipherals.tileentities.TileRFMeter;
+import fr.bastoup.bperipherals.tileentities.TileFEMeter;
 import fr.bastoup.bperipherals.util.BlockFaces;
 import fr.bastoup.bperipherals.util.Util;
 import net.minecraft.nbt.CompoundNBT;
@@ -12,26 +12,26 @@ import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.IEnergyStorage;
 
-public class RFMeterEnergyOut implements IEnergyStorage, INBTSerializable<CompoundNBT>{
-	
-	public final static int RF_METER_CAPACITY = 64000;
-	public final static int MAX_TRANSFER_RATE = 32000;
-	
-	private int energyStored;
-	private int transferRate;
-	private TileRFMeter tile;
-	private boolean updated = false;
-	
-	public RFMeterEnergyOut(TileRFMeter tileRFMeter) {
-		energyStored = 0;
-		transferRate = 1000;
-		tile = tileRFMeter;
-	}
-	
-	@Override
-	public int receiveEnergy(int maxReceive, boolean simulate) {
-		return 0;
-	}
+public class FEMeterEnergyOut implements IEnergyStorage, INBTSerializable<CompoundNBT> {
+
+    public final static int FE_METER_CAPACITY = 64000;
+    public final static int MAX_TRANSFER_RATE = 32000;
+
+    private int energyStored;
+    private int transferRate;
+    private final TileFEMeter tile;
+    private boolean updated = false;
+
+    public FEMeterEnergyOut(TileFEMeter tileRFMeter) {
+        energyStored = 0;
+        transferRate = 32000;
+        tile = tileRFMeter;
+    }
+
+    @Override
+    public int receiveEnergy(int maxReceive, boolean simulate) {
+        return 0;
+    }
 
 	@Override
 	public int extractEnergy(int maxExtract, boolean simulate) {
@@ -45,8 +45,8 @@ public class RFMeterEnergyOut implements IEnergyStorage, INBTSerializable<Compou
 
 	@Override
 	public int getMaxEnergyStored() {
-		return RF_METER_CAPACITY;
-	}
+        return FE_METER_CAPACITY;
+    }
 
 	@Override
 	public boolean canExtract() {
@@ -78,25 +78,25 @@ public class RFMeterEnergyOut implements IEnergyStorage, INBTSerializable<Compou
 	}
 	
 	public int transferFromIn(int maxTransfer, boolean simulate) {
-		int actualTransfer = 0;
-		if(maxTransfer >= transferRate) {
-			actualTransfer = transferRate;
-		} else {
-			actualTransfer = maxTransfer;
-		}
-		
-		if(maxTransfer + energyStored >= RF_METER_CAPACITY) {
-			actualTransfer = RF_METER_CAPACITY - energyStored;
-		}
-		
-		if(!simulate) {
-			energyStored += actualTransfer;
-			updated = true;
-			tile.markDirty();
-		}
-		
-		return actualTransfer;
-	}
+        int actualTransfer = 0;
+        if (maxTransfer >= transferRate) {
+            actualTransfer = transferRate;
+        } else {
+            actualTransfer = maxTransfer;
+        }
+
+        if (maxTransfer + energyStored >= FE_METER_CAPACITY) {
+            actualTransfer = FE_METER_CAPACITY - energyStored;
+        }
+
+        if (!simulate) {
+            energyStored += actualTransfer;
+            updated = true;
+            tile.markDirty();
+        }
+
+        return actualTransfer;
+    }
 	
 	public int getExtractableEnergy() {
 		if(energyStored < transferRate) {

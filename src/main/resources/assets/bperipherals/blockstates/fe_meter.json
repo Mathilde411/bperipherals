@@ -1,0 +1,19 @@
+{
+	"variants": {
+      "facing=north": {
+        "model": "bperipherals:block/fe_meter"
+      },
+      "facing=south": {
+        "model": "bperipherals:block/fe_meter",
+        "y": 180
+      },
+      "facing=west": {
+        "model": "bperipherals:block/fe_meter",
+        "y": 270
+      },
+      "facing=east": {
+        "model": "bperipherals:block/fe_meter",
+        "y": 90
+      }
+    }
+}
