@@ -3,8 +3,10 @@ package fr.bastoup.bperipherals.database;
 import dan200.computercraft.api.lua.LuaException;
 import fr.bastoup.bperipherals.util.BPeripheralsProperties;
 
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -68,5 +70,28 @@ public class DBUtil {
             throw new LuaException(((ErrorResult) res).getError());
         }
         return ret;
+    }
+
+    public static void closeAll(Statement statement, Connection con, ResultSet resultSet) {
+        if (statement != null) {
+            try {
+                statement.close();
+            } catch (SQLException ignore) {
+            }
+        }
+
+        if (con != null) {
+            try {
+                con.close();
+            } catch (SQLException ignore) {
+            }
+        }
+
+        if (resultSet != null) {
+            try {
+                resultSet.close();
+            } catch (SQLException ignore) {
+            }
+        }
     }
 }

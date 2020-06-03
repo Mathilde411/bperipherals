@@ -1,5 +1,7 @@
 package fr.bastoup.bperipherals.database;
 
+import fr.bastoup.bperipherals.peripherals.PeripheralDatabase;
+
 import java.sql.*;
 
 public class DBFactory {
@@ -47,26 +49,38 @@ public class DBFactory {
         } catch (SQLException e) {
             res = new ErrorResult(e.getMessage());
         } finally {
-            if (statement != null) {
-                try {
-                    statement.close();
-                } catch (SQLException ignore) {
-                }
-            }
+            DBUtil.closeAll(statement, con, resultSet);
+        }
+        return res;
+    }
 
-            if (con != null) {
-                try {
-                    con.close();
-                } catch (SQLException ignore) {
+    public SQLResult executePrepared(String path, PeripheralDatabase.CCPreparedStatement statement) {
+        SQLResult res;
+        Connection con = null;
+        PreparedStatement prepStatement = null;
+        ResultSet resultSet = null;
+        try {
+            String forbiddenSQL = DBUtil.getForbiddenSQL(statement.getSQL());
+            if (forbiddenSQL == null) {
+                con = getConnection(path);
+                prepStatement = con.prepareStatement(statement.getSQL());
+                for (int key : statement.getParameters().keySet()) {
+                    prepStatement.setObject(key, statement.getParameters().get(key));
                 }
-            }
-
-            if (resultSet != null) {
-                try {
-                    resultSet.close();
-                } catch (SQLException ignore) {
+                boolean stmtExec = prepStatement.execute();
+                if (stmtExec) {
+                    resultSet = prepStatement.getResultSet();
+                    res = new QueryResult(DBUtil.mapResults(resultSet));
+                } else {
+                    res = new UpdateResult(prepStatement.getUpdateCount());
                 }
+            } else {
+                res = new ErrorResult("Your SQL code contains forbidden instructions. (" + forbiddenSQL + ")");
             }
+        } catch (SQLException e) {
+            res = new ErrorResult(e.getMessage());
+        } finally {
+            DBUtil.closeAll(prepStatement, con, resultSet);
         }
         return res;
     }

@@ -9,5 +9,5 @@ import java.util.List;
 public class ModItems {
     public static final List<Item> ITEMS = new ArrayList<Item>();
 
-    public static final Item DATABASE_DISK = new ItemBase("database_disk");
+    public static final Item DATABASE_DISK = new ItemBase("database_disk", 1);
 }
