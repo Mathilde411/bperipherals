@@ -92,6 +92,9 @@ repositories {
     maven { url = "https://squiddev.cc/maven" }
     jcenter()
     mavenCentral()
+    flatDir {
+        dirs 'lib'
+    }
 }
 
 configurations {
@@ -117,7 +120,8 @@ dependencies {
 
     // The 'provided' configuration is for optional dependencies that exist at compile-time but might not at runtime.
     // provided 'com.mod-buildcraft:buildcraft:6.0.8:dev'
-    shade('org.xerial:sqlite-jdbc:3.31.1')
+    shade (name: 'sqlite-jdbc-CUSTOM', ext: 'jar')
+    compile (name: 'sqlite-jdbc-CUSTOM', ext: 'jar')
     compile fg.deobf('org.squiddev:cc-tweaked-1.15.2:1.88.1')
 
     runtime fg.deobf("curse.maven:mekanism:2958427")

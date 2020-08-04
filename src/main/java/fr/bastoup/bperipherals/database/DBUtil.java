@@ -1,7 +1,6 @@
 package fr.bastoup.bperipherals.database;
 
 import dan200.computercraft.api.lua.LuaException;
-import fr.bastoup.bperipherals.util.BPeripheralsProperties;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -11,8 +10,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class DBUtil {
 
@@ -46,16 +43,6 @@ public class DBUtil {
             hMap.put(keys[i], values[i]);
         }
         return hMap;
-    }
-
-    public static String getForbiddenSQL(String sql) {
-        for (String exp : BPeripheralsProperties.FORBIDDEN_SQL) {
-            Pattern p = Pattern.compile("(?i)\\b" + exp + "\\b");
-            Matcher m = p.matcher(sql);
-            if (m.find())
-                return exp;
-        }
-        return null;
     }
 
     public static List<Object> factorizeResults(SQLResult res) throws LuaException {
