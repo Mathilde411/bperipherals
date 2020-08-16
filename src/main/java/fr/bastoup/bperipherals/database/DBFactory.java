@@ -1,5 +1,9 @@
 package fr.bastoup.bperipherals.database;
 
+import fr.bastoup.bperipherals.beans.ErrorResult;
+import fr.bastoup.bperipherals.beans.QueryResult;
+import fr.bastoup.bperipherals.beans.SQLResult;
+import fr.bastoup.bperipherals.beans.UpdateResult;
 import fr.bastoup.bperipherals.peripherals.PeripheralDatabase;
 
 import java.sql.*;

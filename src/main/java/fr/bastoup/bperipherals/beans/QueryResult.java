@@ -1,4 +1,4 @@
-package fr.bastoup.bperipherals.database;
+package fr.bastoup.bperipherals.beans;
 
 import java.util.List;
 import java.util.Map;

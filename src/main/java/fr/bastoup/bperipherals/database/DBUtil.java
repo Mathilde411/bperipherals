@@ -1,6 +1,10 @@
 package fr.bastoup.bperipherals.database;
 
 import dan200.computercraft.api.lua.LuaException;
+import fr.bastoup.bperipherals.beans.ErrorResult;
+import fr.bastoup.bperipherals.beans.QueryResult;
+import fr.bastoup.bperipherals.beans.SQLResult;
+import fr.bastoup.bperipherals.beans.UpdateResult;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
