@@ -1,5 +1,6 @@
 package fr.bastoup.bperipherals.gui;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import fr.bastoup.bperipherals.containers.ContainerDatabase;
 import fr.bastoup.bperipherals.util.BPeripheralsProperties;
@@ -8,29 +9,31 @@ import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 
+import javax.annotation.Nonnull;
+
 
 public class GUIDatabase extends ContainerScreen<ContainerDatabase> {
     private static final ResourceLocation BACKGROUND = new ResourceLocation(BPeripheralsProperties.MODID, "textures/gui/database.png");
 
-    public GUIDatabase(ContainerDatabase container, PlayerInventory player, ITextComponent title) {
-        super(container, player, title);
+    public GUIDatabase( ContainerDatabase container, PlayerInventory player, ITextComponent title )
+    {
+        super( container, player, title );
     }
 
-    protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
-        String title = this.title.getFormattedText();
-        this.font.drawString(title, (float) (this.xSize - this.font.getStringWidth(title)) / 2.0F, 6.0F, 4210752);
-        this.font.drawString(title, 8.0F, (float) (this.ySize - 96 + 2), 4210752);
+    @Override
+    public void render( @Nonnull MatrixStack transform, int mouseX, int mouseY, float partialTicks )
+    {
+        renderBackground( transform );
+        super.render( transform, mouseX, mouseY, partialTicks );
+        renderHoveredTooltip(transform, mouseX, mouseY);
     }
 
-    protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
-        RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-        this.minecraft.getTextureManager().bindTexture(BACKGROUND);
-        this.blit(this.guiLeft, this.guiTop, 0, 0, this.xSize, this.ySize);
-    }
-
-    public void render(int mouseX, int mouseY, float partialTicks) {
-        this.renderBackground();
-        super.render(mouseX, mouseY, partialTicks);
-        this.renderHoveredToolTip(mouseX, mouseY);
+    @Override
+    protected void drawGuiContainerBackgroundLayer(MatrixStack matrixStack, float partialTicks, int x, int y) {
+        RenderSystem.color4f( 1.0F, 1.0F, 1.0F, 1.0F );
+        minecraft.getTextureManager().bindTexture(BACKGROUND);
+        int i = (this.width - this.xSize) / 2;
+        int j = (this.height - this.ySize) / 2;
+        this.blit(matrixStack, i, j, 0, 0, this.xSize, this.ySize);
     }
 }

@@ -7,6 +7,8 @@ import fr.bastoup.bperipherals.containers.ContainerDatabase;
 import fr.bastoup.bperipherals.init.ModItems;
 import fr.bastoup.bperipherals.init.ModTileTypes;
 import fr.bastoup.bperipherals.peripherals.PeripheralDatabase;
+import fr.bastoup.bperipherals.util.Util;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -24,7 +26,9 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.dimension.DimensionType;
+import net.minecraft.world.DimensionType;
+import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.storage.DimensionSavedDataManager;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.LazyOptional;
@@ -36,9 +40,10 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Field;
 
 public class TileDatabase extends TileOrientable implements INamedContainerProvider, TilePeripheral, ICapabilityProvider, ITickableTileEntity, INameable {
-	private final DatabaseInventory databaseInventory = new DatabaseInventory();
+	private final DatabaseInventory databaseInventory = new DatabaseInventory(this);
 	private final LazyOptional<DatabaseInventory> holderInv = LazyOptional.of(() -> databaseInventory);
 
 	private boolean lastDiskState = false;
@@ -53,9 +58,11 @@ public class TileDatabase extends TileOrientable implements INamedContainerProvi
 		return databaseInventory.getStackInSlot(0);
 	}
 
-	public File getDatabaseFile() {
-		File worldDirectory = ServerLifecycleHooks.getCurrentServer().getWorld(DimensionType.OVERWORLD)
-				.getSaveHandler().getWorldDirectory();
+	public File getDatabaseFile() throws NoSuchFieldException, IllegalAccessException {
+		if(this.getWorld().isRemote())
+			return null;
+
+		File worldDirectory = Util.getWorldFolder((ServerWorld) this.getWorld());
 
 		Integer databaseId = databaseInventory.getDiskId(true);
 		if (databaseId == null || databaseId == -1) {
@@ -107,10 +114,10 @@ public class TileDatabase extends TileOrientable implements INamedContainerProvi
 	}
 
 	@Override
-	public void read(CompoundNBT nbt) {
-		super.read(nbt);
+	public void read(BlockState state, CompoundNBT nbt) {
+		super.read(state, nbt);
 		databaseInventory.deserializeNBT(nbt.getCompound("databaseInventory"));
-		setCustomName(nbt.contains("customName") ? ITextComponent.Serializer.fromJson(nbt.getString("CustomName")) : null);
+		setCustomName(nbt.contains("customName") ? ITextComponent.Serializer.getComponentFromJson(nbt.getString("CustomName")) : null);
 	}
 
 	@Override

@@ -2,10 +2,11 @@ package fr.bastoup.bperipherals.capabilites;
 
 import dan200.computercraft.api.ComputerCraftAPI;
 import fr.bastoup.bperipherals.init.ModItems;
+import fr.bastoup.bperipherals.tileentities.TileDatabase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.world.dimension.DimensionType;
+import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.fml.server.ServerLifecycleHooks;
 import net.minecraftforge.items.ItemStackHandler;
@@ -14,19 +15,24 @@ import javax.annotation.Nonnull;
 
 public class DatabaseInventory extends ItemStackHandler {
 
-    public DatabaseInventory() {
+    private final TileDatabase database;
+
+    public DatabaseInventory(TileDatabase database) {
         super(1);
+        this.database = database;
     }
 
     public Integer setDiskId(boolean force) {
+        if(database == null)
+            return null;
+
         ItemStack item = super.stacks.get(0);
         if (item != null && item.getItem().equals(ModItems.DATABASE_DISK)) {
             CompoundNBT tag = item.getOrCreateTag();
             if (!force && tag.contains("databaseId")) {
                 return null;
             }
-            MinecraftServer server = ServerLifecycleHooks.getCurrentServer();
-            ServerWorld world = server.getWorld(DimensionType.OVERWORLD);
+            World world = database.getWorld();
             int id = ComputerCraftAPI.createUniqueNumberedSaveDir(world, "database");
             if (id >= 0)
                 tag.putInt("databaseId", id);

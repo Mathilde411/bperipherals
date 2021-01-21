@@ -77,7 +77,14 @@ public class PeripheralDatabase implements IPeripheral {
 
     @LuaFunction
     public final List<Object> executeSQL(String sql) throws LuaException {
-        File file = tile.getDatabaseFile();
+        File file = null;
+        try {
+            file = tile.getDatabaseFile();
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
         if (tile.isDiskInserted()) {
             return DBUtil.factorizeResults(BPeripherals.getDBFactory().executeSQL(file.getPath(), sql));
         } else {
@@ -165,7 +172,14 @@ public class PeripheralDatabase implements IPeripheral {
         public final List<Object> execute() throws LuaException {
             peripheralStillValid();
             TileDatabase tile = (TileDatabase) database.getTarget();
-            File file = tile.getDatabaseFile();
+            File file = null;
+            try {
+                file = tile.getDatabaseFile();
+            } catch (NoSuchFieldException e) {
+                e.printStackTrace();
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
             if (tile.isDiskInserted()) {
                 return DBUtil.factorizeResults(BPeripherals.getDBFactory().executePrepared(file.getPath(), this));
             } else {
@@ -251,7 +265,14 @@ public class PeripheralDatabase implements IPeripheral {
         public final List<Object> execute() throws LuaException {
             peripheralStillValid();
             TileDatabase tile = (TileDatabase) database.getTarget();
-            File file = tile.getDatabaseFile();
+            File file = null;
+            try {
+                file = tile.getDatabaseFile();
+            } catch (NoSuchFieldException e) {
+                e.printStackTrace();
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
             if (tile.isDiskInserted()) {
                 if (this.primaryKey == null) {
                     if (columns.containsKey("id")) {
@@ -312,7 +333,6 @@ public class PeripheralDatabase implements IPeripheral {
         public final List<Object> execute() throws LuaException {
             peripheralStillValid();
             TileDatabase tile = (TileDatabase) database.getTarget();
-            File file = tile.getDatabaseFile();
             if (tile.isDiskInserted()) {
                 List<String> s = new ArrayList<>();
                 Map<Integer, Object> obj = new HashMap<>();
@@ -364,7 +384,6 @@ public class PeripheralDatabase implements IPeripheral {
         public final List<Object> execute() throws LuaException {
             peripheralStillValid();
             TileDatabase tile = (TileDatabase) database.getTarget();
-            File file = tile.getDatabaseFile();
             if (tile.isDiskInserted()) {
                 Map<Integer, Object> obj = new HashMap<>();
                 List<String> k = new ArrayList<>();
@@ -414,7 +433,6 @@ public class PeripheralDatabase implements IPeripheral {
         public final List<Object> execute() throws LuaException {
             peripheralStillValid();
             TileDatabase tile = (TileDatabase) database.getTarget();
-            File file = tile.getDatabaseFile();
             if (tile.isDiskInserted()) {
                 Map<Integer, Object> obj = new HashMap<>();
                 List<String> k = new ArrayList<>();

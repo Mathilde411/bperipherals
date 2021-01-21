@@ -1,38 +1,38 @@
 modLoader="javafml"
-loaderVersion="[31,)"
-
+loaderVersion="[35,37)"
+license="Apache License, Version 2.0"
 #issueTrackerURL="http://my.issue.tracker/"
 
 [[mods]]
-modId="bperipherals"
-version="0.1"
-displayName="BPeripherals"
-#updateJSONURL="http://myurl.me/"
-#displayURL="http://example.com/"
-#logoFile="examplemod.png"
-#credits="Thanks for this example mod goes to Java"
-#authors="Love, Cheese and small house plants"
-description='''
-This is a mod that adds peripherals to ComputerCraft.
-'''
+    modId="bperipherals"
+    version="0.1"
+    displayName="BPeripherals"
+    #updateJSONURL="http://myurl.me/"
+    #displayURL="http://example.com/"
+    #logoFile="examplemod.png"
+    #credits="Thanks for this example mod goes to Java"
+    authors="BastouP"
+    description='''
+    This is a mod that adds peripherals to ComputerCraft.
+    '''
 
 [[dependencies.bperipherals]]
     modId="forge"
     mandatory=true
-    versionRange="[31,)"
+    versionRange="[36,)"
     ordering="NONE"
     side="BOTH"
 
 [[dependencies.bperipherals]]
     modId="minecraft"
     mandatory=true
-    versionRange="[1.15.2]"
+    versionRange="[1.16.5,)"
     ordering="NONE"
     side="BOTH"
 
 [[dependencies.bperipherals]]
     modId="computercraft"
     mandatory=true
-    versionRange="[1.88,)"
+    versionRange="[1.95,)"
     ordering="NONE"
     side="BOTH"

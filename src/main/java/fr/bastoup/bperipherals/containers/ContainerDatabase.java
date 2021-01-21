@@ -34,7 +34,7 @@ public class ContainerDatabase extends Container {
     }
 
     public ContainerDatabase(int i, PlayerInventory inventory, PacketBuffer buffer) {
-        this(i, inventory, new DatabaseInventory());
+        this(i, inventory, new DatabaseInventory(null));
     }
 
     public boolean canInteractWith(@Nonnull PlayerEntity player) {

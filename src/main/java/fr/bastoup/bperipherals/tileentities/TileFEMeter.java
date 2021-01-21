@@ -4,6 +4,7 @@ import fr.bastoup.bperipherals.capabilites.FEMeterEnergyIn;
 import fr.bastoup.bperipherals.capabilites.FEMeterEnergyOut;
 import fr.bastoup.bperipherals.init.ModTileTypes;
 import fr.bastoup.bperipherals.peripherals.PeripheralRFMeter;
+import net.minecraft.block.BlockState;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
@@ -43,8 +44,8 @@ public class TileFEMeter extends TileOrientable implements ICapabilityProvider, 
         energyTransferedLastTick = nbt.getInt("energyTransfered");
     }
 	@Override
-	public void read(CompoundNBT nbt) {
-        super.read(nbt);
+	public void read(BlockState state, CompoundNBT nbt) {
+        super.read(state, nbt);
         holderOut.orElse(null).deserializeNBT(nbt.getCompound("Energy"));
         energyTransferedLastTick = nbt.getInt("energyTransfered");
     }

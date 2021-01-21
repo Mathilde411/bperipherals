@@ -2,6 +2,11 @@ package fr.bastoup.bperipherals.util;
 
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.storage.DimensionSavedDataManager;
+
+import java.io.File;
+import java.lang.reflect.Field;
 
 public class Util {
 	
@@ -112,5 +117,13 @@ public class Util {
 		default:
 			return pos;
 		}
+	}
+
+	public static File getWorldFolder(ServerWorld world) throws NoSuchFieldException, IllegalAccessException {
+		DimensionSavedDataManager savedData = world.getChunkProvider().getSavedData();
+
+		Field folderField = DimensionSavedDataManager.class.getDeclaredField("folder");
+		folderField.setAccessible(true);
+		return ((File) folderField.get(savedData)).getParentFile();
 	}
 }
