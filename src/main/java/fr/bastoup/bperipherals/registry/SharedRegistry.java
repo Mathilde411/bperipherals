@@ -34,7 +34,8 @@ public class SharedRegistry {
     public static void onTileRegister(RegistryEvent.Register<TileEntityType<?>> event) {
         event.getRegistry().registerAll(
                 ModTileTypes.FE_METER,
-                ModTileTypes.DATABASE
+                ModTileTypes.DATABASE,
+                ModTileTypes.CRYPTOGRAPHIC_ACCELERATOR
         );
     }
 

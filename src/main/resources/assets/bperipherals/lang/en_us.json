@@ -2,5 +2,6 @@
   "itemGroup.bperipherals": "BPeripherals",
   "block.bperipherals.fe_meter": "FE Meter",
   "block.bperipherals.database": "Database",
+  "block.bperipherals.cryptographic_accelerator": "Cryptographic Accelerator",
   "item.bperipherals.database_disk": "Database Disk"
 }

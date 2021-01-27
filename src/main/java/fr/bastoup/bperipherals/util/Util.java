@@ -4,11 +4,22 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraft.world.storage.DimensionSavedDataManager;
+import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 
 import java.io.File;
 import java.lang.reflect.Field;
+import java.nio.ByteBuffer;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Util {
+
+	private static Field folderField;
+
+	static {
+		folderField = ObfuscationReflectionHelper.findField(DimensionSavedDataManager.class, "folder");
+		folderField.setAccessible(true);
+	}
 	
 	public static Direction getOppositeFacing(Direction facing) {
 		switch(facing) {
@@ -121,9 +132,12 @@ public class Util {
 
 	public static File getWorldFolder(ServerWorld world) throws NoSuchFieldException, IllegalAccessException {
 		DimensionSavedDataManager savedData = world.getChunkProvider().getSavedData();
-
-		Field folderField = DimensionSavedDataManager.class.getDeclaredField("folder");
-		folderField.setAccessible(true);
 		return ((File) folderField.get(savedData)).getParentFile();
+	}
+
+	public static byte[] getByteBufferArray(ByteBuffer buf) {
+		byte[] res = new byte[buf.remaining()];
+		buf.get(res, 0, res.length);
+		return res;
 	}
 }

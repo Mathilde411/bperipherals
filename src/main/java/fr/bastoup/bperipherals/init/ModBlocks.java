@@ -1,5 +1,6 @@
 package fr.bastoup.bperipherals.init;
 
+import fr.bastoup.bperipherals.blocks.BlockCryptographicAccelerator;
 import fr.bastoup.bperipherals.blocks.BlockDatabase;
 import fr.bastoup.bperipherals.blocks.BlockFEMeter;
 import net.minecraft.block.Block;
@@ -12,4 +13,5 @@ public class ModBlocks {
 
     public static final Block FE_METER = new BlockFEMeter();
     public static final Block DATABASE = new BlockDatabase();
+    public static final Block CRYPTOGRAPHIC_ACCELERATOR = new BlockCryptographicAccelerator();
 }
