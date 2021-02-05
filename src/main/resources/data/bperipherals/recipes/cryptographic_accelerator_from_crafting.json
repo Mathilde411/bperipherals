@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "sgs",
+    "srs",
+    "sgs"
+  ],
+  "key": {
+    "s": {
+      "tag": "forge:stone"
+    },
+    "r": {
+      "tag": "forge:dusts/redstone"
+    },
+    "g": {
+      "tag": "forge:ingots/gold"
+    }
+  },
+  "result": {
+    "item": "bperipherals:cryptographic_accelerator",
+    "count": 1
+  }
+}
