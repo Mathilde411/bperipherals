@@ -1,5 +1,6 @@
 package fr.bastoup.bperipherals.tileentities;
 
+import dan200.computercraft.shared.Capabilities;
 import fr.bastoup.bperipherals.blocks.BlockDatabase;
 import fr.bastoup.bperipherals.blocks.BlockOrientable;
 import fr.bastoup.bperipherals.capabilites.DatabaseInventory;
@@ -26,25 +27,24 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.DimensionType;
 import net.minecraft.world.server.ServerWorld;
-import net.minecraft.world.storage.DimensionSavedDataManager;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fml.network.NetworkHooks;
-import net.minecraftforge.fml.server.ServerLifecycleHooks;
 import net.minecraftforge.items.CapabilityItemHandler;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Field;
 
-public class TileDatabase extends TileOrientable implements INamedContainerProvider, TilePeripheral, ICapabilityProvider, ITickableTileEntity, INameable {
+public class TileDatabase extends TileOrientable implements INamedContainerProvider, ICapabilityProvider, ITickableTileEntity, INameable {
 	private final DatabaseInventory databaseInventory = new DatabaseInventory(this);
+	private final PeripheralDatabase peripheralDatabase = new PeripheralDatabase(this);
+
 	private final LazyOptional<DatabaseInventory> holderInv = LazyOptional.of(() -> databaseInventory);
+	private final LazyOptional<PeripheralDatabase> holderPeripheral = LazyOptional.of(() -> peripheralDatabase);
 
 	private boolean lastDiskState = false;
 	private ITextComponent customName;
@@ -107,10 +107,15 @@ public class TileDatabase extends TileOrientable implements INamedContainerProvi
 	@Override
 	public <T> LazyOptional<T> getCapability(Capability<T> capability, Direction facing) {
 		if (capability.equals(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)) {
-			return (LazyOptional<T>) holderInv;
-		} else {
-			return super.getCapability(capability, facing);
+			return holderInv.cast();
 		}
+
+		if (capability.equals(Capabilities.CAPABILITY_PERIPHERAL)) {
+			return holderPeripheral.cast();
+		}
+
+		return super.getCapability(capability, facing);
+
 	}
 
 	@Override
@@ -129,10 +134,6 @@ public class TileDatabase extends TileOrientable implements INamedContainerProvi
 		return super.write(nbt);
 	}
 
-	@Override
-	public PeripheralDatabase getPeripheral() {
-		return new PeripheralDatabase(this);
-	}
 
 	@Override
 	public void tick() {

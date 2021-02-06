@@ -5,13 +5,13 @@ import dan200.computercraft.api.peripheral.IComputerAccess;
 import dan200.computercraft.api.peripheral.IPeripheral;
 import fr.bastoup.bperipherals.tileentities.TileFEMeter;
 
-public class PeripheralRFMeter implements IPeripheral {
+public class PeripheralFEMeter implements IPeripheral {
 
     public static final String TYPE = "fe_meter";
 
     private final TileFEMeter tile;
 
-    public PeripheralRFMeter(TileFEMeter tile) {
+    public PeripheralFEMeter(TileFEMeter tile) {
         this.tile = tile;
     }
 
@@ -35,37 +35,37 @@ public class PeripheralRFMeter implements IPeripheral {
 
     @Override
     public boolean equals(IPeripheral other) {
-        return other instanceof PeripheralRFMeter && ((TileFEMeter) other.getTarget()).getWorld().equals(tile.getWorld()) &&
+        return other instanceof PeripheralFEMeter && ((TileFEMeter) other.getTarget()).getWorld().equals(tile.getWorld()) &&
                 ((TileFEMeter) other.getTarget()).getPos().equals(tile.getPos());
     }
 
     @LuaFunction
-    public int getEnergyTransferedLastTick() {
+    public final int getEnergyTransferedLastTick() {
         return tile.getEnergyTransferedLastTick();
     }
 
     @LuaFunction
-    public int getEnergyStored() {
+    public final int getEnergyStored() {
         return tile.getEnergyStored();
     }
 
     @LuaFunction
-    public int getMaxEnergyStored() {
+    public final int getMaxEnergyStored() {
         return tile.getMaxEnergyStored();
     }
 
     @LuaFunction
-    public int getTransferRate() {
+    public final int getTransferRate() {
         return tile.getTransferRate();
     }
 
     @LuaFunction
-    public void setTransferRate(int rate) {
+    public final void setTransferRate(int rate) {
         tile.setTransferRate(rate);
     }
 
     @LuaFunction
-    public int getMaxTransferRate() {
+    public final int getMaxTransferRate() {
         return tile.getMaxTransferRate();
     }
 }

@@ -1,9 +1,10 @@
 package fr.bastoup.bperipherals.tileentities;
 
+import dan200.computercraft.shared.Capabilities;
 import fr.bastoup.bperipherals.capabilites.FEMeterEnergyIn;
 import fr.bastoup.bperipherals.capabilites.FEMeterEnergyOut;
 import fr.bastoup.bperipherals.init.ModTileTypes;
-import fr.bastoup.bperipherals.peripherals.PeripheralRFMeter;
+import fr.bastoup.bperipherals.peripherals.PeripheralFEMeter;
 import net.minecraft.block.BlockState;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.NetworkManager;
@@ -15,12 +16,15 @@ import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.energy.CapabilityEnergy;
 
-public class TileFEMeter extends TileOrientable implements ICapabilityProvider, ITickableTileEntity, TilePeripheral {
+public class TileFEMeter extends TileOrientable implements ICapabilityProvider, ITickableTileEntity {
 
     private final FEMeterEnergyOut outEnergyStorage = new FEMeterEnergyOut(this);
     private final FEMeterEnergyIn inEnergyStrorage = new FEMeterEnergyIn(outEnergyStorage);
+    private final PeripheralFEMeter peripheral = new PeripheralFEMeter(this);
+
     private final LazyOptional<FEMeterEnergyOut> holderOut = LazyOptional.of(() -> outEnergyStorage);
     private final LazyOptional<FEMeterEnergyIn> holderIn = LazyOptional.of(() -> inEnergyStrorage);
+    private final LazyOptional<PeripheralFEMeter> holderPeripheral = LazyOptional.of(() -> peripheral);
 
     private int energyTransferedLastTick = 0;
     private int energyStoredLastTick = 0;
@@ -61,19 +65,24 @@ public class TileFEMeter extends TileOrientable implements ICapabilityProvider, 
 	@SuppressWarnings("unchecked")
 	@Override
 	public <T> LazyOptional<T> getCapability(Capability<T> capability, Direction facing) {
-		if (capability.equals(CapabilityEnergy.ENERGY)) {
-			switch (getFaceOfFacing(facing)) {
-			case LEFT:
-				return (LazyOptional<T>) holderIn;
-			case RIGHT:
-				return (LazyOptional<T>) holderOut;
-			default:
-				return null;
-			}
-		} else {
-			return super.getCapability(capability, facing);
-		}
-	}
+
+        if (capability.equals(CapabilityEnergy.ENERGY)) {
+            switch (getFaceOfFacing(facing)) {
+                case LEFT:
+                    return holderIn.cast();
+                case RIGHT:
+                    return holderOut.cast();
+                default:
+                    return null;
+            }
+        }
+
+        if (capability.equals(Capabilities.CAPABILITY_PERIPHERAL)) {
+            return holderPeripheral.cast();
+        }
+
+        return super.getCapability(capability, facing);
+    }
 
 	@Override
 	public void tick() {
@@ -86,11 +95,6 @@ public class TileFEMeter extends TileOrientable implements ICapabilityProvider, 
                 world.notifyBlockUpdate(pos, world.getBlockState(pos), world.getBlockState(pos), 2);
             }
         }
-    }
-
-    @Override
-    public PeripheralRFMeter getPeripheral() {
-        return new PeripheralRFMeter(this);
     }
 
     public int getEnergyTransferedLastTick() {

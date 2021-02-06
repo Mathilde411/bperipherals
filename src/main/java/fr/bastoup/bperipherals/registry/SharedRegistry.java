@@ -1,12 +1,10 @@
 package fr.bastoup.bperipherals.registry;
 
-import dan200.computercraft.api.ComputerCraftAPI;
 import fr.bastoup.bperipherals.init.ModBlocks;
 import fr.bastoup.bperipherals.init.ModContainerTypes;
 import fr.bastoup.bperipherals.init.ModItems;
 import fr.bastoup.bperipherals.init.ModTileTypes;
 import fr.bastoup.bperipherals.util.BPeripheralsProperties;
-import fr.bastoup.bperipherals.util.handler.BPeripheralsProvider;
 import net.minecraft.block.Block;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.item.Item;
@@ -14,7 +12,6 @@ import net.minecraft.tileentity.TileEntityType;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
 
 @Mod.EventBusSubscriber(
         modid = BPeripheralsProperties.MODID
@@ -44,12 +41,5 @@ public class SharedRegistry {
         event.getRegistry().registerAll(
                 ModContainerTypes.DATABASE
         );
-    }
-
-    @SubscribeEvent
-    public static void onLoadComplete(FMLLoadCompleteEvent event) {
-        if (ComputerCraftAPI.getInstalledVersion() != null) {
-            ComputerCraftAPI.registerPeripheralProvider(new BPeripheralsProvider());
-        }
     }
 }
