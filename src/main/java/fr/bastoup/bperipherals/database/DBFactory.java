@@ -4,7 +4,7 @@ import fr.bastoup.bperipherals.beans.ErrorResult;
 import fr.bastoup.bperipherals.beans.QueryResult;
 import fr.bastoup.bperipherals.beans.SQLResult;
 import fr.bastoup.bperipherals.beans.UpdateResult;
-import fr.bastoup.bperipherals.peripherals.PeripheralDatabase;
+import fr.bastoup.bperipherals.peripherals.database.PeripheralDatabase;
 
 import java.sql.*;
 

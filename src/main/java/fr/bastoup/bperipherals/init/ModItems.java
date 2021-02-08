@@ -1,6 +1,6 @@
 package fr.bastoup.bperipherals.init;
 
-import fr.bastoup.bperipherals.items.ItemBase;
+import fr.bastoup.bperipherals.util.items.ItemBase;
 import net.minecraft.item.Item;
 
 import java.util.ArrayList;

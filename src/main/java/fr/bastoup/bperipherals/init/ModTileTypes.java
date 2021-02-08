@@ -1,9 +1,9 @@
 package fr.bastoup.bperipherals.init;
 
-import dan200.computercraft.api.lua.ILuaAPIFactory;
-import fr.bastoup.bperipherals.tileentities.TileCryptographicAccelerator;
-import fr.bastoup.bperipherals.tileentities.TileDatabase;
-import fr.bastoup.bperipherals.tileentities.TileFEMeter;
+import fr.bastoup.bperipherals.peripherals.cryprographicaccelerator.TileCryptographicAccelerator;
+import fr.bastoup.bperipherals.peripherals.database.TileDatabase;
+import fr.bastoup.bperipherals.peripherals.femeter.TileFEMeter;
+import fr.bastoup.bperipherals.peripherals.magcardreader.TileMagCardReader;
 import fr.bastoup.bperipherals.util.BPeripheralsProperties;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.ResourceLocation;
@@ -16,4 +16,7 @@ public class ModTileTypes {
             .build(null).setRegistryName(new ResourceLocation(BPeripheralsProperties.MODID, "database"));
     public static final TileEntityType<TileCryptographicAccelerator> CRYPTOGRAPHIC_ACCELERATOR = (TileEntityType<TileCryptographicAccelerator>) TileEntityType.Builder.create(TileCryptographicAccelerator::new, ModBlocks.CRYPTOGRAPHIC_ACCELERATOR)
             .build(null).setRegistryName(new ResourceLocation(BPeripheralsProperties.MODID, "cryptographic_accelerator"));
+    public static final TileEntityType<TileMagCardReader> MAG_CARD_READER = (TileEntityType<TileMagCardReader>) TileEntityType.Builder.create(TileMagCardReader::new, ModBlocks.MAG_CARD_READER)
+            .build(null).setRegistryName(new ResourceLocation(BPeripheralsProperties.MODID, "mag_card_reader"));
+
 }

@@ -32,7 +32,8 @@ public class SharedRegistry {
         event.getRegistry().registerAll(
                 ModTileTypes.FE_METER,
                 ModTileTypes.DATABASE,
-                ModTileTypes.CRYPTOGRAPHIC_ACCELERATOR
+                ModTileTypes.CRYPTOGRAPHIC_ACCELERATOR,
+                ModTileTypes.MAG_CARD_READER
         );
     }
 

@@ -1,0 +1,12 @@
+{
+  "parent": "block/cube",
+  "textures": {
+    "down": "bperipherals:blocks/generic/machine_bottom",
+    "up": "bperipherals:blocks/generic/machine_top",
+    "north": "bperipherals:blocks/cryptographic_accelerator/cryptographic_accelerator_off",
+    "east": "bperipherals:blocks/generic/machine_side",
+    "west": "bperipherals:blocks/generic/machine_side",
+    "south": "bperipherals:blocks/generic/machine_side",
+    "particle": "bperipherals:blocks/cryptographic_accelerator/cryptographic_accelerator_off"
+  }
+}

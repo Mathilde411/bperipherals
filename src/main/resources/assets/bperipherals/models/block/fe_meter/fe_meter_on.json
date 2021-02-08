@@ -1,0 +1,12 @@
+{
+  "parent": "block/cube",
+  "textures": {
+    "down": "bperipherals:blocks/generic/machine_bottom",
+    "up": "bperipherals:blocks/generic/machine_top",
+    "north": "bperipherals:blocks/fe_meter/fe_meter_face_on",
+    "east": "bperipherals:blocks/fe_meter/fe_meter_in",
+    "west": "bperipherals:blocks/fe_meter/fe_meter_out",
+    "south": "bperipherals:blocks/generic/machine_side",
+    "particle": "bperipherals:blocks/fe_meter/fe_meter_face_on"
+  }
+}

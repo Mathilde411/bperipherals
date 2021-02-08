@@ -1,6 +1,6 @@
 package fr.bastoup.bperipherals.init;
 
-import fr.bastoup.bperipherals.containers.ContainerDatabase;
+import fr.bastoup.bperipherals.peripherals.database.ContainerDatabase;
 import fr.bastoup.bperipherals.util.BPeripheralsProperties;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.util.ResourceLocation;

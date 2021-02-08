@@ -1,7 +1,7 @@
 package fr.bastoup.bperipherals.registry;
 
-import fr.bastoup.bperipherals.gui.GUIDatabase;
 import fr.bastoup.bperipherals.init.ModContainerTypes;
+import fr.bastoup.bperipherals.peripherals.database.GUIDatabase;
 import fr.bastoup.bperipherals.util.BPeripheralsProperties;
 import net.minecraft.client.gui.ScreenManager;
 import net.minecraftforge.api.distmarker.Dist;
