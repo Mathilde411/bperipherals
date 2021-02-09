@@ -1,0 +1,12 @@
+{
+  "parent": "block/cube",
+  "textures": {
+    "down": "bperipherals:blocks/generic/machine_bottom",
+    "up": "bperipherals:blocks/generic/machine_top",
+    "north": "bperipherals:blocks/mag_card_reader/mag_card_reader_write",
+    "east": "bperipherals:blocks/generic/machine_side",
+    "west": "bperipherals:blocks/generic/machine_side",
+    "south": "bperipherals:blocks/generic/machine_side",
+    "particle": "bperipherals:blocks/mag_card_reader/mag_card_reader_write"
+  }
+}

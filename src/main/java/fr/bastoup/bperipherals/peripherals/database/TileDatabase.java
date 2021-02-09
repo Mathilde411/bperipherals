@@ -40,6 +40,7 @@ public class TileDatabase extends TilePeripheral implements INamedContainerProvi
 	private final LazyOptional<InventoryDatabase> holderInv = LazyOptional.of(() -> databaseInventory);
 
 	private boolean lastDiskState = false;
+	private int lastSize = 0;
 	private ITextComponent customName;
 
 	public TileDatabase() {
@@ -133,6 +134,14 @@ public class TileDatabase extends TilePeripheral implements INamedContainerProvi
 			this.getWorld().setBlockState(this.getPos(), this.getBlockState().with(BlockDatabase.DISK_INSERTED, false));
 		}
 		lastDiskState = isDiskInserted();
+
+		synchronized (computers) {
+			if(computers.size() != lastSize) {
+				lastSize = computers.size();
+				System.out.println("Connected: "  + lastSize);
+			}
+		}
+
 	}
 
 	@Nullable

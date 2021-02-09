@@ -4,8 +4,8 @@ import net.minecraft.util.IStringSerializable;
 
 public enum BlockStateMagCardReader implements IStringSerializable {
     WRITE,
-    WAITING,
-    CORRECT,
+    WAIT,
+    READ,
     WRONG;
 
     @Override

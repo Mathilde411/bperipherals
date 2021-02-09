@@ -3,5 +3,7 @@
   "block.bperipherals.fe_meter": "Compteur de FE",
   "block.bperipherals.database": "Base de Données",
   "block.bperipherals.cryptographic_accelerator": "Accélérateur Cryptographique",
+  "block.bperipherals.mag_card_reader": "Lecteur de Cartes Magnétiques",
+
   "item.bperipherals.database_disk": "Disque de Base de Données"
 }

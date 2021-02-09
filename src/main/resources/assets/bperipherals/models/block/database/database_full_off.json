@@ -7,6 +7,6 @@
     "east": "bperipherals:blocks/database/database_side",
     "west": "bperipherals:blocks/database/database_side",
     "south": "bperipherals:blocks/database/database_side",
-    "particle": "bperipherals:blocks/database/database_face_off"
+    "particle": "bperipherals:blocks/database/database_face_full_off"
   }
 }

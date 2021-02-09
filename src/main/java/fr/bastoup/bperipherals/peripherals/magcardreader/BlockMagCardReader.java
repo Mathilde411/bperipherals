@@ -21,7 +21,7 @@ public class BlockMagCardReader extends BlockPeripheral {
     public BlockMagCardReader() {
         super(Properties.create(Material.ROCK).hardnessAndResistance(2.0F), "mag_card_reader");
 
-        setDefaultState(this.getDefaultState().with(FACING, Direction.NORTH).with(STATE, BlockStateMagCardReader.CORRECT));
+        setDefaultState(this.getDefaultState().with(FACING, Direction.NORTH).with(STATE, BlockStateMagCardReader.READ));
     }
 
     @Override
@@ -37,7 +37,7 @@ public class BlockMagCardReader extends BlockPeripheral {
 
     @Override
     public BlockState getStateForPlacement(BlockItemUseContext context) {
-        return super.getStateForPlacement(context).with(STATE, BlockStateMagCardReader.CORRECT);
+        return super.getStateForPlacement(context).with(STATE, BlockStateMagCardReader.READ);
     }
 
     @Override
