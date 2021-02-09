@@ -9,6 +9,7 @@ import net.minecraft.util.Direction;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 
+import javax.annotation.Nonnull;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -31,7 +32,6 @@ public abstract class TilePeripheral extends TileOrientable {
         synchronized (computers) {
             computers.add(computer);
             update();
-            System.out.println("tic " + computers.size());
         }
     }
 
@@ -39,11 +39,11 @@ public abstract class TilePeripheral extends TileOrientable {
         synchronized (computers) {
             computers.remove(computer);
             update();
-            System.out.println("tac " + computers.size());
         }
     }
 
     @Override
+    @Nonnull
     public <T> LazyOptional<T> getCapability(Capability<T> capability, Direction facing) {
         if (capability.equals(Capabilities.CAPABILITY_PERIPHERAL)) {
             return holderPeripheral.cast();
@@ -52,7 +52,7 @@ public abstract class TilePeripheral extends TileOrientable {
     }
 
     public void update() {
-        if (computers.isEmpty()) {
+        if (computers.isEmpty() && this.getWorld().getBlockState(this.getPos()).hasProperty(BlockPeripheral.SWITCHED_ON)) {
             this.getWorld().setBlockState(this.getPos(), this.getBlockState().with(BlockPeripheral.SWITCHED_ON, false));
         } else {
             this.getWorld().setBlockState(this.getPos(), this.getBlockState().with(BlockPeripheral.SWITCHED_ON, true));

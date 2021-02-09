@@ -1,5 +1,6 @@
 package fr.bastoup.bperipherals.peripherals.database;
 
+import dan200.computercraft.api.peripheral.IComputerAccess;
 import fr.bastoup.bperipherals.init.ModItems;
 import fr.bastoup.bperipherals.init.ModTileTypes;
 import fr.bastoup.bperipherals.util.Util;
@@ -40,7 +41,7 @@ public class TileDatabase extends TilePeripheral implements INamedContainerProvi
 	private final LazyOptional<InventoryDatabase> holderInv = LazyOptional.of(() -> databaseInventory);
 
 	private boolean lastDiskState = false;
-	private int lastSize = 0;
+	private final int lastSize = 0;
 	private ITextComponent customName;
 
 	public TileDatabase() {
@@ -130,18 +131,22 @@ public class TileDatabase extends TilePeripheral implements INamedContainerProvi
 	public void tick() {
 		if (isDiskInserted() && !lastDiskState) {
 			this.getWorld().setBlockState(this.getPos(), this.getBlockState().with(BlockDatabase.DISK_INSERTED, true));
+
+			synchronized (computers) {
+				for (IComputerAccess c : computers) {
+					c.queueEvent("database_attached", c.getAttachmentName(), getDatabaseId(), getDatabaseName());
+				}
+			}
 		} else if (!isDiskInserted() && lastDiskState) {
 			this.getWorld().setBlockState(this.getPos(), this.getBlockState().with(BlockDatabase.DISK_INSERTED, false));
-		}
-		lastDiskState = isDiskInserted();
 
-		synchronized (computers) {
-			if(computers.size() != lastSize) {
-				lastSize = computers.size();
-				System.out.println("Connected: "  + lastSize);
+			synchronized (computers) {
+				for (IComputerAccess c : computers) {
+					c.queueEvent("database_detached", c.getAttachmentName());
+				}
 			}
 		}
-
+		lastDiskState = isDiskInserted();
 	}
 
 	@Nullable
