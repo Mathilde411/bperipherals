@@ -1,8 +1,8 @@
 package fr.bastoup.bperipherals.peripherals.magcardreader;
 
+import dan200.computercraft.api.lua.LuaException;
 import dan200.computercraft.api.lua.LuaFunction;
 import dan200.computercraft.api.peripheral.IPeripheral;
-import fr.bastoup.bperipherals.peripherals.database.TileDatabase;
 import fr.bastoup.bperipherals.util.Util;
 import fr.bastoup.bperipherals.util.peripherals.BPeripheral;
 
@@ -35,8 +35,10 @@ public class PeripheralMagCardReader extends BPeripheral {
     }
 
     @LuaFunction
-    public final void write(ByteBuffer bytes) {
+    public final void write(ByteBuffer bytes) throws LuaException {
         byte[] data = Util.getByteBufferArray(bytes);
+        if (data.length > 32)
+            throw new LuaException("You can't put more than 32 characters in a mag card.");
         getTile().writeCard(data);
     }
 
