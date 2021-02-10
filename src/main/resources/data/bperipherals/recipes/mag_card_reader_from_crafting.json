@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "sss",
+    "srs",
+    "sis"
+  ],
+  "key": {
+    "s": {
+      "tag": "forge:stone"
+    },
+    "r": {
+      "tag": "forge:dusts/redstone"
+    },
+    "i": {
+      "tag": "forge:ingots/iron"
+    }
+  },
+  "result": {
+    "item": "bperipherals:mag_card_reader",
+    "count": 1
+  }
+}

@@ -8,10 +8,7 @@ import fr.bastoup.bperipherals.util.peripherals.BPeripheral;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import javax.crypto.BadPaddingException;
-import javax.crypto.Cipher;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
+import javax.crypto.*;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 import java.nio.ByteBuffer;
@@ -181,6 +178,44 @@ public class PeripheralCryptographicAccelerator extends BPeripheral {
             e.printStackTrace();
             throw new LuaException("Internal error, check the logs for more info.");
         }
+    }
+
+    @LuaFunction
+    public final byte[] hmacSHA512(ByteBuffer key, ByteBuffer data) throws LuaException {
+        byte[] dataArray = Util.getByteBufferArray(data);
+        byte[] keyArray = Util.getByteBufferArray(key);
+        byte[] res;
+        try {
+            Mac mac = Mac.getInstance("HmacSHA512");
+            SecretKeySpec secretKeySpec = new SecretKeySpec(keyArray, "HmacSHA512");
+            mac.init(secretKeySpec);
+            res = mac.doFinal(dataArray);
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+            throw new LuaException("Internal error, check the logs for more info.");
+        } catch (InvalidKeyException e) {
+            throw new LuaException(e.getMessage());
+        }
+        return res;
+    }
+
+    @LuaFunction
+    public final byte[] hmacMD5(ByteBuffer key, ByteBuffer data) throws LuaException {
+        byte[] dataArray = Util.getByteBufferArray(data);
+        byte[] keyArray = Util.getByteBufferArray(key);
+        byte[] res;
+        try {
+            Mac mac = Mac.getInstance("HmacMD5");
+            SecretKeySpec secretKeySpec = new SecretKeySpec(keyArray, "HmacMD5");
+            mac.init(secretKeySpec);
+            res = mac.doFinal(dataArray);
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+            throw new LuaException("Internal error, check the logs for more info.");
+        } catch (InvalidKeyException e) {
+            throw new LuaException(e.getMessage());
+        }
+        return res;
     }
 
 
