@@ -181,7 +181,7 @@ public class PeripheralCryptographicAccelerator extends BPeripheral {
     }
 
     @LuaFunction
-    public final byte[] hmacSHA512(ByteBuffer key, ByteBuffer data) throws LuaException {
+    public final byte[] hmacSHA512(ByteBuffer data, ByteBuffer key) throws LuaException {
         byte[] dataArray = Util.getByteBufferArray(data);
         byte[] keyArray = Util.getByteBufferArray(key);
         byte[] res;
@@ -200,7 +200,7 @@ public class PeripheralCryptographicAccelerator extends BPeripheral {
     }
 
     @LuaFunction
-    public final byte[] hmacMD5(ByteBuffer key, ByteBuffer data) throws LuaException {
+    public final byte[] hmacMD5(ByteBuffer data, ByteBuffer key) throws LuaException {
         byte[] dataArray = Util.getByteBufferArray(data);
         byte[] keyArray = Util.getByteBufferArray(key);
         byte[] res;
