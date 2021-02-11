@@ -1,7 +1,7 @@
 modLoader = "javafml"
 loaderVersion = "[35,37)"
 license = "ComputerCraft Public License"
-issueTrackerURL = "http://my.issue.tracker/"
+issueTrackerURL = "https://github.com/BastouP411/bperipherals/issues"
 
 [[mods]]
 modId = "bperipherals"
