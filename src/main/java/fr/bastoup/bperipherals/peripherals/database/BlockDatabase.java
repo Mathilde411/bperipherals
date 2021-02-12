@@ -45,6 +45,7 @@ public class BlockDatabase extends BlockPeripheral {
         return ModTileTypes.DATABASE.create();
     }
 
+    @Nonnull
     @Override
     public BlockState getStateForPlacement(BlockItemUseContext context) {
         return super.getStateForPlacement(context).with(DISK_INSERTED, false);
@@ -67,7 +68,7 @@ public class BlockDatabase extends BlockPeripheral {
     }
 
     @Override
-    public void harvestBlock(@Nonnull World world, @Nonnull PlayerEntity player, @Nonnull BlockPos pos, @Nonnull BlockState state, @Nullable TileEntity te, ItemStack stack) {
+    public void harvestBlock(@Nonnull World world, @Nonnull PlayerEntity player, @Nonnull BlockPos pos, @Nonnull BlockState state, @Nullable TileEntity te, @Nonnull ItemStack stack) {
         if (te instanceof INameable && ((INameable) te).hasCustomName()) {
             player.addStat(Stats.BLOCK_MINED.get(this));
             player.addExhaustion(0.005F);

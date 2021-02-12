@@ -28,6 +28,7 @@ public class GUIDatabase extends ContainerScreen<ContainerDatabase> {
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     protected void drawGuiContainerBackgroundLayer(@Nonnull MatrixStack matrixStack, float partialTicks, int x, int y) {
         RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
         minecraft.getTextureManager().bindTexture(BACKGROUND);

@@ -39,6 +39,7 @@ public class BlockBase extends Block {
 	}
 
 	@Override
+	@SuppressWarnings("deprecation")
 	public final void onReplaced(@Nonnull BlockState block, @Nonnull World world, @Nonnull BlockPos pos, BlockState replace, boolean bool) {
 		if (block.getBlock() != replace.getBlock()) {
 			TileEntity tile = world.getTileEntity(pos);
@@ -51,6 +52,8 @@ public class BlockBase extends Block {
 		}
 	}
 
+	@SuppressWarnings("deprecation")
+	@Nonnull
 	@Override
 	public final ActionResultType onBlockActivated(@Nonnull BlockState state, World world, @Nonnull BlockPos pos, @Nonnull PlayerEntity player, @Nonnull Hand hand, @Nonnull BlockRayTraceResult hit) {
 		TileEntity tile = world.getTileEntity(pos);

@@ -12,10 +12,9 @@ public class DBFactory {
     private static final String URL_PREFIX = "jdbc:sqlite:";
     private static final String URL_SUFFIX = "?limit_attached=0";
 
-    public static DBFactory getInstance() throws DBException {
+    public static DBFactory getInstance() {
 
-        DBFactory instance = new DBFactory();
-        return instance;
+        return new DBFactory();
     }
 
     public Connection getConnection(String path) throws SQLException {

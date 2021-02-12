@@ -7,6 +7,8 @@ import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.StateContainer;
 
+import javax.annotation.Nonnull;
+
 public abstract class BlockPeripheral extends BlockOrientable {
 
     public static final BooleanProperty SWITCHED_ON = BooleanProperty.create("on");
@@ -20,6 +22,7 @@ public abstract class BlockPeripheral extends BlockOrientable {
     }
 
     @Override
+    @Nonnull
     public BlockState getStateForPlacement(BlockItemUseContext context) {
         return super.getStateForPlacement(context).with(SWITCHED_ON, false);
     }
