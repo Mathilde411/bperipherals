@@ -62,10 +62,16 @@ public class TileMagCardReader extends TilePeripheral {
     public void update() {
         super.update();
 
-        if(write == null) {
-            this.getWorld().setBlockState(this.getPos(), this.getBlockState().with(BlockMagCardReader.STATE, state));
+        if (world == null)
+            return;
+
+        if (!world.getBlockState(this.getPos()).hasProperty(BlockMagCardReader.STATE))
+            return;
+
+        if (write == null) {
+            world.setBlockState(this.getPos(), this.getBlockState().with(BlockMagCardReader.STATE, state));
         } else {
-            this.getWorld().setBlockState(this.getPos(), this.getBlockState().with(BlockMagCardReader.STATE, BlockStateMagCardReader.WRITE));
+            world.setBlockState(this.getPos(), this.getBlockState().with(BlockMagCardReader.STATE, BlockStateMagCardReader.WRITE));
         }
     }
 

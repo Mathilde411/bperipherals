@@ -12,6 +12,8 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.energy.CapabilityEnergy;
 
+import javax.annotation.Nonnull;
+
 public class TileFEMeter extends TilePeripheral implements ITickableTileEntity {
 
     private final EnergyFEMeterOut outEnergyStorage = new EnergyFEMeterOut(this);
@@ -28,6 +30,7 @@ public class TileFEMeter extends TilePeripheral implements ITickableTileEntity {
         this.setPeripheral(new PeripheralFEMeter(this));
     }
 
+    @Nonnull
     @Override
     public CompoundNBT getUpdateTag() {
         CompoundNBT nbt = new CompoundNBT();
@@ -48,18 +51,19 @@ public class TileFEMeter extends TilePeripheral implements ITickableTileEntity {
         holderOut.orElse(null).deserializeNBT(nbt.getCompound("Energy"));
         energyTransferedLastTick = nbt.getInt("energyTransfered");
     }
-	
-	@Override
-	public CompoundNBT write(CompoundNBT compound) {
+
+    @Override
+    public CompoundNBT write(CompoundNBT compound) {
         CompoundNBT nbt = super.write(compound);
         nbt.put("Energy", holderOut.orElse(null).serializeNBT());
         nbt.putInt("energyTransfered", energyTransferedLastTick);
         return nbt;
     }
 
-	@SuppressWarnings("unchecked")
-	@Override
-	public <T> LazyOptional<T> getCapability(Capability<T> capability, Direction facing) {
+    @Nonnull
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T> LazyOptional<T> getCapability(Capability<T> capability, Direction facing) {
 
         if (capability.equals(CapabilityEnergy.ENERGY)) {
             switch (getFaceOfFacing(facing)) {

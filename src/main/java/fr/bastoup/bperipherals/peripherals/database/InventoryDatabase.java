@@ -23,7 +23,7 @@ public class InventoryDatabase extends ItemStackHandler {
             return null;
 
         ItemStack item = super.stacks.get(0);
-        if (item != null && item.getItem().equals(ModItems.DATABASE_DISK)) {
+        if (item.getItem().equals(ModItems.DATABASE_DISK)) {
             CompoundNBT tag = item.getOrCreateTag();
             if (!force && tag.contains("databaseId")) {
                 return null;
@@ -40,7 +40,7 @@ public class InventoryDatabase extends ItemStackHandler {
 
     public Integer getDiskId(boolean force) {
         ItemStack item = super.stacks.get(0);
-        if (item != null && item.getItem().equals(ModItems.DATABASE_DISK)) {
+        if (item.getItem().equals(ModItems.DATABASE_DISK)) {
             CompoundNBT tag = item.getTag();
             if (tag != null && tag.contains("databaseId")) {
                 return tag.getInt("databaseId");
@@ -58,9 +58,9 @@ public class InventoryDatabase extends ItemStackHandler {
 
     public String getDiskName() {
         ItemStack item = super.stacks.get(0);
-        if (item != null && item.getItem().equals(ModItems.DATABASE_DISK)) {
+        if (item.getItem().equals(ModItems.DATABASE_DISK)) {
             CompoundNBT tag = item.getOrCreateTag();
-            if (tag != null && tag.contains("databaseName")) {
+            if (tag.contains("databaseName")) {
                 return tag.getString("databaseName");
             }
         }
@@ -69,7 +69,7 @@ public class InventoryDatabase extends ItemStackHandler {
 
     public void setDiskName(String name) {
         ItemStack item = super.stacks.get(0);
-        if (item != null && item.getItem().equals(ModItems.DATABASE_DISK)) {
+        if (item.getItem().equals(ModItems.DATABASE_DISK)) {
             CompoundNBT tag = item.getOrCreateTag();
             tag.putString("databaseName", name);
         }
@@ -77,7 +77,7 @@ public class InventoryDatabase extends ItemStackHandler {
 
     public boolean isDiskInserted() {
         ItemStack item = super.stacks.get(0);
-        return item != null && item.getItem().equals(ModItems.DATABASE_DISK);
+        return item.getItem().equals(ModItems.DATABASE_DISK);
     }
 
     @Override

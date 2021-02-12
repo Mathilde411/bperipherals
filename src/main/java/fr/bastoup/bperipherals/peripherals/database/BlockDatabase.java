@@ -56,7 +56,7 @@ public class BlockDatabase extends BlockPeripheral {
         super.fillStateContainer(builder);
     }
 
-    public void onBlockPlacedBy(World world, BlockPos pos, BlockState state, LivingEntity placer, ItemStack stack) {
+    public void onBlockPlacedBy(@Nonnull World world, @Nonnull BlockPos pos, @Nonnull BlockState state, LivingEntity placer, ItemStack stack) {
         if (stack.hasDisplayName()) {
             TileEntity tileentity = world.getTileEntity(pos);
             if (tileentity instanceof TileDatabase) {
@@ -67,7 +67,7 @@ public class BlockDatabase extends BlockPeripheral {
     }
 
     @Override
-    public void harvestBlock(@Nonnull World world, PlayerEntity player, @Nonnull BlockPos pos, @Nonnull BlockState state, @Nullable TileEntity te, ItemStack stack) {
+    public void harvestBlock(@Nonnull World world, @Nonnull PlayerEntity player, @Nonnull BlockPos pos, @Nonnull BlockState state, @Nullable TileEntity te, ItemStack stack) {
         if (te instanceof INameable && ((INameable) te).hasCustomName()) {
             player.addStat(Stats.BLOCK_MINED.get(this));
             player.addExhaustion(0.005F);

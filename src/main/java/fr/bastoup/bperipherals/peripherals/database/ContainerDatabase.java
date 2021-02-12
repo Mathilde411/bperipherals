@@ -41,7 +41,7 @@ public class ContainerDatabase extends Container {
     }
 
     @Nonnull
-    public ItemStack transferStackInSlot(PlayerEntity player, int slotIndex) {
+    public ItemStack transferStackInSlot(@Nonnull PlayerEntity player, int slotIndex) {
         Slot slot = this.inventorySlots.get(slotIndex);
         if (slot != null && slot.getHasStack()) {
             ItemStack existing = slot.getStack().copy();

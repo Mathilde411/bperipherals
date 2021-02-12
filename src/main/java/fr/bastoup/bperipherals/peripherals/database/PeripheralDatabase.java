@@ -8,7 +8,9 @@ import fr.bastoup.bperipherals.beans.SQLColumn;
 import fr.bastoup.bperipherals.database.DBUtil;
 import fr.bastoup.bperipherals.util.peripherals.BPeripheral;
 
-import java.io.File;
+import javax.annotation.Nonnull;
+import java.io.IOException;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -26,6 +28,7 @@ public class PeripheralDatabase extends BPeripheral {
         return ((TileDatabase) tile);
     }
 
+    @Nonnull
     @Override
     public String getType() {
         return TYPE;
@@ -33,8 +36,7 @@ public class PeripheralDatabase extends BPeripheral {
 
     @Override
     public boolean equals(IPeripheral other) {
-        return other instanceof PeripheralDatabase && ((TileDatabase) other.getTarget()).getWorld().equals(tile.getWorld()) &&
-                ((TileDatabase) other.getTarget()).getPos().equals(tile.getPos());
+        return this == other || other instanceof PeripheralDatabase && ((PeripheralDatabase) other).tile == tile;
     }
 
     @LuaFunction
@@ -65,19 +67,19 @@ public class PeripheralDatabase extends BPeripheral {
 
     @LuaFunction
     public final List<Object> executeSQL(String sql) throws LuaException {
-        File file = null;
+        Path file;
         try {
             file = getTile().getDatabaseFile();
-        } catch (NoSuchFieldException e) {
+            if (getTile().isDiskInserted()) {
+                return DBUtil.factorizeResults(BPeripherals.getDBFactory().executeSQL(file.toString(), sql));
+            } else {
+                throw new LuaException("There is no disk inserted");
+            }
+        } catch (IllegalAccessException | IOException e) {
             e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
+            throw new LuaException("Internal Error. Please send an issue if the problem persists.");
         }
-        if (getTile().isDiskInserted()) {
-            return DBUtil.factorizeResults(BPeripherals.getDBFactory().executeSQL(file.getPath(), sql));
-        } else {
-            throw new LuaException("There is no disk inserted");
-        }
+
     }
 
     @LuaFunction
@@ -136,7 +138,7 @@ public class PeripheralDatabase extends BPeripheral {
 
         private void peripheralStillValid() throws LuaException {
             TileDatabase t = (TileDatabase) database.getTarget();
-            if (t.isRemoved())
+            if (t == null || t.isRemoved())
                 throw new LuaException("The peripheral does not exist.");
         }
 
@@ -160,16 +162,19 @@ public class PeripheralDatabase extends BPeripheral {
         public final List<Object> execute() throws LuaException {
             peripheralStillValid();
             TileDatabase tile = (TileDatabase) database.getTarget();
-            File file = null;
+            Path file;
+
+            if (tile == null)
+                throw new LuaException("Internal Error. Please send an issue if the problem persists.");
+
             try {
                 file = tile.getDatabaseFile();
-            } catch (NoSuchFieldException e) {
+            } catch (IllegalAccessException | IOException e) {
                 e.printStackTrace();
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
+                throw new LuaException("Internal Error. Please send an issue if the problem persists.");
             }
             if (tile.isDiskInserted()) {
-                return DBUtil.factorizeResults(BPeripherals.getDBFactory().executePrepared(file.getPath(), this));
+                return DBUtil.factorizeResults(BPeripherals.getDBFactory().executePrepared(file.toString(), this));
             } else {
                 throw new LuaException("There is no disk inserted");
             }
@@ -198,7 +203,7 @@ public class PeripheralDatabase extends BPeripheral {
 
         private void peripheralStillValid() throws LuaException {
             TileDatabase t = (TileDatabase) database.getTarget();
-            if (t.isRemoved())
+            if (t == null || t.isRemoved())
                 throw new LuaException("The peripheral does not exist.");
         }
 
@@ -224,7 +229,7 @@ public class PeripheralDatabase extends BPeripheral {
         }
 
         @LuaFunction
-        public final CCTableCreator removeColumn(String name) throws LuaException {
+        public final CCTableCreator removeColumn(String name) {
             if (primaryKey.equalsIgnoreCase(name)) {
                 primaryKey = null;
                 autoIncrement = false;
@@ -253,13 +258,16 @@ public class PeripheralDatabase extends BPeripheral {
         public final List<Object> execute() throws LuaException {
             peripheralStillValid();
             TileDatabase tile = (TileDatabase) database.getTarget();
-            File file = null;
+
+            if (tile == null)
+                throw new LuaException("Internal Error. Please send an issue if the problem persists.");
+
+            Path file;
             try {
                 file = tile.getDatabaseFile();
-            } catch (NoSuchFieldException e) {
+            } catch (IllegalAccessException | IOException e) {
                 e.printStackTrace();
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
+                throw new LuaException("Internal Error. Please send an issue if the problem persists.");
             }
             if (tile.isDiskInserted()) {
                 if (this.primaryKey == null) {
@@ -281,7 +289,7 @@ public class PeripheralDatabase extends BPeripheral {
                     statements.add(statement);
                 }
                 String sql = "CREATE TABLE " + tableName + " (" + String.join(", ", statements) + ");";
-                return DBUtil.factorizeResults(BPeripherals.getDBFactory().executeSQL(file.getPath(), sql));
+                return DBUtil.factorizeResults(BPeripherals.getDBFactory().executeSQL(file.toString(), sql));
             } else {
                 throw new LuaException("There is no disk inserted");
             }
@@ -300,18 +308,18 @@ public class PeripheralDatabase extends BPeripheral {
 
         private void peripheralStillValid() throws LuaException {
             TileDatabase t = (TileDatabase) database.getTarget();
-            if (t.isRemoved())
+            if (t == null || t.isRemoved())
                 throw new LuaException("The peripheral does not exist.");
         }
 
         @LuaFunction
-        public final CCInsert addValue(String column, Object value) throws LuaException {
+        public final CCInsert addValue(String column, Object value) {
             values.put(column.toLowerCase(), value);
             return this;
         }
 
         @LuaFunction
-        public final CCInsert removeValue(String column) throws LuaException {
+        public final CCInsert removeValue(String column) {
             values.remove(column);
             return this;
         }
@@ -321,7 +329,7 @@ public class PeripheralDatabase extends BPeripheral {
         public final List<Object> execute() throws LuaException {
             peripheralStillValid();
             TileDatabase tile = (TileDatabase) database.getTarget();
-            if (tile.isDiskInserted()) {
+            if (tile != null && tile.isDiskInserted()) {
                 List<String> s = new ArrayList<>();
                 Map<Integer, Object> obj = new HashMap<>();
                 Object[] keys = values.keySet().toArray();
@@ -351,18 +359,18 @@ public class PeripheralDatabase extends BPeripheral {
 
         private void peripheralStillValid() throws LuaException {
             TileDatabase t = (TileDatabase) database.getTarget();
-            if (t.isRemoved())
+            if (t == null || t.isRemoved())
                 throw new LuaException("The peripheral does not exist.");
         }
 
         @LuaFunction
-        public final CCSelect addCondition(String column, Object value) throws LuaException {
+        public final CCSelect addCondition(String column, Object value) {
             conditions.put(column.toLowerCase(), value);
             return this;
         }
 
         @LuaFunction
-        public final CCSelect removeCondition(String column) throws LuaException {
+        public final CCSelect removeCondition(String column) {
             conditions.remove(column);
             return this;
         }
@@ -372,7 +380,7 @@ public class PeripheralDatabase extends BPeripheral {
         public final List<Object> execute() throws LuaException {
             peripheralStillValid();
             TileDatabase tile = (TileDatabase) database.getTarget();
-            if (tile.isDiskInserted()) {
+            if (tile != null && tile.isDiskInserted()) {
                 Map<Integer, Object> obj = new HashMap<>();
                 List<String> k = new ArrayList<>();
                 Object[] keys = conditions.keySet().toArray();
@@ -400,18 +408,18 @@ public class PeripheralDatabase extends BPeripheral {
 
         private void peripheralStillValid() throws LuaException {
             TileDatabase t = (TileDatabase) database.getTarget();
-            if (t.isRemoved())
+            if (t == null || t.isRemoved())
                 throw new LuaException("The peripheral does not exist.");
         }
 
         @LuaFunction
-        public final CCDelete addCondition(String column, Object value) throws LuaException {
+        public final CCDelete addCondition(String column, Object value) {
             conditions.put(column.toLowerCase(), value);
             return this;
         }
 
         @LuaFunction
-        public final CCDelete removeCondition(String column) throws LuaException {
+        public final CCDelete removeCondition(String column) {
             conditions.remove(column);
             return this;
         }
@@ -421,7 +429,7 @@ public class PeripheralDatabase extends BPeripheral {
         public final List<Object> execute() throws LuaException {
             peripheralStillValid();
             TileDatabase tile = (TileDatabase) database.getTarget();
-            if (tile.isDiskInserted()) {
+            if (tile != null && tile.isDiskInserted()) {
                 Map<Integer, Object> obj = new HashMap<>();
                 List<String> k = new ArrayList<>();
                 Object[] keys = conditions.keySet().toArray();

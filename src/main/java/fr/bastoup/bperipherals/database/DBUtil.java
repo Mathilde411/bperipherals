@@ -1,6 +1,5 @@
 package fr.bastoup.bperipherals.database;
 
-import dan200.computercraft.api.lua.LuaException;
 import fr.bastoup.bperipherals.beans.ErrorResult;
 import fr.bastoup.bperipherals.beans.QueryResult;
 import fr.bastoup.bperipherals.beans.SQLResult;
@@ -34,7 +33,7 @@ public class DBUtil {
             tableList.add(rows);
         }
 
-        List<Map<String, Object>> res = new ArrayList<Map<String, Object>>();
+        List<Map<String, Object>> res = new ArrayList<>();
         for (Object[] r : tableList) {
             res.add(map(keys, r));
         }
@@ -49,7 +48,7 @@ public class DBUtil {
         return hMap;
     }
 
-    public static List<Object> factorizeResults(SQLResult res) throws LuaException {
+    public static List<Object> factorizeResults(SQLResult res) {
         List<Object> ret = new ArrayList<>();
         if (res instanceof QueryResult) {
             ret.add("query");
@@ -58,7 +57,8 @@ public class DBUtil {
             ret.add("update");
             ret.add(((UpdateResult) res).getUpdateCount());
         } else if (res instanceof ErrorResult) {
-            throw new LuaException(((ErrorResult) res).getError());
+            ret.add("error");
+            ret.add(((ErrorResult) res).getError());
         }
         return ret;
     }

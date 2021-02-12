@@ -37,8 +37,7 @@ public class PeripheralCryptographicAccelerator extends BPeripheral {
 
     @Override
     public boolean equals(@Nullable IPeripheral other) {
-        return other instanceof PeripheralCryptographicAccelerator && ((TileCryptographicAccelerator) other.getTarget()).getWorld().equals(tile.getWorld()) &&
-                ((TileCryptographicAccelerator) other.getTarget()).getPos().equals(tile.getPos());
+        return this == other || other instanceof PeripheralCryptographicAccelerator && ((PeripheralCryptographicAccelerator) other).tile == tile;
     }
 
     @LuaFunction
@@ -60,7 +59,7 @@ public class PeripheralCryptographicAccelerator extends BPeripheral {
     }
 
     @LuaFunction
-    public final String encodeBase64(ByteBuffer str) throws LuaException {
+    public final String encodeBase64(ByteBuffer str) {
         byte[] strArray = Util.getByteBufferArray(str);
         return new String(Base64.getEncoder().encode(strArray));
     }

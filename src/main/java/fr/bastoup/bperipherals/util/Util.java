@@ -9,28 +9,25 @@ import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import java.io.File;
 import java.lang.reflect.Field;
 import java.nio.ByteBuffer;
-import java.util.ArrayList;
-import java.util.List;
+import java.nio.file.Path;
 
 public class Util {
 
-	private static Field folderField;
+	private static final Field folderField;
 
 	static {
-		folderField = ObfuscationReflectionHelper.findField(DimensionSavedDataManager.class, "folder");
+		folderField = ObfuscationReflectionHelper.findField(DimensionSavedDataManager.class, "field_215759_d");
 		folderField.setAccessible(true);
 	}
-	
+
 	public static Direction getOppositeFacing(Direction facing) {
-		switch(facing) {
-		case DOWN:
-			return Direction.UP;
+		switch (facing) {
+			case DOWN:
+				return Direction.UP;
 		case EAST:
 			return Direction.WEST;
 		case NORTH:
 			return Direction.SOUTH;
-		case SOUTH:
-			return Direction.NORTH;
 		case UP:
 			return Direction.DOWN;
 		case WEST:
@@ -46,8 +43,6 @@ public class Util {
 			return 270d;
 		case NORTH:
 			return 180d;
-		case SOUTH:
-			return 0d;
 		case WEST:
 			return 90d;
 		default:
@@ -81,28 +76,25 @@ public class Util {
 	}
 	
 	public static Direction getFacingFromBlockFace(Direction blockFacing, BlockFaces face) {
-		if(face == BlockFaces.TOP) {
+		if (face == BlockFaces.TOP) {
 			return Direction.UP;
 		} else if (face == BlockFaces.BOTTOM) {
 			return Direction.DOWN;
 		} else if (face == BlockFaces.NONE) {
 			return null;
 		}
-		
-		double angle = 0d;
-		switch(face) {
-		case BACK:
-			angle = 180d;
-			break;
-		case FRONT:
-			angle = 0d;
-			break;
-		case LEFT:
-			angle = 270d;
-			break;
-		case RIGHT:
-			angle = 90d;
-			break;
+
+		double angle;
+		switch (face) {
+			case BACK:
+				angle = 180d;
+				break;
+			case LEFT:
+				angle = 270d;
+				break;
+			case RIGHT:
+				angle = 90d;
+				break;
 		default:
 			angle = 0d;
 			break;
@@ -121,18 +113,18 @@ public class Util {
 			return new BlockPos(pos.getX(), pos.getY(), pos.getZ() - 1);
 		case SOUTH:
 			return new BlockPos(pos.getX(), pos.getY(), pos.getZ() + 1);
-		case UP:
-			return new BlockPos(pos.getX(), pos.getY() + 1, pos.getZ());
-		case WEST:
-			return new BlockPos(pos.getX() - 1, pos.getY(), pos.getZ());
-		default:
-			return pos;
+			case UP:
+				return new BlockPos(pos.getX(), pos.getY() + 1, pos.getZ());
+			case WEST:
+				return new BlockPos(pos.getX() - 1, pos.getY(), pos.getZ());
+			default:
+				return pos;
 		}
 	}
 
-	public static File getWorldFolder(ServerWorld world) throws NoSuchFieldException, IllegalAccessException {
+	public static Path getWorldFolder(ServerWorld world) throws IllegalAccessException {
 		DimensionSavedDataManager savedData = world.getChunkProvider().getSavedData();
-		return ((File) folderField.get(savedData)).getParentFile();
+		return ((File) folderField.get(savedData)).toPath().getParent();
 	}
 
 	public static byte[] getByteBufferArray(ByteBuffer buf) {

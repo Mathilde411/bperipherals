@@ -32,8 +32,10 @@ import net.minecraftforge.items.CapabilityItemHandler;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.io.File;
 import java.io.IOException;
+import java.nio.file.FileAlreadyExistsException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 public class TileDatabase extends TilePeripheral implements INamedContainerProvider, ITickableTileEntity, INameable {
 	private final InventoryDatabase databaseInventory = new InventoryDatabase(this);
@@ -41,7 +43,6 @@ public class TileDatabase extends TilePeripheral implements INamedContainerProvi
 	private final LazyOptional<InventoryDatabase> holderInv = LazyOptional.of(() -> databaseInventory);
 
 	private boolean lastDiskState = false;
-	private final int lastSize = 0;
 	private ITextComponent customName;
 
 	public TileDatabase() {
@@ -50,32 +51,29 @@ public class TileDatabase extends TilePeripheral implements INamedContainerProvi
 	}
 
 
-	public ItemStack getDiskStack() {
-		return databaseInventory.getStackInSlot(0);
-	}
+	public Path getDatabaseFile() throws IllegalAccessException, IOException {
 
-	public File getDatabaseFile() throws NoSuchFieldException, IllegalAccessException {
-		if(this.getWorld().isRemote())
-			return null;
-
-		File worldDirectory = Util.getWorldFolder((ServerWorld) this.getWorld());
+		Path worldDirectory = Util.getWorldFolder((ServerWorld) world);
 
 		Integer databaseId = databaseInventory.getDiskId(true);
 		if (databaseId == null || databaseId == -1) {
 			return null;
 		}
+		Path folder = worldDirectory.resolve("computercraft/database/" + databaseId);
+		Path file = folder.resolve("database.db");
 
-		File folder = new File(worldDirectory, "computercraft/database/" + databaseId);
-		File file = new File(folder, "database.db");
-		if (!file.exists()) {
-			folder.mkdirs();
-			try {
-				file.createNewFile();
-			} catch (IOException e) {
-				return null;
-			}
+		try {
+			Files.createDirectories(folder);
+		} catch (FileAlreadyExistsException e) {
+			// Do nothing
 		}
-		this.markDirty();
+
+		try {
+			Files.createFile(file);
+		} catch (FileAlreadyExistsException e) {
+			//Do nothing
+		}
+
 		return file;
 	}
 
@@ -100,6 +98,7 @@ public class TileDatabase extends TilePeripheral implements INamedContainerProvi
 		return databaseInventory.isDiskInserted();
 	}
 
+	@Nonnull
 	@Override
 	public <T> LazyOptional<T> getCapability(Capability<T> capability, Direction facing) {
 		if (capability.equals(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)) {
@@ -111,12 +110,13 @@ public class TileDatabase extends TilePeripheral implements INamedContainerProvi
 	}
 
 	@Override
-	public void read(BlockState state, CompoundNBT nbt) {
+	public void read(@Nonnull BlockState state, @Nonnull CompoundNBT nbt) {
 		super.read(state, nbt);
 		databaseInventory.deserializeNBT(nbt.getCompound("databaseInventory"));
 		setCustomName(nbt.contains("customName") ? ITextComponent.Serializer.getComponentFromJson(nbt.getString("CustomName")) : null);
 	}
 
+	@Nonnull
 	@Override
 	public CompoundNBT write(CompoundNBT nbt) {
 		nbt.put("databaseInventory", databaseInventory.serializeNBT());
@@ -129,8 +129,16 @@ public class TileDatabase extends TilePeripheral implements INamedContainerProvi
 
 	@Override
 	public void tick() {
+		if (world == null)
+			return;
+
+		if (!world.getBlockState(this.getPos()).hasProperty(BlockDatabase.DISK_INSERTED))
+			return;
+
 		if (isDiskInserted() && !lastDiskState) {
-			this.getWorld().setBlockState(this.getPos(), this.getBlockState().with(BlockDatabase.DISK_INSERTED, true));
+
+
+			world.setBlockState(this.getPos(), this.getBlockState().with(BlockDatabase.DISK_INSERTED, true));
 
 			synchronized (computers) {
 				for (IComputerAccess c : computers) {
@@ -138,7 +146,7 @@ public class TileDatabase extends TilePeripheral implements INamedContainerProvi
 				}
 			}
 		} else if (!isDiskInserted() && lastDiskState) {
-			this.getWorld().setBlockState(this.getPos(), this.getBlockState().with(BlockDatabase.DISK_INSERTED, false));
+			world.setBlockState(this.getPos(), this.getBlockState().with(BlockDatabase.DISK_INSERTED, false));
 
 			synchronized (computers) {
 				for (IComputerAccess c : computers) {
@@ -151,7 +159,7 @@ public class TileDatabase extends TilePeripheral implements INamedContainerProvi
 
 	@Nullable
 	@Override
-	public Container createMenu(int id, PlayerInventory inventory, PlayerEntity player) {
+	public Container createMenu(int id, @Nonnull PlayerInventory inventory, @Nonnull PlayerEntity player) {
 		return new ContainerDatabase(id, inventory, databaseInventory);
 	}
 
@@ -161,7 +169,9 @@ public class TileDatabase extends TilePeripheral implements INamedContainerProvi
 	}
 
 	private synchronized void ejectContents(boolean destroyed) {
-		if (!this.getWorld().isRemote && databaseInventory.isDiskInserted()) {
+		if (world == null)
+			return;
+		if (!world.isRemote && databaseInventory.isDiskInserted()) {
 			ItemStack disks = databaseInventory.getStackInSlot(0);
 			databaseInventory.setStackInSlot(0, ItemStack.EMPTY);
 			int xOff = 0;
@@ -176,28 +186,31 @@ public class TileDatabase extends TilePeripheral implements INamedContainerProvi
 			double x = (double) pos.getX() + 0.5D + (double) xOff * 0.5D;
 			double y = (double) pos.getY() + 0.75D;
 			double z = (double) pos.getZ() + 0.5D + (double) zOff * 0.5D;
-			ItemEntity entityitem = new ItemEntity(this.getWorld(), x, y, z, disks);
+			ItemEntity entityitem = new ItemEntity(world, x, y, z, disks);
 			entityitem.setMotion((double) xOff * 0.15D, 0.0D, (double) zOff * 0.15D);
-			this.getWorld().addEntity(entityitem);
+			world.addEntity(entityitem);
 
 		}
 	}
 
 	@Override
 	public ActionResultType onActivate(PlayerEntity player, Hand hand, BlockRayTraceResult hit) {
+		if (world == null)
+			return ActionResultType.PASS;
+
 		if (player.isCrouching()) {
 			ItemStack item = player.getHeldItem(hand);
 			if (item.isEmpty()) {
 				return ActionResultType.PASS;
 			} else {
-				if (!this.getWorld().isRemote && !databaseInventory.isDiskInserted() && item != null && item.getItem().equals(ModItems.DATABASE_DISK)) {
+				if (!world.isRemote && !databaseInventory.isDiskInserted() && item.getItem().equals(ModItems.DATABASE_DISK)) {
 					ItemStack ret = databaseInventory.insertItem(0, item, false);
 					player.setHeldItem(hand, ret);
 				}
 				return ActionResultType.SUCCESS;
 			}
 		} else {
-			if (!this.getWorld().isRemote) {
+			if (!world.isRemote) {
 				NetworkHooks.openGui((ServerPlayerEntity) player, this, pos);
 			}
 
