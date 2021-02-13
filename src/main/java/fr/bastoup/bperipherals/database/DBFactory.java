@@ -12,6 +12,14 @@ public class DBFactory {
     private static final String URL_PREFIX = "jdbc:sqlite:";
     private static final String URL_SUFFIX = "?limit_attached=0";
 
+    static {
+        try {
+            Class.forName("org.sqlite.JDBC");
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public static DBFactory getInstance() {
 
         return new DBFactory();

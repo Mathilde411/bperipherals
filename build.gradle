@@ -16,7 +16,7 @@ apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 apply plugin: "com.wynprice.cursemaven"
 
-version = '1.1.0'
+version = '1.1.1'
 group = 'fr.bastoup.bperipherals' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = 'bperipherals'
 

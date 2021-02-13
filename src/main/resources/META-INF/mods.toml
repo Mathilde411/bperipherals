@@ -5,10 +5,10 @@ issueTrackerURL = "https://github.com/BastouP411/bperipherals/issues"
 
 [[mods]]
 modId = "bperipherals"
-version = "1.1.0"
+version = "1.1.1"
 displayName = "BPeripherals"
 #updateJSONURL="http://myurl.me/"
-#displayURL="http://example.com/"
+displayURL = "https://github.com/BastouP411/bperipherals/wiki"
 logoFile = "logo.png"
 #credits="Thanks for this example mod goes to Java"
 authors = "BastouP"
