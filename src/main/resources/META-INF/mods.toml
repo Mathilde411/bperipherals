@@ -5,7 +5,7 @@ issueTrackerURL = "https://github.com/BastouP411/bperipherals/issues"
 
 [[mods]]
 modId = "bperipherals"
-version = "1.1.1"
+version = "1.1.2"
 displayName = "BPeripherals"
 #updateJSONURL="http://myurl.me/"
 displayURL = "https://github.com/BastouP411/bperipherals/wiki"
@@ -19,14 +19,7 @@ authors = "BastouP"
 [[dependencies.bperipherals]]
     modId="forge"
     mandatory=true
-    versionRange="[36,)"
-    ordering="NONE"
-    side="BOTH"
-
-[[dependencies.bperipherals]]
-    modId="minecraft"
-    mandatory=true
-    versionRange="[1.16.5,)"
+    versionRange="[35.1.16,37)"
     ordering="NONE"
     side="BOTH"
 
