@@ -3,6 +3,7 @@ package fr.bastoup.bperipherals.peripherals.cryprographicaccelerator;
 import dan200.computercraft.api.lua.LuaException;
 import dan200.computercraft.api.lua.LuaFunction;
 import dan200.computercraft.api.peripheral.IPeripheral;
+import fr.bastoup.bperipherals.util.Config;
 import fr.bastoup.bperipherals.util.Util;
 import fr.bastoup.bperipherals.util.peripherals.BPeripheral;
 
@@ -42,8 +43,8 @@ public class PeripheralCryptographicAccelerator extends BPeripheral {
 
     @LuaFunction
     public final byte[] randomBytes(int length) throws LuaException {
-        if(0 >= length  || length > 1024)
-            throw new LuaException("Length must be between 1 and 1024");
+        if (0 >= length || length > Config.MAX_RANDOM_BYTES_SIZE)
+            throw new LuaException("Length must be between 1 and " + Config.MAX_RANDOM_BYTES_SIZE);
         byte[] res = new byte[length];
         new SecureRandom().nextBytes(res);
         return res;

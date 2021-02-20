@@ -52,6 +52,7 @@ public class TileFEMeter extends TilePeripheral implements ITickableTileEntity {
         energyTransferedLastTick = nbt.getInt("energyTransfered");
     }
 
+    @Nonnull
     @Override
     public CompoundNBT write(CompoundNBT compound) {
         CompoundNBT nbt = super.write(compound);

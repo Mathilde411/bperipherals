@@ -1,6 +1,7 @@
 package fr.bastoup.bperipherals.peripherals.femeter;
 
 import fr.bastoup.bperipherals.util.BlockFaces;
+import fr.bastoup.bperipherals.util.Config;
 import fr.bastoup.bperipherals.util.Util;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
@@ -12,9 +13,6 @@ import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.IEnergyStorage;
 
 public class EnergyFEMeterOut implements IEnergyStorage, INBTSerializable<CompoundNBT> {
-
-	public final static int FE_METER_CAPACITY = 64000;
-	public final static int MAX_TRANSFER_RATE = 32000;
 
 	private int energyStored;
 	private int transferRate;
@@ -44,7 +42,7 @@ public class EnergyFEMeterOut implements IEnergyStorage, INBTSerializable<Compou
 
 	@Override
 	public int getMaxEnergyStored() {
-        return FE_METER_CAPACITY;
+		return Config.FE_METER_INTERNAL_BUFFER_SIZE;
     }
 
 	@Override
@@ -63,46 +61,34 @@ public class EnergyFEMeterOut implements IEnergyStorage, INBTSerializable<Compou
 
 	public void setTransferRate(int transferRate) {
 		int actualTransferRate;
-		if(transferRate > MAX_TRANSFER_RATE) {
-			actualTransferRate = MAX_TRANSFER_RATE;
-		} else if (transferRate < 0) {
-			actualTransferRate = 0;
-		} else {
-			actualTransferRate = transferRate;
-		}
-		
+		if (transferRate > Config.MAX_FE_METER_TRANSFER_RATE) {
+			actualTransferRate = Config.MAX_FE_METER_TRANSFER_RATE;
+		} else actualTransferRate = Math.max(transferRate, 0);
+
 		this.transferRate = actualTransferRate;
 		updated = true;
 		tile.markDirty();
 	}
 	
 	public int transferFromIn(int maxTransfer, boolean simulate) {
-        int actualTransfer = 0;
-        if (maxTransfer >= transferRate) {
-            actualTransfer = transferRate;
-        } else {
-            actualTransfer = maxTransfer;
-        }
+		int actualTransfer = 0;
+		actualTransfer = Math.min(maxTransfer, transferRate);
 
-        if (maxTransfer + energyStored >= FE_METER_CAPACITY) {
-            actualTransfer = FE_METER_CAPACITY - energyStored;
-        }
+		if (maxTransfer + energyStored >= Config.FE_METER_INTERNAL_BUFFER_SIZE) {
+			actualTransfer = Config.FE_METER_INTERNAL_BUFFER_SIZE - energyStored;
+		}
 
-        if (!simulate) {
-            energyStored += actualTransfer;
-            updated = true;
-            tile.markDirty();
-        }
+		if (!simulate) {
+			energyStored += actualTransfer;
+			updated = true;
+			tile.markDirty();
+		}
 
-        return actualTransfer;
-    }
+		return actualTransfer;
+	}
 	
 	public int getExtractableEnergy() {
-		if(energyStored < transferRate) {
-			return energyStored;
-		} else {
-			return transferRate;
-		}
+		return Math.min(energyStored, transferRate);
 	}
 	
 	public void sendEnergy() {
@@ -121,7 +107,7 @@ public class EnergyFEMeterOut implements IEnergyStorage, INBTSerializable<Compou
 	}
 	
 	public int getMaxTransferRate() {
-		return MAX_TRANSFER_RATE;
+		return Config.MAX_FE_METER_TRANSFER_RATE;
 	}
 	
 	public boolean resetUpdated() {

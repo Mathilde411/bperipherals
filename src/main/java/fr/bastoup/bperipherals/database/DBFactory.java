@@ -5,12 +5,13 @@ import fr.bastoup.bperipherals.beans.QueryResult;
 import fr.bastoup.bperipherals.beans.SQLResult;
 import fr.bastoup.bperipherals.beans.UpdateResult;
 import fr.bastoup.bperipherals.peripherals.database.PeripheralDatabase;
+import fr.bastoup.bperipherals.util.Config;
 
 import java.sql.*;
 
 public class DBFactory {
     private static final String URL_PREFIX = "jdbc:sqlite:";
-    private static final String URL_SUFFIX = "?limit_attached=0";
+    private static final String URL_SUFFIX = "?limit_attached=0&page_size=1024&max_page_count=%d";
 
     static {
         try {
@@ -26,7 +27,7 @@ public class DBFactory {
     }
 
     public Connection getConnection(String path) throws SQLException {
-        return DriverManager.getConnection(URL_PREFIX + path + URL_SUFFIX, null, null);
+        return DriverManager.getConnection(URL_PREFIX + path + String.format(URL_SUFFIX, Config.MAX_DATABASE_SIZE), null, null);
     }
 
     public SQLResult executeSQL(String path, String sql) {
