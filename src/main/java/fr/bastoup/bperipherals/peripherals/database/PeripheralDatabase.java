@@ -28,6 +28,13 @@ public class PeripheralDatabase extends BPeripheral {
         return ((TileDatabase) tile);
     }
 
+    protected static void checkName(String name) throws LuaException {
+        if (!name.matches("^[a-zA-Z_][a-zA-Z_#@$0-9]*$")) {
+            throw new LuaException("Names may only contain alphanumeric symbols, underscores (_), number signs (#), " +
+                    "dollar signs ($), or at signs (@), and may only start with a letter or underscore.");
+        }
+    }
+
     @Nonnull
     @Override
     public String getType() {
@@ -89,33 +96,25 @@ public class PeripheralDatabase extends BPeripheral {
 
     @LuaFunction
     public final CCInsert prepareInsert(String tableName) throws LuaException {
-        if (!tableName.matches("^[A-Za-z_]\\w*$")) {
-            throw new LuaException("The table names may only contain alphanumeric symbols and cannot start with a number.");
-        }
+        checkName(tableName);
         return new CCInsert(tableName, this);
     }
 
     @LuaFunction
     public final CCTableCreator prepareTableCreation(String tableName) throws LuaException {
-        if (!tableName.matches("^[A-Za-z_]\\w*$")) {
-            throw new LuaException("The table names may only contain alphanumeric symbols and cannot start with a number.");
-        }
+        checkName(tableName);
         return new CCTableCreator(tableName, this);
     }
 
     @LuaFunction
     public final CCSelect prepareSelect(String tableName) throws LuaException {
-        if (!tableName.matches("^[A-Za-z_]\\w*$")) {
-            throw new LuaException("The table names may only contain alphanumeric symbols and cannot start with a number.");
-        }
+        checkName(tableName);
         return new CCSelect(tableName, this);
     }
 
     @LuaFunction
     public final CCDelete prepareDelete(String tableName) throws LuaException {
-        if (!tableName.matches("^[A-Za-z_]\\w*$")) {
-            throw new LuaException("The table names may only contain alphanumeric symbols and cannot start with a number.");
-        }
+        checkName(tableName);
         return new CCDelete(tableName, this);
     }
 
@@ -215,9 +214,7 @@ public class PeripheralDatabase extends BPeripheral {
 
         @LuaFunction
         public final CCTableCreator addColumn(String name, String type, boolean notNull, boolean isUnique) throws LuaException {
-            if (!name.matches("^[A-Za-z_]\\w*$")) {
-                throw new LuaException("The column names may only contain alphanumeric symbols and cannot start with a number.");
-            }
+            checkName(name);
 
             if (!(type.equalsIgnoreCase("text") || type.equalsIgnoreCase("integer") ||
                     type.equalsIgnoreCase("real") || type.equalsIgnoreCase("blob"))) {
@@ -332,7 +329,7 @@ public class PeripheralDatabase extends BPeripheral {
             if (tile != null && tile.isDiskInserted()) {
                 List<String> s = new ArrayList<>();
                 Map<Integer, Object> obj = new HashMap<>();
-                Object[] keys = values.keySet().toArray();
+                String[] keys = values.keySet().toArray(new String[0]);
                 for (int i = 1; i <= values.size(); i++) {
                     obj.put(i, values.get(keys[i - 1]));
                     s.add("?");
@@ -383,7 +380,7 @@ public class PeripheralDatabase extends BPeripheral {
             if (tile != null && tile.isDiskInserted()) {
                 Map<Integer, Object> obj = new HashMap<>();
                 List<String> k = new ArrayList<>();
-                Object[] keys = conditions.keySet().toArray();
+                String[] keys = conditions.keySet().toArray(new String[0]);
                 for (int i = 1; i <= conditions.size(); i++) {
                     obj.put(i, conditions.get(keys[i - 1]));
                     k.add(keys[i - 1] + " = ?");
@@ -432,7 +429,7 @@ public class PeripheralDatabase extends BPeripheral {
             if (tile != null && tile.isDiskInserted()) {
                 Map<Integer, Object> obj = new HashMap<>();
                 List<String> k = new ArrayList<>();
-                Object[] keys = conditions.keySet().toArray();
+                String[] keys = conditions.keySet().toArray(new String[0]);
                 for (int i = 1; i <= conditions.size(); i++) {
                     obj.put(i, conditions.get(keys[i - 1]));
                     k.add(keys[i - 1] + " = ?");

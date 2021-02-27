@@ -78,7 +78,7 @@ public class Config {
                     .defineInRange("max_mag_card_data", Config.MAX_MAG_CARD_DATA, 1, Integer.MAX_VALUE);
 
             MAX_FE_METER_TRANSFER_RATE = builder
-                    .comment("The maximum transfer rate that can be set in an FE Meter.")
+                    .comment("The maximum transfer rate that can be set in an FE Meter. The addition of this and fe_meter_internal_buffer_size **MUST** be BELOW 2147483647, or else THIS WILL CORRUPT YOUR WORLD")
                     .defineInRange("max_fe_meter_transfer_rate", Config.MAX_FE_METER_TRANSFER_RATE, 1, Integer.MAX_VALUE);
             FE_METER_INTERNAL_BUFFER_SIZE = builder
                     .comment("The size of FE Meters internal energy buffer.")

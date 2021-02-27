@@ -7,6 +7,7 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.energy.CapabilityEnergy;
@@ -21,7 +22,7 @@ public class EnergyFEMeterOut implements IEnergyStorage, INBTSerializable<Compou
 
 	public EnergyFEMeterOut(TileFEMeter tileRFMeter) {
 		energyStored = 0;
-		transferRate = 32000;
+		transferRate = Config.MAX_FE_METER_TRANSFER_RATE;
 		tile = tileRFMeter;
 	}
 
@@ -71,8 +72,7 @@ public class EnergyFEMeterOut implements IEnergyStorage, INBTSerializable<Compou
 	}
 	
 	public int transferFromIn(int maxTransfer, boolean simulate) {
-		int actualTransfer = 0;
-		actualTransfer = Math.min(maxTransfer, transferRate);
+		int actualTransfer = Math.min(maxTransfer, transferRate);
 
 		if (maxTransfer + energyStored >= Config.FE_METER_INTERNAL_BUFFER_SIZE) {
 			actualTransfer = Config.FE_METER_INTERNAL_BUFFER_SIZE - energyStored;
@@ -94,10 +94,13 @@ public class EnergyFEMeterOut implements IEnergyStorage, INBTSerializable<Compou
 	public void sendEnergy() {
 		Direction rightFace = tile.getFacingOfFace(BlockFaces.RIGHT);
 		BlockPos pos = Util.getNextPos(tile.getPos(), rightFace);
-		TileEntity targetTile = tile.getWorld().getTileEntity(pos);
-		if(targetTile != null && targetTile instanceof ICapabilityProvider && ((ICapabilityProvider) targetTile).getCapability(CapabilityEnergy.ENERGY, Util.getOppositeFacing(rightFace)).isPresent()) {
+		World world = tile.getWorld();
+		if (world == null)
+			return;
+		TileEntity targetTile = world.getTileEntity(pos);
+		if (targetTile != null && ((ICapabilityProvider) targetTile).getCapability(CapabilityEnergy.ENERGY, Util.getOppositeFacing(rightFace)).isPresent()) {
 			IEnergyStorage cap = ((ICapabilityProvider) targetTile).getCapability(CapabilityEnergy.ENERGY, Util.getOppositeFacing(rightFace)).orElse(null);
-			if(cap.canReceive()) {
+			if (cap.canReceive()) {
 				int extracted = cap.receiveEnergy(getExtractableEnergy(), false);
 				energyStored -= extracted;
 				updated = true;
