@@ -36,11 +36,11 @@ public class PeripheralMagCardReader extends BPeripheral {
     }
 
     @LuaFunction
-    public final void write(ByteBuffer bytes) throws LuaException {
+    public final void write(ByteBuffer bytes, String label) throws LuaException {
         byte[] data = Util.getByteBufferArray(bytes);
         if (data.length > Config.MAX_MAG_CARD_DATA)
             throw new LuaException("You can't put more than " + Config.MAX_MAG_CARD_DATA + " characters in a mag card.");
-        getTile().writeCard(data);
+        getTile().writeCard(data, label);
     }
 
     @LuaFunction

@@ -16,6 +16,7 @@ import java.util.UUID;
 public class TileMagCardReader extends TilePeripheral {
 
     private byte[] write = null;
+    private String label = null;
     private BlockStateMagCardReader state = BlockStateMagCardReader.READ;
 
     public TileMagCardReader() {
@@ -39,13 +40,15 @@ public class TileMagCardReader extends TilePeripheral {
         }
     }
 
-    public void writeCard(byte[] data) {
-        write = data;
+    public void writeCard(byte[] data, String label) {
+        this.write = data;
+        this.label = label;
         update();
     }
 
     public void cancelWrite() {
-        write = null;
+        this.write = null;
+        this.label = null;
         update();
     }
 
@@ -91,8 +94,12 @@ public class TileMagCardReader extends TilePeripheral {
                 }
 
                 tag.putByteArray("data", write);
+                if (label != null) {
+                    tag.putString("label", label);
+                }
                 magWrite(tag.getString("uuid"), write, lastData);
                 write = null;
+                label = null;
                 update();
             } else {
                 if (tag.contains("data")) {

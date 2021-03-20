@@ -60,8 +60,8 @@ public class InventoryDatabase extends ItemStackHandler {
         ItemStack item = super.stacks.get(0);
         if (item.getItem().equals(ModItems.DATABASE_DISK)) {
             CompoundNBT tag = item.getOrCreateTag();
-            if (tag.contains("databaseName")) {
-                return tag.getString("databaseName");
+            if (tag.contains("label")) {
+                return tag.getString("label");
             }
         }
         return null;
@@ -71,7 +71,7 @@ public class InventoryDatabase extends ItemStackHandler {
         ItemStack item = super.stacks.get(0);
         if (item.getItem().equals(ModItems.DATABASE_DISK)) {
             CompoundNBT tag = item.getOrCreateTag();
-            tag.putString("databaseName", name);
+            tag.putString("label", name);
         }
     }
 
