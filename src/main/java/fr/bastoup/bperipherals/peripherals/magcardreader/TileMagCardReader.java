@@ -31,10 +31,10 @@ public class TileMagCardReader extends TilePeripheral {
         }
     }
 
-    public void magWrite(String uuid) {
+    public void magWrite(String uuid, byte[] newData, byte[] lastData) {
         synchronized (computers) {
             for (IComputerAccess computer : computers) {
-                computer.queueEvent("mag_write", computer.getAttachmentName(), uuid);
+                computer.queueEvent("mag_write", computer.getAttachmentName(), uuid, newData, lastData);
             }
         }
     }
@@ -85,10 +85,15 @@ public class TileMagCardReader extends TilePeripheral {
             }
 
             if (write != null) {
+                byte[] lastData = null;
+                if (tag.contains("data")) {
+                    lastData = tag.getByteArray("data");
+                }
+
                 tag.putByteArray("data", write);
+                magWrite(tag.getString("uuid"), write, lastData);
                 write = null;
                 update();
-                magWrite(tag.getString("uuid"));
             } else {
                 if (tag.contains("data")) {
                     magSwipe(tag.getString("uuid"), tag.getByteArray("data"));
