@@ -40,22 +40,23 @@ public class TileFEMeter extends TilePeripheral implements ITickableTileEntity {
     }
 
 	@Override
-	public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
-        CompoundNBT nbt = pkt.getNbtCompound();
+    public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
+        CompoundNBT nbt = pkt.getTag();
         holderOut.orElse(null).deserializeNBT(nbt.getCompound("Energy"));
         energyTransferedLastTick = nbt.getInt("energyTransfered");
     }
-	@Override
-	public void read(BlockState state, CompoundNBT nbt) {
-        super.read(state, nbt);
+
+    @Override
+    public void deserializeNBT(BlockState state, CompoundNBT nbt) {
+        super.deserializeNBT(state, nbt);
         holderOut.orElse(null).deserializeNBT(nbt.getCompound("Energy"));
         energyTransferedLastTick = nbt.getInt("energyTransfered");
     }
 
     @Nonnull
     @Override
-    public CompoundNBT write(CompoundNBT compound) {
-        CompoundNBT nbt = super.write(compound);
+    public CompoundNBT serializeNBT() {
+        CompoundNBT nbt = super.serializeNBT();
         nbt.put("Energy", holderOut.orElse(null).serializeNBT());
         nbt.putInt("energyTransfered", energyTransferedLastTick);
         return nbt;
@@ -82,13 +83,13 @@ public class TileFEMeter extends TilePeripheral implements ITickableTileEntity {
 
 	@Override
 	public void tick() {
-		if (!world.isRemote) {
+        if (!this.getLevel().isClientSide) {
             energyStoredLastTick = holderOut.orElse(null).getEnergyStored();
             holderOut.orElse(null).sendEnergy();
             energyTransferedLastTick = energyStoredLastTick - holderOut.orElse(null).getEnergyStored();
 
             if (holderOut.orElse(null).resetUpdated()) {
-                world.notifyBlockUpdate(pos, world.getBlockState(pos), world.getBlockState(pos), 2);
+                this.getLevel().sendBlockUpdated(worldPosition, this.getLevel().getBlockState(worldPosition), this.getLevel().getBlockState(worldPosition), 2);
             }
         }
     }

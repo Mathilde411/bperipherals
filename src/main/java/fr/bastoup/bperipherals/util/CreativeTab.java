@@ -15,7 +15,7 @@ public class CreativeTab extends ItemGroup {
 
     @Nonnull
     @OnlyIn(Dist.CLIENT)
-    public ItemStack createIcon() {
+    public ItemStack makeIcon() {
         return new ItemStack(ModBlocks.DATABASE);
     }
 }

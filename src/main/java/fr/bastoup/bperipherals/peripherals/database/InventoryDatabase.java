@@ -28,7 +28,7 @@ public class InventoryDatabase extends ItemStackHandler {
             if (!force && tag.contains("databaseId")) {
                 return null;
             }
-            World world = database.getWorld();
+            World world = database.getLevel();
             int id = ComputerCraftAPI.createUniqueNumberedSaveDir(world, "database");
             if (id >= 0)
                 tag.putInt("databaseId", id);
@@ -89,4 +89,6 @@ public class InventoryDatabase extends ItemStackHandler {
     public boolean isItemValid(int slot, @Nonnull ItemStack stack) {
         return stack.getItem().equals(ModItems.DATABASE_DISK);
     }
+
+
 }

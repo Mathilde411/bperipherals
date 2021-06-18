@@ -10,7 +10,7 @@ import net.minecraft.world.IBlockReader;
 public class BlockFEMeter extends BlockPeripheral {
 
     public BlockFEMeter() {
-        super(Properties.create(Material.ROCK).hardnessAndResistance(2.0F), "fe_meter");
+        super(Properties.of(Material.STONE).strength(2.0F), "fe_meter");
     }
 
     @Override

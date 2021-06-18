@@ -53,7 +53,7 @@ public class TileDatabase extends TilePeripheral implements INamedContainerProvi
 
 	public Path getDatabaseFile() throws IllegalAccessException, IOException {
 
-		Path worldDirectory = Util.getWorldFolder((ServerWorld) world);
+		Path worldDirectory = Util.getWorldFolder((ServerWorld) this.getLevel());
 
 		Integer databaseId = databaseInventory.getDiskId(true);
 		if (databaseId == null || databaseId == -1) {
@@ -79,19 +79,19 @@ public class TileDatabase extends TilePeripheral implements INamedContainerProvi
 
 	public Integer getDatabaseId() {
 		Integer id = databaseInventory.getDiskId(true);
-		this.markDirty();
+		this.setChanged();
 		return id;
 	}
 
 	public String getDatabaseName() {
 		String name = databaseInventory.getDiskName();
-		this.markDirty();
+		this.setChanged();
 		return name;
 	}
 
 	public void setDatabaseName(String name) {
 		databaseInventory.setDiskName(name);
-		this.markDirty();
+		this.setChanged();
 	}
 
 	public boolean isDiskInserted() {
@@ -109,36 +109,37 @@ public class TileDatabase extends TilePeripheral implements INamedContainerProvi
 
 	}
 
+
 	@Override
-	public void read(@Nonnull BlockState state, @Nonnull CompoundNBT nbt) {
-		super.read(state, nbt);
+	public void deserializeNBT(@Nonnull BlockState state, @Nonnull CompoundNBT nbt) {
+		super.deserializeNBT(state, nbt);
 		databaseInventory.deserializeNBT(nbt.getCompound("databaseInventory"));
-		setCustomName(nbt.contains("customName") ? ITextComponent.Serializer.getComponentFromJson(nbt.getString("CustomName")) : null);
+		setCustomName(nbt.contains("customName") ? ITextComponent.Serializer.fromJson(nbt.getString("CustomName")) : null);
 	}
 
 	@Nonnull
 	@Override
-	public CompoundNBT write(CompoundNBT nbt) {
+	public CompoundNBT serializeNBT() {
+		CompoundNBT nbt = super.serializeNBT();
 		nbt.put("databaseInventory", databaseInventory.serializeNBT());
 		if (this.customName != null) {
 			nbt.putString("customName", ITextComponent.Serializer.toJson(this.customName));
 		}
-		return super.write(nbt);
+		return nbt;
 	}
 
 
 	@Override
 	public void tick() {
-		if (world == null)
+		if (this.getLevel() == null)
 			return;
 
-		if (!world.getBlockState(this.getPos()).hasProperty(BlockDatabase.DISK_INSERTED))
+		if (!this.getLevel().getBlockState(worldPosition).hasProperty(BlockDatabase.DISK_INSERTED))
 			return;
 
 		if (isDiskInserted() && !lastDiskState) {
 
-
-			world.setBlockState(this.getPos(), this.getBlockState().with(BlockDatabase.DISK_INSERTED, true));
+			this.getLevel().setBlockAndUpdate(worldPosition, this.getBlockState().setValue(BlockDatabase.DISK_INSERTED, true));
 
 			synchronized (computers) {
 				for (IComputerAccess c : computers) {
@@ -146,7 +147,7 @@ public class TileDatabase extends TilePeripheral implements INamedContainerProvi
 				}
 			}
 		} else if (!isDiskInserted() && lastDiskState) {
-			world.setBlockState(this.getPos(), this.getBlockState().with(BlockDatabase.DISK_INSERTED, false));
+			this.getLevel().setBlockAndUpdate(worldPosition, this.getBlockState().setValue(BlockDatabase.DISK_INSERTED, false));
 
 			synchronized (computers) {
 				for (IComputerAccess c : computers) {
@@ -169,49 +170,49 @@ public class TileDatabase extends TilePeripheral implements INamedContainerProvi
 	}
 
 	private synchronized void ejectContents(boolean destroyed) {
-		if (world == null)
+		if (this.getLevel() == null)
 			return;
-		if (!world.isRemote && databaseInventory.isDiskInserted()) {
+		if (!this.getLevel().isClientSide && databaseInventory.isDiskInserted()) {
 			ItemStack disks = databaseInventory.getStackInSlot(0);
 			databaseInventory.setStackInSlot(0, ItemStack.EMPTY);
 			int xOff = 0;
 			int zOff = 0;
 			if (!destroyed) {
-				Direction dir = world.getBlockState(pos).get(BlockOrientable.FACING);
-				xOff = dir.getXOffset();
-				zOff = dir.getZOffset();
+				Direction dir = this.getLevel().getBlockState(worldPosition).getValue(BlockOrientable.FACING);
+				xOff = dir.getStepX();
+				zOff = dir.getStepZ();
 			}
 
-			BlockPos pos = this.getPos();
+			BlockPos pos = worldPosition;
 			double x = (double) pos.getX() + 0.5D + (double) xOff * 0.5D;
 			double y = (double) pos.getY() + 0.75D;
 			double z = (double) pos.getZ() + 0.5D + (double) zOff * 0.5D;
-			ItemEntity entityitem = new ItemEntity(world, x, y, z, disks);
-			entityitem.setMotion((double) xOff * 0.15D, 0.0D, (double) zOff * 0.15D);
-			world.addEntity(entityitem);
+			ItemEntity entityitem = new ItemEntity(this.getLevel(), x, y, z, disks);
+			entityitem.push((double) xOff * 0.15D, 0.0D, (double) zOff * 0.15D);
+			this.getLevel().addFreshEntity(entityitem);
 
 		}
 	}
 
 	@Override
 	public ActionResultType onActivate(PlayerEntity player, Hand hand, BlockRayTraceResult hit) {
-		if (world == null)
+		if (this.getLevel() == null)
 			return ActionResultType.PASS;
 
 		if (player.isCrouching()) {
-			ItemStack item = player.getHeldItem(hand);
+			ItemStack item = player.getItemInHand(hand);
 			if (item.isEmpty()) {
 				return ActionResultType.PASS;
 			} else {
-				if (!world.isRemote && !databaseInventory.isDiskInserted() && item.getItem().equals(ModItems.DATABASE_DISK)) {
+				if (!this.getLevel().isClientSide && !databaseInventory.isDiskInserted() && item.getItem().equals(ModItems.DATABASE_DISK)) {
 					ItemStack ret = databaseInventory.insertItem(0, item, false);
-					player.setHeldItem(hand, ret);
+					player.setItemInHand(hand, ret);
 				}
 				return ActionResultType.SUCCESS;
 			}
 		} else {
-			if (!world.isRemote) {
-				NetworkHooks.openGui((ServerPlayerEntity) player, this, pos);
+			if (!this.level.isClientSide) {
+				NetworkHooks.openGui((ServerPlayerEntity) player, this, worldPosition);
 			}
 
 			return ActionResultType.SUCCESS;
@@ -233,7 +234,7 @@ public class TileDatabase extends TilePeripheral implements INamedContainerProvi
 
 	@Nonnull
 	public ITextComponent getName() {
-		return this.customName != null ? this.customName : new TranslationTextComponent(this.getBlockState().getBlock().getTranslationKey());
+		return this.customName != null ? this.customName : new TranslationTextComponent(this.getBlockState().getBlock().getDescriptionId());
 	}
 
 	@Nonnull

@@ -31,8 +31,8 @@ public class PeripheralMagCardReader extends BPeripheral {
 
     @Override
     public boolean equals(@Nullable IPeripheral other) {
-        return other instanceof PeripheralMagCardReader && ((TileMagCardReader) other.getTarget()).getWorld().equals(tile.getWorld()) &&
-                ((TileMagCardReader) other.getTarget()).getPos().equals(tile.getPos());
+        return other instanceof PeripheralMagCardReader && ((TileMagCardReader) other.getTarget()).getLevel().equals(tile.getLevel()) &&
+                ((TileMagCardReader) other.getTarget()).getBlockPos().equals(tile.getBlockPos());
     }
 
     @LuaFunction

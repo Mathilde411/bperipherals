@@ -16,6 +16,6 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 public class ClientRegistry {
     @SubscribeEvent
     public static void setupClient(FMLClientSetupEvent event) {
-        ScreenManager.registerFactory(ModContainerTypes.DATABASE, GUIDatabase::new);
+        ScreenManager.register(ModContainerTypes.DATABASE, GUIDatabase::new);
     }
 }

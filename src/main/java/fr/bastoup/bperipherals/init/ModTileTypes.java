@@ -10,13 +10,13 @@ import net.minecraft.util.ResourceLocation;
 
 public class ModTileTypes {
 
-    public static final TileEntityType<TileFEMeter> FE_METER = (TileEntityType<TileFEMeter>) TileEntityType.Builder.create(TileFEMeter::new, ModBlocks.FE_METER)
+    public static final TileEntityType<TileFEMeter> FE_METER = (TileEntityType<TileFEMeter>) TileEntityType.Builder.of(TileFEMeter::new, ModBlocks.FE_METER)
             .build(null).setRegistryName(new ResourceLocation(BPeripheralsProperties.MODID, "fe_meter"));
-    public static final TileEntityType<TileDatabase> DATABASE = (TileEntityType<TileDatabase>) TileEntityType.Builder.create(TileDatabase::new, ModBlocks.DATABASE)
+    public static final TileEntityType<TileDatabase> DATABASE = (TileEntityType<TileDatabase>) TileEntityType.Builder.of(TileDatabase::new, ModBlocks.DATABASE)
             .build(null).setRegistryName(new ResourceLocation(BPeripheralsProperties.MODID, "database"));
-    public static final TileEntityType<TileCryptographicAccelerator> CRYPTOGRAPHIC_ACCELERATOR = (TileEntityType<TileCryptographicAccelerator>) TileEntityType.Builder.create(TileCryptographicAccelerator::new, ModBlocks.CRYPTOGRAPHIC_ACCELERATOR)
+    public static final TileEntityType<TileCryptographicAccelerator> CRYPTOGRAPHIC_ACCELERATOR = (TileEntityType<TileCryptographicAccelerator>) TileEntityType.Builder.of(TileCryptographicAccelerator::new, ModBlocks.CRYPTOGRAPHIC_ACCELERATOR)
             .build(null).setRegistryName(new ResourceLocation(BPeripheralsProperties.MODID, "cryptographic_accelerator"));
-    public static final TileEntityType<TileMagCardReader> MAG_CARD_READER = (TileEntityType<TileMagCardReader>) TileEntityType.Builder.create(TileMagCardReader::new, ModBlocks.MAG_CARD_READER)
+    public static final TileEntityType<TileMagCardReader> MAG_CARD_READER = (TileEntityType<TileMagCardReader>) TileEntityType.Builder.of(TileMagCardReader::new, ModBlocks.MAG_CARD_READER)
             .build(null).setRegistryName(new ResourceLocation(BPeripheralsProperties.MODID, "mag_card_reader"));
 
 }

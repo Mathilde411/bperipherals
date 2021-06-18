@@ -23,18 +23,19 @@ public class GUIDatabase extends ContainerScreen<ContainerDatabase> {
     public void render( @Nonnull MatrixStack transform, int mouseX, int mouseY, float partialTicks )
     {
         renderBackground( transform );
-        super.render( transform, mouseX, mouseY, partialTicks );
-        renderHoveredTooltip(transform, mouseX, mouseY);
+        super.render(transform, mouseX, mouseY, partialTicks);
+        renderTooltip(transform, mouseX, mouseY);
     }
+
 
     @Override
     @SuppressWarnings("deprecation")
-    protected void drawGuiContainerBackgroundLayer(@Nonnull MatrixStack matrixStack, float partialTicks, int x, int y) {
+    protected void renderBg(@Nonnull MatrixStack matrixStack, float partialTicks, int x, int y) {
         RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-        minecraft.getTextureManager().bindTexture(BACKGROUND);
-        int i = (this.width - this.xSize) / 2;
-        int j = (this.height - this.ySize) / 2;
-        this.blit(matrixStack, i, j, 0, 0, this.xSize, this.ySize);
+        minecraft.getTextureManager().bind(BACKGROUND);
+        int i = (this.width - this.imageWidth) / 2;
+        int j = (this.height - this.imageHeight) / 2;
+        this.blit(matrixStack, i, j, 0, 0, this.imageWidth, this.imageHeight);
 
     }
 }

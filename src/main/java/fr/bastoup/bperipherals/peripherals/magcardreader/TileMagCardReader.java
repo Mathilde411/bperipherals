@@ -65,22 +65,22 @@ public class TileMagCardReader extends TilePeripheral {
     public void update() {
         super.update();
 
-        if (world == null)
+        if (this.getLevel() == null)
             return;
 
-        if (!world.getBlockState(this.getPos()).hasProperty(BlockMagCardReader.STATE))
+        if (!this.getLevel().getBlockState(worldPosition).hasProperty(BlockMagCardReader.STATE))
             return;
 
         if (write == null) {
-            world.setBlockState(this.getPos(), this.getBlockState().with(BlockMagCardReader.STATE, state));
+            this.getLevel().setBlockAndUpdate(worldPosition, this.getBlockState().setValue(BlockMagCardReader.STATE, state));
         } else {
-            world.setBlockState(this.getPos(), this.getBlockState().with(BlockMagCardReader.STATE, BlockStateMagCardReader.WRITE));
+            this.getLevel().setBlockAndUpdate(worldPosition, this.getBlockState().setValue(BlockMagCardReader.STATE, BlockStateMagCardReader.WRITE));
         }
     }
 
     @Override
     public ActionResultType onActivate(PlayerEntity player, Hand hand, BlockRayTraceResult hit) {
-        ItemStack item = player.getHeldItem(hand);
+        ItemStack item = player.getItemInHand(hand);
         if (!item.isEmpty() && item.getItem().equals(ModItems.MAG_CARD)) {
             CompoundNBT tag = item.getOrCreateTag();
             if (!tag.contains("uuid")) {

@@ -19,9 +19,9 @@ public class BlockMagCardReader extends BlockPeripheral {
     public static final EnumProperty<BlockStateMagCardReader> STATE = EnumProperty.create("state", BlockStateMagCardReader.class);
 
     public BlockMagCardReader() {
-        super(Properties.create(Material.ROCK).hardnessAndResistance(2.0F), "mag_card_reader");
+        super(Properties.of(Material.STONE).strength(2.0F), "mag_card_reader");
 
-        setDefaultState(this.getDefaultState().with(FACING, Direction.NORTH).with(STATE, BlockStateMagCardReader.READ));
+        this.registerDefaultState(this.defaultBlockState().setValue(FACING, Direction.NORTH).setValue(STATE, BlockStateMagCardReader.READ));
     }
 
     @Override
@@ -37,13 +37,13 @@ public class BlockMagCardReader extends BlockPeripheral {
 
     @Override
     public BlockState getStateForPlacement(BlockItemUseContext context) {
-        return super.getStateForPlacement(context).with(STATE, BlockStateMagCardReader.READ);
+        return super.getStateForPlacement(context).setValue(STATE, BlockStateMagCardReader.READ);
     }
 
     @Override
-    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
+    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder) {
         builder.add(STATE);
-        super.fillStateContainer(builder);
+        super.createBlockStateDefinition(builder);
     }
 
 }

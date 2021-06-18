@@ -7,14 +7,11 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.StateContainer;
-import net.minecraft.stats.Stats;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.INameable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
@@ -31,7 +28,7 @@ public class BlockDatabase extends BlockPeripheral {
     public static final BooleanProperty DISK_INSERTED = BooleanProperty.create("disk");
 
     public BlockDatabase() {
-        super(Properties.create(Material.ROCK).hardnessAndResistance(2.0F), "database");
+        super(Properties.of(Material.STONE).strength(2.0F), "database");
     }
 
     @Override
@@ -48,35 +45,21 @@ public class BlockDatabase extends BlockPeripheral {
     @Nonnull
     @Override
     public BlockState getStateForPlacement(BlockItemUseContext context) {
-        return super.getStateForPlacement(context).with(DISK_INSERTED, false);
+        return super.getStateForPlacement(context).setValue(DISK_INSERTED, false);
     }
 
     @Override
-    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
+    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder) {
         builder.add(DISK_INSERTED);
-        super.fillStateContainer(builder);
+        super.createBlockStateDefinition(builder);
     }
 
     public void onBlockPlacedBy(@Nonnull World world, @Nonnull BlockPos pos, @Nonnull BlockState state, LivingEntity placer, ItemStack stack) {
-        if (stack.hasDisplayName()) {
-            TileEntity tileentity = world.getTileEntity(pos);
+        if (stack.hasCustomHoverName()) {
+            TileEntity tileentity = world.getBlockEntity(pos);
             if (tileentity instanceof TileDatabase) {
                 ((TileDatabase) tileentity).setCustomName(stack.getDisplayName());
             }
-        }
-
-    }
-
-    @Override
-    public void harvestBlock(@Nonnull World world, @Nonnull PlayerEntity player, @Nonnull BlockPos pos, @Nonnull BlockState state, @Nullable TileEntity te, @Nonnull ItemStack stack) {
-        if (te instanceof INameable && ((INameable) te).hasCustomName()) {
-            player.addStat(Stats.BLOCK_MINED.get(this));
-            player.addExhaustion(0.005F);
-            ItemStack result = new ItemStack(this);
-            result.setDisplayName(((INameable) te).getCustomName());
-            spawnAsEntity(world, pos, result);
-        } else {
-            super.harvestBlock(world, player, pos, state, te, stack);
         }
 
     }

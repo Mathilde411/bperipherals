@@ -13,12 +13,12 @@ public class ItemMagCard extends ItemBase {
     }
 
     @Override
-    public ITextComponent getDisplayName(ItemStack stack) {
+    public ITextComponent getName(ItemStack stack) {
         CompoundNBT tag = stack.getOrCreateTag();
         if (tag.contains("label")) {
             return new StringTextComponent(tag.getString("label"));
         } else {
-            return super.getDisplayName(stack);
+            return super.getName(stack);
         }
     }
 }

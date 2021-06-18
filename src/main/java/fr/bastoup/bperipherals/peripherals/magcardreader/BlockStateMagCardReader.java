@@ -8,8 +8,12 @@ public enum BlockStateMagCardReader implements IStringSerializable {
     READ,
     WRONG;
 
-    @Override
     public String getString() {
+        return super.name().toLowerCase();
+    }
+
+    @Override
+    public String getSerializedName() {
         return super.name().toLowerCase();
     }
 }

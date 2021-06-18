@@ -40,24 +40,25 @@ public class ContainerDatabase extends Container {
         return true;
     }
 
+
     @Nonnull
-    public ItemStack transferStackInSlot(@Nonnull PlayerEntity player, int slotIndex) {
-        Slot slot = this.inventorySlots.get(slotIndex);
-        if (slot != null && slot.getHasStack()) {
-            ItemStack existing = slot.getStack().copy();
+    public ItemStack quickMoveStack(@Nonnull PlayerEntity player, int slotIndex) {
+        Slot slot = this.slots.get(slotIndex);
+        if (slot != null && slot.hasItem()) {
+            ItemStack existing = slot.getItem().copy();
             ItemStack result = existing.copy();
             if (slotIndex == 0) {
-                if (!this.mergeItemStack(existing, 1, 37, true)) {
+                if (!this.moveItemStackTo(existing, 1, 37, true)) {
                     return ItemStack.EMPTY;
                 }
-            } else if (!this.mergeItemStack(existing, 0, 1, false)) {
+            } else if (!this.moveItemStackTo(existing, 0, 1, false)) {
                 return ItemStack.EMPTY;
             }
 
             if (existing.isEmpty()) {
-                slot.putStack(ItemStack.EMPTY);
+                slot.set(ItemStack.EMPTY);
             } else {
-                slot.onSlotChanged();
+                slot.setChanged();
             }
 
             if (existing.getCount() == result.getCount()) {
@@ -69,5 +70,10 @@ public class ContainerDatabase extends Container {
         } else {
             return ItemStack.EMPTY;
         }
+    }
+
+    @Override
+    public boolean stillValid(PlayerEntity p_75145_1_) {
+        return true;
     }
 }

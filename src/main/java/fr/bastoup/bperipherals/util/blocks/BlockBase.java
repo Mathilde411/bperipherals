@@ -23,11 +23,11 @@ import javax.annotation.Nonnull;
 public class BlockBase extends Block {
 
 	public BlockBase(String name, Material material) {
-		super(Properties.create(material));
+		super(Properties.of(material));
 		setRegistryName(new ResourceLocation(BPeripheralsProperties.MODID, name));
 
 		ModBlocks.BLOCKS.add(this);
-		ModItems.ITEMS.add(new BlockItem(this, new Item.Properties().group(BPeripheralsProperties.CREATIVE_TAB)).setRegistryName(this.getRegistryName()));
+		ModItems.ITEMS.add(new BlockItem(this, new Item.Properties().tab(BPeripheralsProperties.CREATIVE_TAB)).setRegistryName(this.getRegistryName()));
 	}
 
 	public BlockBase(final Properties properties, String name) {
@@ -35,16 +35,16 @@ public class BlockBase extends Block {
 		setRegistryName(name);
 
 		ModBlocks.BLOCKS.add(this);
-		ModItems.ITEMS.add(new BlockItem(this, new Item.Properties().group(BPeripheralsProperties.CREATIVE_TAB)).setRegistryName(this.getRegistryName()));
+		ModItems.ITEMS.add(new BlockItem(this, new Item.Properties().tab(BPeripheralsProperties.CREATIVE_TAB)).setRegistryName(this.getRegistryName()));
 	}
 
 	@Override
 	@SuppressWarnings("deprecation")
-	public final void onReplaced(@Nonnull BlockState block, @Nonnull World world, @Nonnull BlockPos pos, BlockState replace, boolean bool) {
+	public final void onRemove(@Nonnull BlockState block, @Nonnull World world, @Nonnull BlockPos pos, BlockState replace, boolean bool) {
 		if (block.getBlock() != replace.getBlock()) {
-			TileEntity tile = world.getTileEntity(pos);
-			super.onReplaced(block, world, pos, replace, bool);
-			world.removeTileEntity(pos);
+			TileEntity tile = world.getBlockEntity(pos);
+			super.onRemove(block, world, pos, replace, bool);
+			world.removeBlockEntity(pos);
 			if (tile instanceof TileBase) {
 				((TileBase) tile).destroy();
 			}
@@ -52,11 +52,12 @@ public class BlockBase extends Block {
 		}
 	}
 
+
 	@SuppressWarnings("deprecation")
 	@Nonnull
 	@Override
-	public final ActionResultType onBlockActivated(@Nonnull BlockState state, World world, @Nonnull BlockPos pos, @Nonnull PlayerEntity player, @Nonnull Hand hand, @Nonnull BlockRayTraceResult hit) {
-		TileEntity tile = world.getTileEntity(pos);
+	public final ActionResultType use(@Nonnull BlockState state, World world, @Nonnull BlockPos pos, @Nonnull PlayerEntity player, @Nonnull Hand hand, @Nonnull BlockRayTraceResult hit) {
+		TileEntity tile = world.getBlockEntity(pos);
 		return tile instanceof TileBase ? ((TileBase) tile).onActivate(player, hand, hit) : ActionResultType.PASS;
 	}
 

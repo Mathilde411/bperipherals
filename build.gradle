@@ -1,26 +1,22 @@
 buildscript {
     repositories {
         maven { url = 'https://files.minecraftforge.net/maven' }
-        maven { url "https://plugins.gradle.org/m2/" }
-        jcenter()
         mavenCentral()
     }
     dependencies {
-        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '3.+', changing: true
-        classpath "com.wynprice.cursemaven:CurseMaven:2.1.0"
+        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '4.1.+', changing: true
     }
 }
 apply plugin: 'net.minecraftforge.gradle'
 // Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
 apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
-apply plugin: "com.wynprice.cursemaven"
 
 version = '1.1.3'
 group = 'fr.bastoup.bperipherals' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = 'bperipherals'
 
-sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
+java.toolchain.languageVersion = JavaLanguageVersion.of(8) // Mojang ships Java 8 to end users, so your mod should target Java 8.
 
 println('Java: ' + System.getProperty('java.version') + ' JVM: ' + System.getProperty('java.vm.version') + '(' + System.getProperty('java.vendor') + ') Arch: ' + System.getProperty('os.arch'))
 minecraft {
@@ -29,7 +25,7 @@ minecraft {
     // stable_#            Stables are built at the discretion of the MCP team.
     // Use non-default mappings at your own risk. they may not always work.
     // Simply re-run your setup task after changing the mappings to update your workspace.
-    mappings channel: 'snapshot', version: '20201028-1.16.3'
+    mappings channel: 'official', version: '1.16.5'
     // makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
 
     // accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
@@ -96,7 +92,7 @@ sourceSets.main.resources { srcDir 'src/generated/resources' }
 repositories {
     jcenter()
     mavenCentral()
-    maven { url = 'https://files.minecraftforge.net/maven' }
+    maven { url 'https://squiddev.cc/maven/' }
 }
 
 configurations {
@@ -110,15 +106,11 @@ dependencies {
     // Specify the version of Minecraft to use, If this is any group other then 'net.minecraft' it is assumed
     // that the dep is a ForgeGradle 'patcher' dependency. And it's patches will be applied.
     // The userdev artifact is a special name and will get all sorts of transformations applied to it.
-    minecraft 'net.minecraftforge:forge:1.16.4-35.1.16'
+    minecraft 'net.minecraftforge:forge:1.16.5-36.1.0'
 
     shade (group: 'org.xerial', name: 'sqlite-jdbc', version: '3.34.0')
     compile (group: 'org.xerial', name: 'sqlite-jdbc', version: '3.34.0')
-    compile fg.deobf("curse.maven:cc-tweaked:3170424")
-    runtime fg.deobf("curse.maven:mekanism:3134211")
-    runtime fg.deobf("curse.maven:mekanism-additions:3134215")
-    runtime fg.deobf("curse.maven:mekanism-generators:3134213")
-    runtime fg.deobf("curse.maven:mekanism-tools:3134214")
+    compile fg.deobf("org.squiddev:cc-tweaked-1.16.4:1.95.3")
 
 }
 

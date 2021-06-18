@@ -24,12 +24,12 @@ public abstract class BlockPeripheral extends BlockOrientable {
     @Override
     @Nonnull
     public BlockState getStateForPlacement(BlockItemUseContext context) {
-        return super.getStateForPlacement(context).with(SWITCHED_ON, false);
+        return super.getStateForPlacement(context).setValue(SWITCHED_ON, false);
     }
 
     @Override
-    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
+    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder) {
         builder.add(SWITCHED_ON);
-        super.fillStateContainer(builder);
+        super.createBlockStateDefinition(builder);
     }
 }

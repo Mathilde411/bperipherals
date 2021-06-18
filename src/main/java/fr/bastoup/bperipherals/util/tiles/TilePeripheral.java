@@ -52,16 +52,16 @@ public abstract class TilePeripheral extends TileOrientable {
     }
 
     public void update() {
-        if (world == null)
+        if (this.getLevel() == null)
             return;
 
-        if (!world.getBlockState(this.getPos()).hasProperty(BlockPeripheral.SWITCHED_ON))
+        if (!this.getLevel().getBlockState(worldPosition).hasProperty(BlockPeripheral.SWITCHED_ON))
             return;
 
         if (computers.isEmpty()) {
-            world.setBlockState(this.getPos(), this.getBlockState().with(BlockPeripheral.SWITCHED_ON, false));
+            this.getLevel().setBlockAndUpdate(worldPosition, this.getBlockState().setValue(BlockPeripheral.SWITCHED_ON, false));
         } else {
-            world.setBlockState(this.getPos(), this.getBlockState().with(BlockPeripheral.SWITCHED_ON, true));
+            this.getLevel().setBlockAndUpdate(worldPosition, this.getBlockState().setValue(BlockPeripheral.SWITCHED_ON, true));
         }
     }
 }

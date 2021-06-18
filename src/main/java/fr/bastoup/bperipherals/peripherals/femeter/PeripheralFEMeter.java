@@ -23,8 +23,8 @@ public class PeripheralFEMeter extends BPeripheral {
 
     @Override
     public boolean equals(IPeripheral other) {
-        return other instanceof PeripheralFEMeter && ((TileFEMeter) other.getTarget()).getWorld().equals(tile.getWorld()) &&
-                ((TileFEMeter) other.getTarget()).getPos().equals(tile.getPos());
+        return other instanceof PeripheralFEMeter && ((TileFEMeter) other.getTarget()).getLevel().equals(tile.getLevel()) &&
+                ((TileFEMeter) other.getTarget()).getBlockPos().equals(tile.getBlockPos());
     }
 
     @LuaFunction

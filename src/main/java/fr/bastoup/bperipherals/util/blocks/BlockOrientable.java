@@ -29,13 +29,13 @@ public abstract class BlockOrientable extends BlockBase {
 	public BlockState getStateForPlacement(BlockItemUseContext context) {
         PlayerEntity player = context.getPlayer();
         if (player != null)
-            return getDefaultState().with(FACING, Util.getOppositeFacing(player.getHorizontalFacing()));
-        return getDefaultState().with(FACING, Util.getOppositeFacing(Direction.NORTH));
+            return defaultBlockState().setValue(FACING, Util.getOppositeFacing(player.getDirection()));
+        return defaultBlockState().setValue(FACING, Util.getOppositeFacing(Direction.NORTH));
     }
 
-	@Override
-	protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
-		builder.add(FACING);
-		super.fillStateContainer(builder);
-	}
+    @Override
+    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder) {
+        builder.add(FACING);
+        super.createBlockStateDefinition(builder);
+    }
 }

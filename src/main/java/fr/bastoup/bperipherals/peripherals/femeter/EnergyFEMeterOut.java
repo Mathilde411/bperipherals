@@ -68,7 +68,7 @@ public class EnergyFEMeterOut implements IEnergyStorage, INBTSerializable<Compou
 
 		this.transferRate = actualTransferRate;
 		updated = true;
-		tile.markDirty();
+		tile.setChanged();
 	}
 	
 	public int transferFromIn(int maxTransfer, boolean simulate) {
@@ -81,7 +81,7 @@ public class EnergyFEMeterOut implements IEnergyStorage, INBTSerializable<Compou
 		if (!simulate) {
 			energyStored += actualTransfer;
 			updated = true;
-			tile.markDirty();
+			tile.setChanged();
 		}
 
 		return actualTransfer;
@@ -93,18 +93,18 @@ public class EnergyFEMeterOut implements IEnergyStorage, INBTSerializable<Compou
 	
 	public void sendEnergy() {
 		Direction rightFace = tile.getFacingOfFace(BlockFaces.RIGHT);
-		BlockPos pos = Util.getNextPos(tile.getPos(), rightFace);
-		World world = tile.getWorld();
+		BlockPos pos = Util.getNextPos(tile.getBlockPos(), rightFace);
+		World world = tile.getLevel();
 		if (world == null)
 			return;
-		TileEntity targetTile = world.getTileEntity(pos);
+		TileEntity targetTile = world.getBlockEntity(pos);
 		if (targetTile != null && ((ICapabilityProvider) targetTile).getCapability(CapabilityEnergy.ENERGY, Util.getOppositeFacing(rightFace)).isPresent()) {
 			IEnergyStorage cap = ((ICapabilityProvider) targetTile).getCapability(CapabilityEnergy.ENERGY, Util.getOppositeFacing(rightFace)).orElse(null);
 			if (cap.canReceive()) {
 				int extracted = cap.receiveEnergy(getExtractableEnergy(), false);
 				energyStored -= extracted;
 				updated = true;
-				tile.markDirty();
+				tile.setChanged();
 			}
 		}
 	}

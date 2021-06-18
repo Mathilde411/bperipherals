@@ -12,7 +12,7 @@ import javax.annotation.Nullable;
 public class BlockCryptographicAccelerator extends BlockPeripheral {
 
     public BlockCryptographicAccelerator() {
-        super(Properties.create(Material.ROCK).hardnessAndResistance(2.0F), "cryptographic_accelerator");
+        super(Properties.of(Material.STONE).strength(2.0F), "cryptographic_accelerator");
     }
 
     @Override

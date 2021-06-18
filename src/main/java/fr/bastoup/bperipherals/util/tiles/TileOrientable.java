@@ -13,12 +13,12 @@ public abstract class TileOrientable extends TileBase {
 	}
 
 	public BlockFaces getFaceOfFacing(Direction face) {
-		Direction blockFacing = world.getBlockState(pos).get(BlockOrientable.FACING);
+		Direction blockFacing = this.getLevel().getBlockState(worldPosition).getValue(BlockOrientable.FACING);
 		return Util.getBlockFace(blockFacing, face);
 	}
 	
 	public Direction getFacingOfFace(BlockFaces face) {
-		Direction blockFacing = world.getBlockState(pos).get(BlockOrientable.FACING);
+		Direction blockFacing = this.getLevel().getBlockState(worldPosition).getValue(BlockOrientable.FACING);
 		return Util.getFacingFromBlockFace(blockFacing, face);
 	}
 

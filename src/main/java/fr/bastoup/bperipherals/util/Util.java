@@ -52,7 +52,7 @@ public class Util {
 	}
 	
 	public static BlockFaces getBlockFace(Direction blockFacing, Direction face ) {
-		if(face == Direction.UP) {
+		if (face == Direction.UP) {
 			return BlockFaces.TOP;
 		} else if (face == Direction.DOWN) {
 			return BlockFaces.BOTTOM;
@@ -60,17 +60,17 @@ public class Util {
 			return BlockFaces.NONE;
 		}
 
-		Direction reorFace = Direction.fromAngle((getAngleFromFace(face) - getAngleFromFace(blockFacing)) % 360d);
-		switch(reorFace) {
-		case EAST:
-			return BlockFaces.RIGHT;
-		case NORTH:
-			return BlockFaces.BACK;
-		case SOUTH:
-			return BlockFaces.FRONT;
-		case WEST:
-			return BlockFaces.LEFT;
-		default:
+		Direction reorFace = Direction.fromYRot((getAngleFromFace(face) - getAngleFromFace(blockFacing)) % 360d);
+		switch (reorFace) {
+			case EAST:
+				return BlockFaces.RIGHT;
+			case NORTH:
+				return BlockFaces.BACK;
+			case SOUTH:
+				return BlockFaces.FRONT;
+			case WEST:
+				return BlockFaces.LEFT;
+			default:
 			return BlockFaces.NONE;
 		}
 	}
@@ -95,12 +95,12 @@ public class Util {
 			case RIGHT:
 				angle = 90d;
 				break;
-		default:
-			angle = 0d;
-			break;
+			default:
+				angle = 0d;
+				break;
 		}
-		
-		return Direction.fromAngle((getAngleFromFace(blockFacing) - angle) % 360d);
+
+		return Direction.fromYRot((getAngleFromFace(blockFacing) - angle) % 360d);
 	}
 	
 	public static BlockPos getNextPos(BlockPos pos, Direction facing) {
@@ -123,7 +123,7 @@ public class Util {
 	}
 
 	public static Path getWorldFolder(ServerWorld world) throws IllegalAccessException {
-		DimensionSavedDataManager savedData = world.getChunkProvider().getSavedData();
+		DimensionSavedDataManager savedData = world.getDataStorage();
 		return ((File) folderField.get(savedData)).toPath().getParent();
 	}
 
