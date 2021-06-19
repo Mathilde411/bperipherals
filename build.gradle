@@ -90,9 +90,9 @@ minecraft {
 sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 repositories {
-    jcenter()
     mavenCentral()
     maven { url 'https://squiddev.cc/maven/' }
+    maven { url 'https://dvs1.progwml6.com/files/maven' }
 }
 
 configurations {
@@ -110,7 +110,8 @@ dependencies {
 
     shade (group: 'org.xerial', name: 'sqlite-jdbc', version: '3.34.0')
     compile (group: 'org.xerial', name: 'sqlite-jdbc', version: '3.34.0')
-    compile fg.deobf("org.squiddev:cc-tweaked-1.16.4:1.95.3")
+    compile fg.deobf(group: "org.squiddev", name: "cc-tweaked-1.16.4", version: "1.95.3")
+    runtime fg.deobf(group: "mezz.jei", name: "jei-1.16.5", version: "7.6.1.75")
 
 }
 

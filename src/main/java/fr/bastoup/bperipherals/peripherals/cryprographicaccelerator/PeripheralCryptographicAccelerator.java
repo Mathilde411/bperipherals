@@ -105,8 +105,8 @@ public class PeripheralCryptographicAccelerator extends BPeripheral {
 
     @LuaFunction
     public final Map<String, byte[]> generateRSAKeys(int keySize) throws LuaException {
-        if(0 >= keySize  || keySize > 1024)
-            throw new LuaException("Key size must be between 1 and 1024");
+        if (512 > keySize || keySize > 1024)
+            throw new LuaException("Key size must be between 512 and 1024");
         try {
             KeyPairGenerator kpGen = KeyPairGenerator.getInstance("RSA");
             kpGen.initialize(keySize);

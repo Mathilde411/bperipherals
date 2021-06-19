@@ -10,7 +10,7 @@ displayName = "BPeripherals"
 #updateJSONURL="http://myurl.me/"
 displayURL = "https://github.com/BastouP411/bperipherals/wiki"
 logoFile = "logo.png"
-#credits="Thanks for this example mod goes to Java"
+#credits=""
 authors = "BastouP"
     description='''
     This is a mod that adds peripherals to ComputerCraft.
