@@ -10,6 +10,7 @@ import fr.bastoup.bperipherals.util.peripherals.BPeripheral;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.nio.ByteBuffer;
+import java.util.Optional;
 
 public class PeripheralMagCardReader extends BPeripheral {
 
@@ -36,11 +37,11 @@ public class PeripheralMagCardReader extends BPeripheral {
     }
 
     @LuaFunction
-    public final void write(ByteBuffer bytes, String label) throws LuaException {
+    public final void write(ByteBuffer bytes, Optional<String> label) throws LuaException {
         byte[] data = Util.getByteBufferArray(bytes);
         if (data.length > Config.MAX_MAG_CARD_DATA)
             throw new LuaException("You can't put more than " + Config.MAX_MAG_CARD_DATA + " characters in a mag card.");
-        getTile().writeCard(data, label);
+        getTile().writeCard(data, label.orElse(null));
     }
 
     @LuaFunction
