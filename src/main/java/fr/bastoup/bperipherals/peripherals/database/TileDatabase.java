@@ -128,7 +128,23 @@ public class TileDatabase extends TilePeripheral implements INamedContainerProvi
 		return nbt;
 	}
 
-	
+	@Override
+	public CompoundNBT save(CompoundNBT nbtParam) {
+		CompoundNBT nbt = super.save(nbtParam);
+		nbt.put("databaseInventory", databaseInventory.serializeNBT());
+		if (this.customName != null) {
+			nbt.putString("customName", ITextComponent.Serializer.toJson(this.customName));
+		}
+		return nbt;
+	}
+
+	@Override
+	public void load(BlockState state, CompoundNBT nbt) {
+		super.load(state, nbt);
+		databaseInventory.deserializeNBT(nbt.getCompound("databaseInventory"));
+		setCustomName(nbt.contains("customName") ? ITextComponent.Serializer.fromJson(nbt.getString("CustomName")) : null);
+	}
+
 	@Override
 	public void tick() {
 		if (this.getLevel() == null)

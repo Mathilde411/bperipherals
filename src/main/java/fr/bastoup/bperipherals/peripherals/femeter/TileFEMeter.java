@@ -62,6 +62,21 @@ public class TileFEMeter extends TilePeripheral implements ITickableTileEntity {
         return nbt;
     }
 
+    @Override
+    public CompoundNBT save(CompoundNBT nbtParam) {
+        CompoundNBT nbt = super.save(nbtParam);
+        nbt.put("Energy", holderOut.orElse(null).serializeNBT());
+        nbt.putInt("energyTransfered", energyTransferedLastTick);
+        return nbt;
+    }
+
+    @Override
+    public void load(BlockState state, CompoundNBT nbt) {
+        super.load(state, nbt);
+        holderOut.orElse(null).deserializeNBT(nbt.getCompound("Energy"));
+        energyTransferedLastTick = nbt.getInt("energyTransfered");
+    }
+
     @Nonnull
     @SuppressWarnings("unchecked")
     @Override

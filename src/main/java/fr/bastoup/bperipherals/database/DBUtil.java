@@ -49,14 +49,14 @@ public class DBUtil {
         return hMap;
     }
 
-    public static List<Object> factorizeResults(SQLResult res) throws LuaException {
-        List<Object> ret = new ArrayList<>();
+    public static Map<String, Object> factorizeResults(SQLResult res) throws LuaException {
+        Map<String, Object> ret = new HashMap<>();
         if (res instanceof QueryResult) {
-            ret.add("query");
-            ret.add(((QueryResult) res).getResult());
+            ret.put("type", "query");
+            ret.put("data", ((QueryResult) res).getResult());
         } else if (res instanceof UpdateResult) {
-            ret.add("update");
-            ret.add(((UpdateResult) res).getUpdateCount());
+            ret.put("type", "update");
+            ret.put("data", ((UpdateResult) res).getUpdateCount());
         } else if (res instanceof ErrorResult) {
             throw new LuaException(((ErrorResult) res).getError());
         }

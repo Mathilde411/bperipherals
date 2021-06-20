@@ -73,7 +73,7 @@ public class PeripheralDatabase extends BPeripheral {
     }
 
     @LuaFunction
-    public final List<Object> executeSQL(String sql) throws LuaException {
+    public final Map<String, Object> executeSQL(String sql) throws LuaException {
         Path file;
         try {
             file = getTile().getDatabaseFile();
@@ -158,7 +158,7 @@ public class PeripheralDatabase extends BPeripheral {
         }
 
         @LuaFunction
-        public final List<Object> execute() throws LuaException {
+        public final Map<String, Object> execute() throws LuaException {
             peripheralStillValid();
             TileDatabase tile = (TileDatabase) database.getTarget();
             Path file;
@@ -252,7 +252,7 @@ public class PeripheralDatabase extends BPeripheral {
         }
 
         @LuaFunction
-        public final List<Object> execute() throws LuaException {
+        public final Map<String, Object> execute() throws LuaException {
             peripheralStillValid();
             TileDatabase tile = (TileDatabase) database.getTarget();
 
@@ -323,7 +323,7 @@ public class PeripheralDatabase extends BPeripheral {
 
 
         @LuaFunction
-        public final List<Object> execute() throws LuaException {
+        public final Map<String, Object> execute() throws LuaException {
             peripheralStillValid();
             TileDatabase tile = (TileDatabase) database.getTarget();
             if (tile != null && tile.isDiskInserted()) {
@@ -374,7 +374,7 @@ public class PeripheralDatabase extends BPeripheral {
 
 
         @LuaFunction
-        public final List<Object> execute() throws LuaException {
+        public final Map<String, Object> execute() throws LuaException {
             peripheralStillValid();
             TileDatabase tile = (TileDatabase) database.getTarget();
             if (tile != null && tile.isDiskInserted()) {
@@ -423,7 +423,7 @@ public class PeripheralDatabase extends BPeripheral {
 
 
         @LuaFunction
-        public final List<Object> execute() throws LuaException {
+        public final Map<String, Object> execute() throws LuaException {
             peripheralStillValid();
             TileDatabase tile = (TileDatabase) database.getTarget();
             if (tile != null && tile.isDiskInserted()) {
