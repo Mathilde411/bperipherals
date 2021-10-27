@@ -1,23 +1,25 @@
 package fr.bastoup.bperipherals.util.tiles;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityType;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.BlockRayTraceResult;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.BlockHitResult;
 
-public abstract class TileBase extends TileEntity {
+public abstract class TileBase extends BlockEntity {
 
-    public TileBase(TileEntityType<?> tileEntityTypeIn) {
-        super(tileEntityTypeIn);
+    public TileBase(BlockEntityType<? extends TileBase> tileType, BlockPos pos, BlockState state) {
+        super(tileType, pos, state);
     }
 
     public void destroy() {
 
     }
 
-    public ActionResultType onActivate(PlayerEntity player, Hand hand, BlockRayTraceResult hit) {
-        return ActionResultType.PASS;
+    public InteractionResult onActivate(Player player, InteractionHand hand, BlockHitResult hit) {
+        return InteractionResult.PASS;
     }
 }

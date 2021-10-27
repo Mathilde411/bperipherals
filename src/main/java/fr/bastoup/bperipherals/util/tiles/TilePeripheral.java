@@ -4,8 +4,10 @@ import dan200.computercraft.api.peripheral.IComputerAccess;
 import dan200.computercraft.shared.Capabilities;
 import fr.bastoup.bperipherals.util.blocks.BlockPeripheral;
 import fr.bastoup.bperipherals.util.peripherals.BPeripheral;
-import net.minecraft.tileentity.TileEntityType;
-import net.minecraft.util.Direction;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.core.Direction;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 
@@ -19,8 +21,8 @@ public abstract class TilePeripheral extends TileOrientable {
     private BPeripheral peripheral;
     private LazyOptional<BPeripheral> holderPeripheral;
 
-    public TilePeripheral(TileEntityType<?> tileEntityTypeIn) {
-        super(tileEntityTypeIn);
+    public TilePeripheral(BlockEntityType<? extends TileBase> tileType, BlockPos pos, BlockState state) {
+        super(tileType, pos, state);
     }
 
     protected void setPeripheral(BPeripheral peripheral) {

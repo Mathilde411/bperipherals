@@ -4,21 +4,23 @@ import fr.bastoup.bperipherals.init.ModBlocks;
 import fr.bastoup.bperipherals.init.ModItems;
 import fr.bastoup.bperipherals.util.BPeripheralsProperties;
 import fr.bastoup.bperipherals.util.tiles.TileBase;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.material.Material;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.BlockItem;
-import net.minecraft.item.Item;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Hand;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.world.World;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.level.Level;
 
 import javax.annotation.Nonnull;
+
+import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
 
 public class BlockBase extends Block {
 
@@ -40,9 +42,9 @@ public class BlockBase extends Block {
 
 	@Override
 	@SuppressWarnings("deprecation")
-	public final void onRemove(@Nonnull BlockState block, @Nonnull World world, @Nonnull BlockPos pos, BlockState replace, boolean bool) {
+	public final void onRemove(@Nonnull BlockState block, @Nonnull Level world, @Nonnull BlockPos pos, BlockState replace, boolean bool) {
 		if (block.getBlock() != replace.getBlock()) {
-			TileEntity tile = world.getBlockEntity(pos);
+			BlockEntity tile = world.getBlockEntity(pos);
 			super.onRemove(block, world, pos, replace, bool);
 			world.removeBlockEntity(pos);
 			if (tile instanceof TileBase) {
@@ -56,9 +58,9 @@ public class BlockBase extends Block {
 	@SuppressWarnings("deprecation")
 	@Nonnull
 	@Override
-	public final ActionResultType use(@Nonnull BlockState state, World world, @Nonnull BlockPos pos, @Nonnull PlayerEntity player, @Nonnull Hand hand, @Nonnull BlockRayTraceResult hit) {
-		TileEntity tile = world.getBlockEntity(pos);
-		return tile instanceof TileBase ? ((TileBase) tile).onActivate(player, hand, hit) : ActionResultType.PASS;
+	public final InteractionResult use(@Nonnull BlockState state, Level world, @Nonnull BlockPos pos, @Nonnull Player player, @Nonnull InteractionHand hand, @Nonnull BlockHitResult hit) {
+		BlockEntity tile = world.getBlockEntity(pos);
+		return tile instanceof TileBase ? ((TileBase) tile).onActivate(player, hand, hit) : InteractionResult.PASS;
 	}
 
 }

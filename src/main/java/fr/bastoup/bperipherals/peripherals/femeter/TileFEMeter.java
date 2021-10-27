@@ -2,19 +2,21 @@ package fr.bastoup.bperipherals.peripherals.femeter;
 
 import fr.bastoup.bperipherals.init.ModTileTypes;
 import fr.bastoup.bperipherals.util.tiles.TilePeripheral;
-import net.minecraft.block.BlockState;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.NetworkManager;
-import net.minecraft.network.play.server.SUpdateTileEntityPacket;
-import net.minecraft.tileentity.ITickableTileEntity;
-import net.minecraft.util.Direction;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.Connection;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.core.Direction;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.energy.CapabilityEnergy;
 
 import javax.annotation.Nonnull;
 
-public class TileFEMeter extends TilePeripheral implements ITickableTileEntity {
+public class TileFEMeter extends TilePeripheral {
 
     private final EnergyFEMeterOut outEnergyStorage = new EnergyFEMeterOut(this);
     private final EnergyFEMeterIn inEnergyStrorage = new EnergyFEMeterIn(outEnergyStorage);
@@ -25,54 +27,54 @@ public class TileFEMeter extends TilePeripheral implements ITickableTileEntity {
     private int energyTransferedLastTick = 0;
     private int energyStoredLastTick = 0;
 
-    public TileFEMeter() {
-        super(ModTileTypes.FE_METER);
+    public TileFEMeter(BlockPos pos, BlockState state) {
+        super(ModTileTypes.FE_METER, pos, state);
         this.setPeripheral(new PeripheralFEMeter(this));
     }
 
     @Nonnull
     @Override
-    public CompoundNBT getUpdateTag() {
-        CompoundNBT nbt = new CompoundNBT();
+    public CompoundTag getUpdateTag() {
+        CompoundTag nbt = new CompoundTag();
         nbt.put("Energy", holderOut.orElse(null).serializeNBT());
         nbt.putInt("energyTransfered", energyTransferedLastTick);
         return nbt;
     }
 
 	@Override
-    public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
-        CompoundNBT nbt = pkt.getTag();
+    public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt) {
+        CompoundTag nbt = pkt.getTag();
         holderOut.orElse(null).deserializeNBT(nbt.getCompound("Energy"));
         energyTransferedLastTick = nbt.getInt("energyTransfered");
     }
 
     @Override
-    public void deserializeNBT(BlockState state, CompoundNBT nbt) {
-        super.deserializeNBT(state, nbt);
+    public void deserializeNBT(CompoundTag nbt) {
+        super.deserializeNBT(nbt);
         holderOut.orElse(null).deserializeNBT(nbt.getCompound("Energy"));
         energyTransferedLastTick = nbt.getInt("energyTransfered");
     }
 
     @Nonnull
     @Override
-    public CompoundNBT serializeNBT() {
-        CompoundNBT nbt = super.serializeNBT();
+    public CompoundTag serializeNBT() {
+        CompoundTag nbt = super.serializeNBT();
         nbt.put("Energy", holderOut.orElse(null).serializeNBT());
         nbt.putInt("energyTransfered", energyTransferedLastTick);
         return nbt;
     }
 
     @Override
-    public CompoundNBT save(CompoundNBT nbtParam) {
-        CompoundNBT nbt = super.save(nbtParam);
+    public CompoundTag save(CompoundTag nbtParam) {
+        CompoundTag nbt = super.save(nbtParam);
         nbt.put("Energy", holderOut.orElse(null).serializeNBT());
         nbt.putInt("energyTransfered", energyTransferedLastTick);
         return nbt;
     }
 
     @Override
-    public void load(BlockState state, CompoundNBT nbt) {
-        super.load(state, nbt);
+    public void load(CompoundTag nbt) {
+        super.load(nbt);
         holderOut.orElse(null).deserializeNBT(nbt.getCompound("Energy"));
         energyTransferedLastTick = nbt.getInt("energyTransfered");
     }
@@ -96,15 +98,18 @@ public class TileFEMeter extends TilePeripheral implements ITickableTileEntity {
         return super.getCapability(capability, facing);
     }
 
-	@Override
-	public void tick() {
-        if (!this.getLevel().isClientSide) {
-            energyStoredLastTick = holderOut.orElse(null).getEnergyStored();
-            holderOut.orElse(null).sendEnergy();
-            energyTransferedLastTick = energyStoredLastTick - holderOut.orElse(null).getEnergyStored();
+    public static <T extends BlockEntity> void tick(Level level, BlockPos blockPos, BlockState blockState, T tile) {
+        if(!(tile instanceof TileFEMeter))
+            return;
 
-            if (holderOut.orElse(null).resetUpdated()) {
-                this.getLevel().sendBlockUpdated(worldPosition, this.getLevel().getBlockState(worldPosition), this.getLevel().getBlockState(worldPosition), 2);
+        TileFEMeter blockEntity = (TileFEMeter) tile;
+        if (!blockEntity.getLevel().isClientSide) {
+            blockEntity.energyStoredLastTick = blockEntity.holderOut.orElse(null).getEnergyStored();
+            blockEntity.holderOut.orElse(null).sendEnergy();
+            blockEntity.energyTransferedLastTick = blockEntity.energyStoredLastTick - blockEntity.holderOut.orElse(null).getEnergyStored();
+
+            if (blockEntity.holderOut.orElse(null).resetUpdated()) {
+                blockEntity.getLevel().sendBlockUpdated(blockEntity.worldPosition, blockEntity.getLevel().getBlockState(blockEntity.worldPosition), blockEntity.getLevel().getBlockState(blockEntity.worldPosition), 2);
             }
         }
     }
@@ -132,4 +137,6 @@ public class TileFEMeter extends TilePeripheral implements ITickableTileEntity {
     public int getMaxTransferRate() {
         return holderOut.orElse(null).getMaxTransferRate();
     }
+
+
 }

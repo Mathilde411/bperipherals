@@ -4,7 +4,7 @@ import fr.bastoup.bperipherals.peripherals.cryprographicaccelerator.BlockCryptog
 import fr.bastoup.bperipherals.peripherals.database.BlockDatabase;
 import fr.bastoup.bperipherals.peripherals.femeter.BlockFEMeter;
 import fr.bastoup.bperipherals.peripherals.magcardreader.BlockMagCardReader;
-import net.minecraft.block.Block;
+import net.minecraft.world.level.block.Block;
 
 import java.util.ArrayList;
 import java.util.List;

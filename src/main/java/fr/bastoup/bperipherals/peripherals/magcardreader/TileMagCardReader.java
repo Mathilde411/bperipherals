@@ -4,12 +4,14 @@ import dan200.computercraft.api.peripheral.IComputerAccess;
 import fr.bastoup.bperipherals.init.ModItems;
 import fr.bastoup.bperipherals.init.ModTileTypes;
 import fr.bastoup.bperipherals.util.tiles.TilePeripheral;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.BlockRayTraceResult;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.BlockHitResult;
 
 import java.util.UUID;
 
@@ -19,8 +21,8 @@ public class TileMagCardReader extends TilePeripheral {
     private String label = null;
     private BlockStateMagCardReader state = BlockStateMagCardReader.READ;
 
-    public TileMagCardReader() {
-        super(ModTileTypes.MAG_CARD_READER);
+    public TileMagCardReader(BlockPos pos, BlockState state) {
+        super(ModTileTypes.MAG_CARD_READER, pos, state);
         this.setPeripheral(new PeripheralMagCardReader(this));
     }
 
@@ -79,10 +81,10 @@ public class TileMagCardReader extends TilePeripheral {
     }
 
     @Override
-    public ActionResultType onActivate(PlayerEntity player, Hand hand, BlockRayTraceResult hit) {
+    public InteractionResult onActivate(Player player, InteractionHand hand, BlockHitResult hit) {
         ItemStack item = player.getItemInHand(hand);
         if (!item.isEmpty() && item.getItem().equals(ModItems.MAG_CARD)) {
-            CompoundNBT tag = item.getOrCreateTag();
+            CompoundTag tag = item.getOrCreateTag();
             if (!tag.contains("uuid")) {
                 tag.putString("uuid", UUID.randomUUID().toString());
             }
@@ -108,9 +110,9 @@ public class TileMagCardReader extends TilePeripheral {
                     magSwipe(tag.getString("uuid"), null);
                 }
             }
-            return ActionResultType.SUCCESS;
+            return InteractionResult.SUCCESS;
         }
-        return ActionResultType.PASS;
+        return InteractionResult.PASS;
     }
 
 

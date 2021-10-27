@@ -1,10 +1,10 @@
 package fr.bastoup.bperipherals.util;
 
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.server.ServerWorld;
-import net.minecraft.world.storage.DimensionSavedDataManager;
-import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
+import net.minecraft.core.Direction;
+import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.level.storage.DimensionDataStorage;
+import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
 
 import java.io.File;
 import java.lang.reflect.Field;
@@ -16,7 +16,7 @@ public class Util {
 	private static final Field folderField;
 
 	static {
-		folderField = ObfuscationReflectionHelper.findField(DimensionSavedDataManager.class, "field_215759_d");
+		folderField = ObfuscationReflectionHelper.findField(DimensionDataStorage.class, "f_78146_");
 		folderField.setAccessible(true);
 	}
 
@@ -122,8 +122,8 @@ public class Util {
 		}
 	}
 
-	public static Path getWorldFolder(ServerWorld world) throws IllegalAccessException {
-		DimensionSavedDataManager savedData = world.getDataStorage();
+	public static Path getWorldFolder(ServerLevel world) throws IllegalAccessException {
+		DimensionDataStorage savedData = world.getDataStorage();
 		return ((File) folderField.get(savedData)).toPath().getParent();
 	}
 

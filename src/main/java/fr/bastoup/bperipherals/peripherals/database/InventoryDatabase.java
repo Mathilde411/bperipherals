@@ -2,9 +2,9 @@ package fr.bastoup.bperipherals.peripherals.database;
 
 import dan200.computercraft.api.ComputerCraftAPI;
 import fr.bastoup.bperipherals.init.ModItems;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.world.World;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.items.ItemStackHandler;
 
 import javax.annotation.Nonnull;
@@ -24,11 +24,11 @@ public class InventoryDatabase extends ItemStackHandler {
 
         ItemStack item = super.stacks.get(0);
         if (item.getItem().equals(ModItems.DATABASE_DISK)) {
-            CompoundNBT tag = item.getOrCreateTag();
+            CompoundTag tag = item.getOrCreateTag();
             if (!force && tag.contains("databaseId")) {
                 return null;
             }
-            World world = database.getLevel();
+            Level world = database.getLevel();
             int id = ComputerCraftAPI.createUniqueNumberedSaveDir(world, "database");
             if (id >= 0)
                 tag.putInt("databaseId", id);
@@ -41,7 +41,7 @@ public class InventoryDatabase extends ItemStackHandler {
     public Integer getDiskId(boolean force) {
         ItemStack item = super.stacks.get(0);
         if (item.getItem().equals(ModItems.DATABASE_DISK)) {
-            CompoundNBT tag = item.getTag();
+            CompoundTag tag = item.getTag();
             if (tag != null && tag.contains("databaseId")) {
                 return tag.getInt("databaseId");
             } else {
@@ -59,7 +59,7 @@ public class InventoryDatabase extends ItemStackHandler {
     public String getDiskName() {
         ItemStack item = super.stacks.get(0);
         if (item.getItem().equals(ModItems.DATABASE_DISK)) {
-            CompoundNBT tag = item.getOrCreateTag();
+            CompoundTag tag = item.getOrCreateTag();
             if (tag.contains("label")) {
                 return tag.getString("label");
             }
@@ -70,7 +70,7 @@ public class InventoryDatabase extends ItemStackHandler {
     public void setDiskName(String name) {
         ItemStack item = super.stacks.get(0);
         if (item.getItem().equals(ModItems.DATABASE_DISK)) {
-            CompoundNBT tag = item.getOrCreateTag();
+            CompoundTag tag = item.getOrCreateTag();
             tag.putString("label", name);
         }
     }

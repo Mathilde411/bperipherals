@@ -2,7 +2,7 @@ package fr.bastoup.bperipherals.init;
 
 import fr.bastoup.bperipherals.items.ItemDatabaseDisk;
 import fr.bastoup.bperipherals.items.ItemMagCard;
-import net.minecraft.item.Item;
+import net.minecraft.world.item.Item;
 
 import java.util.ArrayList;
 import java.util.List;

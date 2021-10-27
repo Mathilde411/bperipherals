@@ -1,14 +1,14 @@
 package fr.bastoup.bperipherals.util.blocks;
 
 import fr.bastoup.bperipherals.util.Util;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.material.Material;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.BlockItemUseContext;
-import net.minecraft.state.DirectionProperty;
-import net.minecraft.state.StateContainer;
-import net.minecraft.util.Direction;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.block.state.properties.DirectionProperty;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.core.Direction;
 
 import javax.annotation.Nonnull;
 
@@ -26,15 +26,15 @@ public abstract class BlockOrientable extends BlockBase {
 
     @Override
     @Nonnull
-	public BlockState getStateForPlacement(BlockItemUseContext context) {
-        PlayerEntity player = context.getPlayer();
+	public BlockState getStateForPlacement(BlockPlaceContext context) {
+        Player player = context.getPlayer();
         if (player != null)
             return defaultBlockState().setValue(FACING, Util.getOppositeFacing(player.getDirection()));
         return defaultBlockState().setValue(FACING, Util.getOppositeFacing(Direction.NORTH));
     }
 
     @Override
-    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder) {
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(FACING);
         super.createBlockStateDefinition(builder);
     }

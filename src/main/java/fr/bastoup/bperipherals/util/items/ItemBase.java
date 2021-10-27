@@ -2,7 +2,7 @@ package fr.bastoup.bperipherals.util.items;
 
 import fr.bastoup.bperipherals.init.ModItems;
 import fr.bastoup.bperipherals.util.BPeripheralsProperties;
-import net.minecraft.item.Item;
+import net.minecraft.world.item.Item;
 
 public class ItemBase extends Item {
     public ItemBase(String name) {

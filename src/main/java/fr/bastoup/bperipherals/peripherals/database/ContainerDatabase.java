@@ -1,21 +1,21 @@
 package fr.bastoup.bperipherals.peripherals.database;
 
 import fr.bastoup.bperipherals.init.ModContainerTypes;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.items.SlotItemHandler;
 
 import javax.annotation.Nonnull;
 
-public class ContainerDatabase extends Container {
+public class ContainerDatabase extends AbstractContainerMenu {
 
     private final InventoryDatabase inventory;
 
-    public ContainerDatabase(int id, PlayerInventory player, InventoryDatabase inventory) {
+    public ContainerDatabase(int id, Inventory player, InventoryDatabase inventory) {
         super(ModContainerTypes.DATABASE, id);
         this.inventory = inventory;
         this.addSlot(new SlotItemHandler(inventory, 0, 80, 35));
@@ -32,17 +32,17 @@ public class ContainerDatabase extends Container {
 
     }
 
-    public ContainerDatabase(int i, PlayerInventory inventory, PacketBuffer buffer) {
+    public ContainerDatabase(int i, Inventory inventory, FriendlyByteBuf buffer) {
         this(i, inventory, new InventoryDatabase(null));
     }
 
-    public boolean canInteractWith(@Nonnull PlayerEntity player) {
+    public boolean canInteractWith(@Nonnull Player player) {
         return true;
     }
 
 
     @Nonnull
-    public ItemStack quickMoveStack(@Nonnull PlayerEntity player, int slotIndex) {
+    public ItemStack quickMoveStack(@Nonnull Player player, int slotIndex) {
         Slot slot = this.slots.get(slotIndex);
         if (slot != null && slot.hasItem()) {
             ItemStack existing = slot.getItem().copy();
@@ -73,7 +73,7 @@ public class ContainerDatabase extends Container {
     }
 
     @Override
-    public boolean stillValid(PlayerEntity p_75145_1_) {
+    public boolean stillValid(Player p_75145_1_) {
         return true;
     }
 }

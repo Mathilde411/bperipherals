@@ -1,11 +1,11 @@
 modLoader = "javafml"
-loaderVersion = "[35,37)"
+loaderVersion = "[37,)"
 license = "ComputerCraft Public License"
 issueTrackerURL = "https://github.com/BastouP411/bperipherals/issues"
 
 [[mods]]
 modId = "bperipherals"
-version = "1.1.3"
+version = "1.1.5"
 displayName = "BPeripherals"
 #updateJSONURL="http://myurl.me/"
 displayURL = "https://github.com/BastouP411/bperipherals/wiki"
@@ -19,13 +19,13 @@ authors = "BastouP"
 [[dependencies.bperipherals]]
     modId="forge"
     mandatory=true
-    versionRange="[35.1.16,37)"
+    versionRange="[37,)"
     ordering="NONE"
     side="BOTH"
 
 [[dependencies.bperipherals]]
     modId="computercraft"
     mandatory=true
-    versionRange="[1.95,)"
+    versionRange="[1.98,)"
     ordering="NONE"
     side="BOTH"

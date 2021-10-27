@@ -1,10 +1,10 @@
 package fr.bastoup.bperipherals.items;
 
 import fr.bastoup.bperipherals.util.items.ItemBase;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
 
 public class ItemMagCard extends ItemBase {
 
@@ -13,10 +13,10 @@ public class ItemMagCard extends ItemBase {
     }
 
     @Override
-    public ITextComponent getName(ItemStack stack) {
-        CompoundNBT tag = stack.getOrCreateTag();
+    public Component getName(ItemStack stack) {
+        CompoundTag tag = stack.getOrCreateTag();
         if (tag.contains("label")) {
-            return new StringTextComponent(tag.getString("label"));
+            return new TextComponent(tag.getString("label"));
         } else {
             return super.getName(stack);
         }

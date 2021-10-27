@@ -3,17 +3,17 @@ package fr.bastoup.bperipherals.peripherals.femeter;
 import fr.bastoup.bperipherals.util.BlockFaces;
 import fr.bastoup.bperipherals.util.Config;
 import fr.bastoup.bperipherals.util.Util;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.core.Direction;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.IEnergyStorage;
 
-public class EnergyFEMeterOut implements IEnergyStorage, INBTSerializable<CompoundNBT> {
+public class EnergyFEMeterOut implements IEnergyStorage, INBTSerializable<CompoundTag> {
 
 	private int energyStored;
 	private int transferRate;
@@ -94,10 +94,10 @@ public class EnergyFEMeterOut implements IEnergyStorage, INBTSerializable<Compou
 	public void sendEnergy() {
 		Direction rightFace = tile.getFacingOfFace(BlockFaces.RIGHT);
 		BlockPos pos = Util.getNextPos(tile.getBlockPos(), rightFace);
-		World world = tile.getLevel();
+		Level world = tile.getLevel();
 		if (world == null)
 			return;
-		TileEntity targetTile = world.getBlockEntity(pos);
+		BlockEntity targetTile = world.getBlockEntity(pos);
 		if (targetTile != null && ((ICapabilityProvider) targetTile).getCapability(CapabilityEnergy.ENERGY, Util.getOppositeFacing(rightFace)).isPresent()) {
 			IEnergyStorage cap = ((ICapabilityProvider) targetTile).getCapability(CapabilityEnergy.ENERGY, Util.getOppositeFacing(rightFace)).orElse(null);
 			if (cap.canReceive()) {
@@ -122,15 +122,15 @@ public class EnergyFEMeterOut implements IEnergyStorage, INBTSerializable<Compou
 	}
 
 	@Override
-	public CompoundNBT serializeNBT() {
-		CompoundNBT nbt = new CompoundNBT();
+	public CompoundTag serializeNBT() {
+		CompoundTag nbt = new CompoundTag();
 		nbt.putInt("transferRate", transferRate);
 		nbt.putInt("energyStored", energyStored);
 		return nbt;
 	}
 
 	@Override
-	public void deserializeNBT(CompoundNBT nbt) {
+	public void deserializeNBT(CompoundTag nbt) {
 		transferRate = nbt.getInt("transferRate");
 		energyStored = nbt.getInt("energyStored");
 	}

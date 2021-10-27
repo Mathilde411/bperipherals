@@ -9,6 +9,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
+import net.minecraftforge.fml.event.config.ModConfigEvent;
 
 @Mod.EventBusSubscriber(modid = BPeripheralsProperties.MODID)
 public class Config {
@@ -33,12 +34,12 @@ public class Config {
     }
 
     @SubscribeEvent
-    public static void sync(ModConfig.Loading event) {
+    public static void sync(ModConfigEvent.Loading event) {
         sync();
     }
 
     @SubscribeEvent
-    public static void sync(ModConfig.Reloading event) {
+    public static void sync(ModConfigEvent.Reloading event) {
         // Ensure file configs are reloaded. Forge should probably do this, so worth checking in the future.
         CommentedConfig config = event.getConfig().getConfigData();
         if (config instanceof CommentedFileConfig) ((CommentedFileConfig) config).load();

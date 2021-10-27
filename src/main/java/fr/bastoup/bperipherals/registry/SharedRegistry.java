@@ -5,10 +5,10 @@ import fr.bastoup.bperipherals.init.ModContainerTypes;
 import fr.bastoup.bperipherals.init.ModItems;
 import fr.bastoup.bperipherals.init.ModTileTypes;
 import fr.bastoup.bperipherals.util.BPeripheralsProperties;
-import net.minecraft.block.Block;
-import net.minecraft.inventory.container.ContainerType;
-import net.minecraft.item.Item;
-import net.minecraft.tileentity.TileEntityType;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.inventory.MenuType;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -28,7 +28,7 @@ public class SharedRegistry {
     }
 
     @SubscribeEvent
-    public static void onTileRegister(RegistryEvent.Register<TileEntityType<?>> event) {
+    public static void onTileRegister(RegistryEvent.Register<BlockEntityType<?>> event) {
         event.getRegistry().registerAll(
                 ModTileTypes.FE_METER,
                 ModTileTypes.DATABASE,
@@ -38,7 +38,7 @@ public class SharedRegistry {
     }
 
     @SubscribeEvent
-    public static void onContainerRegister(RegistryEvent.Register<ContainerType<?>> event) {
+    public static void onContainerRegister(RegistryEvent.Register<MenuType<?>> event) {
         event.getRegistry().registerAll(
                 ModContainerTypes.DATABASE
         );

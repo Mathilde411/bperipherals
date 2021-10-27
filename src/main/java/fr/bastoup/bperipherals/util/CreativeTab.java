@@ -1,14 +1,14 @@
 package fr.bastoup.bperipherals.util;
 
 import fr.bastoup.bperipherals.init.ModBlocks;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nonnull;
 
-public class CreativeTab extends ItemGroup {
+public class CreativeTab extends CreativeModeTab {
     public CreativeTab() {
         super("bperipherals");
     }

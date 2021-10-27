@@ -1,15 +1,22 @@
 package fr.bastoup.bperipherals.util.blocks;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.material.Material;
-import net.minecraft.item.BlockItemUseContext;
-import net.minecraft.state.BooleanProperty;
-import net.minecraft.state.StateContainer;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.EntityBlock;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.block.state.StateDefinition;
 
 import javax.annotation.Nonnull;
 
-public abstract class BlockPeripheral extends BlockOrientable {
+import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
+
+public abstract class BlockPeripheral extends BlockOrientable  implements EntityBlock {
 
     public static final BooleanProperty SWITCHED_ON = BooleanProperty.create("on");
 
@@ -23,12 +30,12 @@ public abstract class BlockPeripheral extends BlockOrientable {
 
     @Override
     @Nonnull
-    public BlockState getStateForPlacement(BlockItemUseContext context) {
+    public BlockState getStateForPlacement(BlockPlaceContext context) {
         return super.getStateForPlacement(context).setValue(SWITCHED_ON, false);
     }
 
     @Override
-    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder) {
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(SWITCHED_ON);
         super.createBlockStateDefinition(builder);
     }

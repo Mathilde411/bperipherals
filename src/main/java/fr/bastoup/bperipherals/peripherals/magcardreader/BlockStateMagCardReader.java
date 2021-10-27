@@ -1,8 +1,8 @@
 package fr.bastoup.bperipherals.peripherals.magcardreader;
 
-import net.minecraft.util.IStringSerializable;
+import net.minecraft.util.StringRepresentable;
 
-public enum BlockStateMagCardReader implements IStringSerializable {
+public enum BlockStateMagCardReader implements StringRepresentable {
     WRITE,
     WAIT,
     READ,

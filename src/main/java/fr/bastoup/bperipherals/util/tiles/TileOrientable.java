@@ -3,13 +3,15 @@ package fr.bastoup.bperipherals.util.tiles;
 import fr.bastoup.bperipherals.util.BlockFaces;
 import fr.bastoup.bperipherals.util.Util;
 import fr.bastoup.bperipherals.util.blocks.BlockOrientable;
-import net.minecraft.tileentity.TileEntityType;
-import net.minecraft.util.Direction;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.core.Direction;
+import net.minecraft.world.level.block.state.BlockState;
 
 public abstract class TileOrientable extends TileBase {
 
-	public TileOrientable(TileEntityType<?> tileEntityTypeIn) {
-		super(tileEntityTypeIn);
+	public TileOrientable(BlockEntityType<? extends TileBase> tileType, BlockPos pos, BlockState state) {
+		super(tileType, pos, state);
 	}
 
 	public BlockFaces getFaceOfFacing(Direction face) {

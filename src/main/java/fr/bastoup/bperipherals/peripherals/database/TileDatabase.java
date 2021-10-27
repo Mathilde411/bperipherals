@@ -3,31 +3,33 @@ package fr.bastoup.bperipherals.peripherals.database;
 import dan200.computercraft.api.peripheral.IComputerAccess;
 import fr.bastoup.bperipherals.init.ModItems;
 import fr.bastoup.bperipherals.init.ModTileTypes;
+import fr.bastoup.bperipherals.peripherals.femeter.TileFEMeter;
 import fr.bastoup.bperipherals.util.Util;
 import fr.bastoup.bperipherals.util.blocks.BlockOrientable;
 import fr.bastoup.bperipherals.util.tiles.TilePeripheral;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.INamedContainerProvider;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.tileentity.ITickableTileEntity;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Direction;
-import net.minecraft.util.Hand;
-import net.minecraft.util.INameable;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.core.Direction;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.Nameable;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.fml.network.NetworkHooks;
+import net.minecraftforge.fmllegacy.network.NetworkHooks;
 import net.minecraftforge.items.CapabilityItemHandler;
 
 import javax.annotation.Nonnull;
@@ -37,23 +39,23 @@ import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-public class TileDatabase extends TilePeripheral implements INamedContainerProvider, ITickableTileEntity, INameable {
+public class TileDatabase extends TilePeripheral implements MenuProvider, Nameable {
 	private final InventoryDatabase databaseInventory = new InventoryDatabase(this);
 
 	private final LazyOptional<InventoryDatabase> holderInv = LazyOptional.of(() -> databaseInventory);
 
 	private boolean lastDiskState = false;
-	private ITextComponent customName;
+	private Component customName;
 
-	public TileDatabase() {
-		super(ModTileTypes.DATABASE);
+	public TileDatabase(BlockPos pos, BlockState state) {
+		super(ModTileTypes.DATABASE, pos, state);
 		this.setPeripheral(new PeripheralDatabase(this));
 	}
 
 
 	public Path getDatabaseFile() throws IllegalAccessException, IOException {
 
-		Path worldDirectory = Util.getWorldFolder((ServerWorld) this.getLevel());
+		Path worldDirectory = Util.getWorldFolder((ServerLevel) this.getLevel());
 
 		Integer databaseId = databaseInventory.getDiskId(true);
 		if (databaseId == null || databaseId == -1) {
@@ -111,72 +113,45 @@ public class TileDatabase extends TilePeripheral implements INamedContainerProvi
 
 
 	@Override
-	public void deserializeNBT(@Nonnull BlockState state, @Nonnull CompoundNBT nbt) {
-		super.deserializeNBT(state, nbt);
+	public void deserializeNBT(@Nonnull CompoundTag nbt) {
+		super.deserializeNBT(nbt);
 		databaseInventory.deserializeNBT(nbt.getCompound("databaseInventory"));
-		setCustomName(nbt.contains("customName") ? ITextComponent.Serializer.fromJson(nbt.getString("CustomName")) : null);
+		setCustomName(nbt.contains("customName") ? Component.Serializer.fromJson(nbt.getString("CustomName")) : null);
 	}
 
 	@Nonnull
 	@Override
-	public CompoundNBT serializeNBT() {
-		CompoundNBT nbt = super.serializeNBT();
+	public CompoundTag serializeNBT() {
+		CompoundTag nbt = super.serializeNBT();
 		nbt.put("databaseInventory", databaseInventory.serializeNBT());
 		if (this.customName != null) {
-			nbt.putString("customName", ITextComponent.Serializer.toJson(this.customName));
+			nbt.putString("customName", Component.Serializer.toJson(this.customName));
 		}
 		return nbt;
 	}
 
 	@Override
-	public CompoundNBT save(CompoundNBT nbtParam) {
-		CompoundNBT nbt = super.save(nbtParam);
+	public CompoundTag save(CompoundTag nbtParam) {
+		CompoundTag nbt = super.save(nbtParam);
 		nbt.put("databaseInventory", databaseInventory.serializeNBT());
 		if (this.customName != null) {
-			nbt.putString("customName", ITextComponent.Serializer.toJson(this.customName));
+			nbt.putString("customName", Component.Serializer.toJson(this.customName));
 		}
 		return nbt;
 	}
 
 	@Override
-	public void load(BlockState state, CompoundNBT nbt) {
-		super.load(state, nbt);
+	public void load(CompoundTag nbt) {
+		super.load(nbt);
 		databaseInventory.deserializeNBT(nbt.getCompound("databaseInventory"));
-		setCustomName(nbt.contains("customName") ? ITextComponent.Serializer.fromJson(nbt.getString("CustomName")) : null);
+		setCustomName(nbt.contains("customName") ? Component.Serializer.fromJson(nbt.getString("CustomName")) : null);
 	}
 
-	@Override
-	public void tick() {
-		if (this.getLevel() == null)
-			return;
 
-		if (!this.getLevel().getBlockState(worldPosition).hasProperty(BlockDatabase.DISK_INSERTED))
-			return;
-
-		if (isDiskInserted() && !lastDiskState) {
-
-			this.getLevel().setBlockAndUpdate(worldPosition, this.getBlockState().setValue(BlockDatabase.DISK_INSERTED, true));
-
-			synchronized (computers) {
-				for (IComputerAccess c : computers) {
-					c.queueEvent("database_attached", c.getAttachmentName(), getDatabaseId(), getDatabaseName());
-				}
-			}
-		} else if (!isDiskInserted() && lastDiskState) {
-			this.getLevel().setBlockAndUpdate(worldPosition, this.getBlockState().setValue(BlockDatabase.DISK_INSERTED, false));
-
-			synchronized (computers) {
-				for (IComputerAccess c : computers) {
-					c.queueEvent("database_detached", c.getAttachmentName());
-				}
-			}
-		}
-		lastDiskState = isDiskInserted();
-	}
 
 	@Nullable
 	@Override
-	public Container createMenu(int id, @Nonnull PlayerInventory inventory, @Nonnull PlayerEntity player) {
+	public AbstractContainerMenu createMenu(int id, @Nonnull Inventory inventory, @Nonnull Player player) {
 		return new ContainerDatabase(id, inventory, databaseInventory);
 	}
 
@@ -211,27 +186,27 @@ public class TileDatabase extends TilePeripheral implements INamedContainerProvi
 	}
 
 	@Override
-	public ActionResultType onActivate(PlayerEntity player, Hand hand, BlockRayTraceResult hit) {
+	public InteractionResult onActivate(Player player, InteractionHand hand, BlockHitResult hit) {
 		if (this.getLevel() == null)
-			return ActionResultType.PASS;
+			return InteractionResult.PASS;
 
 		if (player.isCrouching()) {
 			ItemStack item = player.getItemInHand(hand);
 			if (item.isEmpty()) {
-				return ActionResultType.PASS;
+				return InteractionResult.PASS;
 			} else {
 				if (!this.getLevel().isClientSide && !databaseInventory.isDiskInserted() && item.getItem().equals(ModItems.DATABASE_DISK)) {
 					ItemStack ret = databaseInventory.insertItem(0, item, false);
 					player.setItemInHand(hand, ret);
 				}
-				return ActionResultType.SUCCESS;
+				return InteractionResult.SUCCESS;
 			}
 		} else {
 			if (!this.level.isClientSide) {
-				NetworkHooks.openGui((ServerPlayerEntity) player, this, worldPosition);
+				NetworkHooks.openGui((ServerPlayer) player, this, worldPosition);
 			}
 
-			return ActionResultType.SUCCESS;
+			return InteractionResult.SUCCESS;
 		}
 	}
 
@@ -240,22 +215,56 @@ public class TileDatabase extends TilePeripheral implements INamedContainerProvi
 	}
 
 	@Nullable
-	public ITextComponent getCustomName() {
+	public Component getCustomName() {
 		return this.customName;
 	}
 
-	public void setCustomName(ITextComponent customName) {
+	public void setCustomName(Component customName) {
 		this.customName = customName;
 	}
 
 	@Nonnull
-	public ITextComponent getName() {
-		return this.customName != null ? this.customName : new TranslationTextComponent(this.getBlockState().getBlock().getDescriptionId());
+	public Component getName() {
+		return this.customName != null ? this.customName : new TranslatableComponent(this.getBlockState().getBlock().getDescriptionId());
 	}
 
 	@Nonnull
 	@Override
-	public ITextComponent getDisplayName() {
+	public Component getDisplayName() {
 		return getName();
+	}
+
+	public static <T extends BlockEntity> void tick(Level level, BlockPos blockPos, BlockState blockState, T tile) {
+
+		if(!(tile instanceof TileDatabase))
+			return;
+
+		TileDatabase blockEntity = (TileDatabase) tile;
+
+		if (blockEntity.getLevel() == null)
+			return;
+
+		if (!blockEntity.getLevel().getBlockState(blockEntity.worldPosition).hasProperty(BlockDatabase.DISK_INSERTED))
+			return;
+
+		if (blockEntity.isDiskInserted() && !blockEntity.lastDiskState) {
+
+			blockEntity.getLevel().setBlockAndUpdate(blockEntity.worldPosition, blockEntity.getBlockState().setValue(BlockDatabase.DISK_INSERTED, true));
+
+			synchronized (blockEntity.computers) {
+				for (IComputerAccess c : blockEntity.computers) {
+					c.queueEvent("database_attached", c.getAttachmentName(), blockEntity.getDatabaseId(), blockEntity.getDatabaseName());
+				}
+			}
+		} else if (!blockEntity.isDiskInserted() && blockEntity.lastDiskState) {
+			blockEntity.getLevel().setBlockAndUpdate(blockEntity.worldPosition, blockEntity.getBlockState().setValue(BlockDatabase.DISK_INSERTED, false));
+
+			synchronized (blockEntity.computers) {
+				for (IComputerAccess c : blockEntity.computers) {
+					c.queueEvent("database_detached", c.getAttachmentName());
+				}
+			}
+		}
+		blockEntity.lastDiskState = blockEntity.isDiskInserted();
 	}
 }
