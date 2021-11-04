@@ -1,6 +1,6 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "bperipherals:items/mag_card/mag_card"
+    "layer0": "bperipherals:item/mag_card/mag_card"
   }
 }

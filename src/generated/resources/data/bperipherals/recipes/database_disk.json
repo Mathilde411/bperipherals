@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " R ",
+    "IDI",
+    " I "
+  ],
+  "key": {
+    "D": {
+      "item": "computercraft:disk"
+    },
+    "R": {
+      "tag": "forge:dusts/redstone"
+    },
+    "I": {
+      "tag": "forge:ingots/iron"
+    }
+  },
+  "result": {
+    "item": "bperipherals:database_disk"
+  }
+}

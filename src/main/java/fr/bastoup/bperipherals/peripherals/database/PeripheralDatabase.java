@@ -6,6 +6,7 @@ import dan200.computercraft.api.peripheral.IPeripheral;
 import fr.bastoup.bperipherals.BPeripherals;
 import fr.bastoup.bperipherals.beans.SQLColumn;
 import fr.bastoup.bperipherals.database.DBUtil;
+import fr.bastoup.bperipherals.database.SQLiteType;
 import fr.bastoup.bperipherals.util.peripherals.BPeripheral;
 
 import javax.annotation.Nonnull;
@@ -20,12 +21,12 @@ public class PeripheralDatabase extends BPeripheral {
 
     public static final String TYPE = "database";
 
-    public PeripheralDatabase(TileDatabase tile) {
+    public PeripheralDatabase(BlockEntityDatabase tile) {
         super(tile);
     }
 
-    private TileDatabase getTile() {
-        return ((TileDatabase) tile);
+    private BlockEntityDatabase getTile() {
+        return ((BlockEntityDatabase) blockEntity);
     }
 
     protected static void checkName(String name) throws LuaException {
@@ -43,7 +44,7 @@ public class PeripheralDatabase extends BPeripheral {
 
     @Override
     public boolean equals(IPeripheral other) {
-        return this == other || other instanceof PeripheralDatabase && ((PeripheralDatabase) other).tile == tile;
+        return this == other || other instanceof PeripheralDatabase && ((PeripheralDatabase) other).blockEntity == blockEntity;
     }
 
     @LuaFunction
@@ -94,30 +95,6 @@ public class PeripheralDatabase extends BPeripheral {
         return new CCPreparedStatement(sql, this);
     }
 
-    @LuaFunction
-    public final CCInsert prepareInsert(String tableName) throws LuaException {
-        checkName(tableName);
-        return new CCInsert(tableName, this);
-    }
-
-    @LuaFunction
-    public final CCTableCreator prepareTableCreation(String tableName) throws LuaException {
-        checkName(tableName);
-        return new CCTableCreator(tableName, this);
-    }
-
-    @LuaFunction
-    public final CCSelect prepareSelect(String tableName) throws LuaException {
-        checkName(tableName);
-        return new CCSelect(tableName, this);
-    }
-
-    @LuaFunction
-    public final CCDelete prepareDelete(String tableName) throws LuaException {
-        checkName(tableName);
-        return new CCDelete(tableName, this);
-    }
-
     public static class CCPreparedStatement {
         private final PeripheralDatabase database;
         private final String sql;
@@ -136,7 +113,7 @@ public class PeripheralDatabase extends BPeripheral {
         }
 
         private void peripheralStillValid() throws LuaException {
-            TileDatabase t = (TileDatabase) database.getTarget();
+            BlockEntityDatabase t = (BlockEntityDatabase) database.getTarget();
             if (t == null || t.isRemoved())
                 throw new LuaException("The peripheral does not exist.");
         }
@@ -160,7 +137,7 @@ public class PeripheralDatabase extends BPeripheral {
         @LuaFunction
         public final Map<String, Object> execute() throws LuaException {
             peripheralStillValid();
-            TileDatabase tile = (TileDatabase) database.getTarget();
+            BlockEntityDatabase tile = (BlockEntityDatabase) database.getTarget();
             Path file;
 
             if (tile == null)
@@ -188,256 +165,164 @@ public class PeripheralDatabase extends BPeripheral {
         }
     }
 
-    public static class CCTableCreator {
+    public static class CCOrmModel {
         private final PeripheralDatabase database;
-        private final String tableName;
-        private final Map<String, SQLColumn> columns = new HashMap<>();
-        private String primaryKey = null;
-        private boolean autoIncrement = false;
+        private final String modelName;
+        private final Map<String, Column> columns;
+        private final String primaryKey;
 
-        CCTableCreator(String tableName, PeripheralDatabase database) {
-            this.tableName = tableName;
+        public CCOrmModel(PeripheralDatabase database, String modelName, Map<String, Column> columns, String primaryKey) {
             this.database = database;
+            this.modelName = modelName;
+            this.columns = columns;
+            this.primaryKey = primaryKey;
         }
 
         private void peripheralStillValid() throws LuaException {
-            TileDatabase t = (TileDatabase) database.getTarget();
+            BlockEntityDatabase t = (BlockEntityDatabase) database.getTarget();
             if (t == null || t.isRemoved())
                 throw new LuaException("The peripheral does not exist.");
         }
 
-        @LuaFunction
-        public final CCTableCreator addColumn(String name, String type) throws LuaException {
-            return addColumn(name, type, false, false);
+        private void init() {
 
         }
 
-        @LuaFunction
-        public final CCTableCreator addColumn(String name, String type, boolean notNull, boolean isUnique) throws LuaException {
-            checkName(name);
+        public static class Builder {
+            private final PeripheralDatabase database;
+            private final String modelName;
+            private final Map<String, Column> columns;
+            private String primaryKey = null;
 
-            if (!(type.equalsIgnoreCase("text") || type.equalsIgnoreCase("integer") ||
-                    type.equalsIgnoreCase("real") || type.equalsIgnoreCase("blob"))) {
-                throw new LuaException("Type must be either TEXT, INTEGER, REAL or BLOB.");
+
+            Builder(PeripheralDatabase database, String modelName) {
+                this.database = database;
+                this.modelName = modelName;
+                this.columns = new HashMap<>();
             }
 
-            columns.put(name.toLowerCase(), new SQLColumn(name, type, notNull, isUnique));
-            return this;
-        }
-
-        @LuaFunction
-        public final CCTableCreator removeColumn(String name) {
-            if (primaryKey.equalsIgnoreCase(name)) {
-                primaryKey = null;
-                autoIncrement = false;
-            }
-            columns.remove(name.toLowerCase());
-            return this;
-        }
-
-        @LuaFunction
-        public final CCTableCreator setPrimaryKey(String name, boolean autoIncrement) throws LuaException {
-            if (!columns.containsKey(name.toLowerCase())) {
-                throw new LuaException("This column does not exist.");
+            private void peripheralStillValid() throws LuaException {
+                BlockEntityDatabase t = (BlockEntityDatabase) database.getTarget();
+                if (t == null || t.isRemoved())
+                    throw new LuaException("The peripheral does not exist.");
             }
 
-            if (autoIncrement && !columns.get(name.toLowerCase()).getType().equalsIgnoreCase("integer")) {
-                throw new LuaException("This column is not INTEGER. Cannot auto increment.");
+            @LuaFunction
+            public Builder addColumn(String columnName, String type) throws LuaException {
+                return addColumn(columnName, type, true, false, false);
             }
 
-            this.primaryKey = name.toLowerCase();
-            this.autoIncrement = autoIncrement;
-            return this;
-
-        }
-
-        @LuaFunction
-        public final Map<String, Object> execute() throws LuaException {
-            peripheralStillValid();
-            TileDatabase tile = (TileDatabase) database.getTarget();
-
-            if (tile == null)
-                throw new LuaException("Internal Error. Please send an issue if the problem persists.");
-
-            Path file;
-            try {
-                file = tile.getDatabaseFile();
-            } catch (IllegalAccessException | IOException e) {
-                e.printStackTrace();
-                throw new LuaException("Internal Error. Please send an issue if the problem persists.");
+            @LuaFunction
+            public Builder addColumn(String columnName, String type, boolean nullable) throws LuaException {
+                return addColumn(columnName, type, nullable, false, false);
             }
-            if (tile.isDiskInserted()) {
-                if (this.primaryKey == null) {
-                    if (columns.containsKey("id")) {
-                        throw new LuaException("Column id already exists, cannot create primary key.");
-                    }
-                    addColumn("id", "INTEGER");
-                    setPrimaryKey("id", true);
-                }
-                List<String> statements = new ArrayList<>();
-                for (String key : columns.keySet()) {
-                    SQLColumn col = columns.get(key);
-                    String statement = col.getName() + " " + col.getType();
-                    if (col.getName().equalsIgnoreCase(this.primaryKey)) {
-                        statement += " PRIMARY KEY" + (this.autoIncrement ? " AUTOINCREMENT" : "");
+
+            @LuaFunction
+            public Builder addColumn(String columnName, String type, boolean nullable, boolean primaryKey) throws LuaException {
+                return addColumn(columnName, type, nullable, primaryKey, false);
+            }
+
+            @LuaFunction
+            public Builder addColumn(String columnName, String strType, boolean nullable, boolean primaryKey, boolean autoIncrement) throws LuaException {
+                peripheralStillValid();
+
+                String name = columnName.strip();
+                if(name == null || name.isBlank())
+                    throw new LuaException("The column name must not be empty.");
+
+                if(columns.containsKey(name))
+                    throw new LuaException("A column named '" + name + "' already exists.");
+
+                SQLiteType type = SQLiteType.getType(strType);
+                if(type == null)
+                    throw new LuaException("A column named '" + name + "' already exists.");
+
+                if(primaryKey) {
+                    if(this.primaryKey == null) {
+                        this.primaryKey = columnName;
                     } else {
-                        statement += (col.isUnique() ? " UNIQUE" : "") + (col.isNotNull() ? " NOT NULL" : "");
+                        throw new LuaException(this.primaryKey + " is already a primary key.");
                     }
-                    statements.add(statement);
                 }
-                String sql = "CREATE TABLE " + tableName + " (" + String.join(", ", statements) + ");";
-                return DBUtil.factorizeResults(BPeripherals.getDBFactory().executeSQL(file.toString(), sql));
-            } else {
-                throw new LuaException("There is no disk inserted");
+
+                columns.put(columnName, new Column(columnName, type, nullable, primaryKey, autoIncrement));
+                return this;
+            }
+
+            @LuaFunction
+            public CCOrmModel build() throws LuaException {
+                peripheralStillValid();
+                
+                if(primaryKey == null) {
+                    if(columns.containsKey("id")) {
+                        throw new LuaException("A column named 'id' already exists. Cannot create primary key.");
+                    } else {
+                        columns.put("id", new Column("id", SQLiteType.INTEGER, false, true, true));
+                    }
+                }
+                CCOrmModel model = new CCOrmModel(database, modelName, columns, primaryKey == null ? "id": primaryKey);
+                model.init();
+                return model;
             }
         }
-    }
 
-    public static class CCInsert {
-        private final PeripheralDatabase database;
-        private final String tableName;
-        private final Map<String, Object> values = new HashMap<>();
+        public static class Column {
+            private final String columnName;
+            private final SQLiteType type;
+            private final boolean primaryKey;
+            private final boolean nullable;
+            private final boolean autoIncrement;
 
-        CCInsert(String tableName, PeripheralDatabase database) {
-            this.tableName = tableName;
-            this.database = database;
-        }
-
-        private void peripheralStillValid() throws LuaException {
-            TileDatabase t = (TileDatabase) database.getTarget();
-            if (t == null || t.isRemoved())
-                throw new LuaException("The peripheral does not exist.");
-        }
-
-        @LuaFunction
-        public final CCInsert addValue(String column, Object value) {
-            values.put(column.toLowerCase(), value);
-            return this;
-        }
-
-        @LuaFunction
-        public final CCInsert removeValue(String column) {
-            values.remove(column);
-            return this;
-        }
-
-
-        @LuaFunction
-        public final Map<String, Object> execute() throws LuaException {
-            peripheralStillValid();
-            TileDatabase tile = (TileDatabase) database.getTarget();
-            if (tile != null && tile.isDiskInserted()) {
-                List<String> s = new ArrayList<>();
-                Map<Integer, Object> obj = new HashMap<>();
-                String[] keys = values.keySet().toArray(new String[0]);
-                for (int i = 1; i <= values.size(); i++) {
-                    obj.put(i, values.get(keys[i - 1]));
-                    s.add("?");
-                }
-                String sql = "INSERT INTO " + tableName + " (" + String.join(", ", values.keySet()) +
-                        ") VALUES (" + String.join(", ", s) + ");";
-
-                return new CCPreparedStatement(sql, obj, database).execute();
-            } else {
-                throw new LuaException("There is no disk inserted");
+            Column(String columnName, SQLiteType type) {
+                this.type = type;
+                this.columnName = columnName;
+                this.primaryKey = false;
+                this.nullable = false;
+                this.autoIncrement = false;
             }
-        }
-    }
 
-    public static class CCSelect {
-        private final PeripheralDatabase database;
-        private final String tableName;
-        private final Map<String, Object> conditions = new HashMap<>();
-
-        CCSelect(String tableName, PeripheralDatabase database) {
-            this.tableName = tableName;
-            this.database = database;
-        }
-
-        private void peripheralStillValid() throws LuaException {
-            TileDatabase t = (TileDatabase) database.getTarget();
-            if (t == null || t.isRemoved())
-                throw new LuaException("The peripheral does not exist.");
-        }
-
-        @LuaFunction
-        public final CCSelect addCondition(String column, Object value) {
-            conditions.put(column.toLowerCase(), value);
-            return this;
-        }
-
-        @LuaFunction
-        public final CCSelect removeCondition(String column) {
-            conditions.remove(column);
-            return this;
-        }
-
-
-        @LuaFunction
-        public final Map<String, Object> execute() throws LuaException {
-            peripheralStillValid();
-            TileDatabase tile = (TileDatabase) database.getTarget();
-            if (tile != null && tile.isDiskInserted()) {
-                Map<Integer, Object> obj = new HashMap<>();
-                List<String> k = new ArrayList<>();
-                String[] keys = conditions.keySet().toArray(new String[0]);
-                for (int i = 1; i <= conditions.size(); i++) {
-                    obj.put(i, conditions.get(keys[i - 1]));
-                    k.add(keys[i - 1] + " = ?");
-                }
-                String sql = "SELECT * FROM " + tableName + (conditions.isEmpty() ? "" : " WHERE " + String.join(" AND ", k)) + ";";
-                return new CCPreparedStatement(sql, obj, database).execute();
-            } else {
-                throw new LuaException("There is no disk inserted");
+            Column(String columnName, SQLiteType type, boolean nullable) {
+                this.type = type;
+                this.columnName = columnName;
+                this.nullable = nullable;
+                this.primaryKey = false;
+                this.autoIncrement = false;
             }
-        }
-    }
 
-    public static class CCDelete {
-        private final PeripheralDatabase database;
-        private final String tableName;
-        private final Map<String, Object> conditions = new HashMap<>();
+            Column(String columnName, SQLiteType type, boolean nullable, boolean primaryKey) {
+                this.type = type;
+                this.columnName = columnName;
+                this.nullable = nullable;
+                this.primaryKey = primaryKey;
+                this.autoIncrement = false;
+            }
 
-        CCDelete(String tableName, PeripheralDatabase database) {
-            this.tableName = tableName;
-            this.database = database;
-        }
+            Column(String columnName, SQLiteType type, boolean nullable, boolean primaryKey, boolean autoIncrement) {
+                this.type = type;
+                this.columnName = columnName;
+                this.nullable = nullable;
+                this.primaryKey = primaryKey;
+                this.autoIncrement = autoIncrement;
+            }
 
-        private void peripheralStillValid() throws LuaException {
-            TileDatabase t = (TileDatabase) database.getTarget();
-            if (t == null || t.isRemoved())
-                throw new LuaException("The peripheral does not exist.");
-        }
+            public String getColumnName() {
+                return columnName;
+            }
 
-        @LuaFunction
-        public final CCDelete addCondition(String column, Object value) {
-            conditions.put(column.toLowerCase(), value);
-            return this;
-        }
+            public SQLiteType getType() {
+                return type;
+            }
 
-        @LuaFunction
-        public final CCDelete removeCondition(String column) {
-            conditions.remove(column);
-            return this;
-        }
+            public boolean isPrimaryKey() {
+                return primaryKey;
+            }
 
+            public boolean isNullable() {
+                return nullable;
+            }
 
-        @LuaFunction
-        public final Map<String, Object> execute() throws LuaException {
-            peripheralStillValid();
-            TileDatabase tile = (TileDatabase) database.getTarget();
-            if (tile != null && tile.isDiskInserted()) {
-                Map<Integer, Object> obj = new HashMap<>();
-                List<String> k = new ArrayList<>();
-                String[] keys = conditions.keySet().toArray(new String[0]);
-                for (int i = 1; i <= conditions.size(); i++) {
-                    obj.put(i, conditions.get(keys[i - 1]));
-                    k.add(keys[i - 1] + " = ?");
-                }
-                String sql = "DELETE FROM " + tableName + (conditions.isEmpty() ? "" : " WHERE " + String.join(" AND ", k)) + ";";
-                return new CCPreparedStatement(sql, obj, database).execute();
-            } else {
-                throw new LuaException("There is no disk inserted");
+            public boolean isAutoIncrement() {
+                return autoIncrement;
             }
         }
     }

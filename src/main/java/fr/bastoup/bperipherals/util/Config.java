@@ -19,6 +19,7 @@ public class Config {
     public static int MAX_MAG_CARD_DATA = 32;
     public static int MAX_FE_METER_TRANSFER_RATE = 32000;
     public static int FE_METER_INTERNAL_BUFFER_SIZE = 64000;
+    public static double MAX_KEYBOARD_INTERACT_DISTANCE = 25.0;
 
     public static void setup() {
         ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, ConfigValues.serverSpecs);
@@ -30,6 +31,7 @@ public class Config {
         MAX_MAG_CARD_DATA = ConfigValues.MAX_MAG_CARD_DATA.get();
         MAX_FE_METER_TRANSFER_RATE = ConfigValues.MAX_FE_METER_TRANSFER_RATE.get();
         FE_METER_INTERNAL_BUFFER_SIZE = ConfigValues.FE_METER_INTERNAL_BUFFER_SIZE.get();
+        MAX_KEYBOARD_INTERACT_DISTANCE= ConfigValues.MAX_KEYBOARD_INTERACT_DISTANCE.get();
 
     }
 
@@ -61,6 +63,9 @@ public class Config {
         protected static final ForgeConfigSpec.ConfigValue<Integer> MAX_FE_METER_TRANSFER_RATE;
         protected static final ForgeConfigSpec.ConfigValue<Integer> FE_METER_INTERNAL_BUFFER_SIZE;
 
+        //Keyboard
+        public static final ForgeConfigSpec.ConfigValue<Double> MAX_KEYBOARD_INTERACT_DISTANCE;
+
         protected static final ForgeConfigSpec serverSpecs;
 
         static {
@@ -84,6 +89,10 @@ public class Config {
             FE_METER_INTERNAL_BUFFER_SIZE = builder
                     .comment("The size of FE Meters internal energy buffer.")
                     .defineInRange("fe_meter_internal_buffer_size", Config.FE_METER_INTERNAL_BUFFER_SIZE, 1, Integer.MAX_VALUE);
+
+            MAX_KEYBOARD_INTERACT_DISTANCE = builder
+                    .comment("The maximal distance at which the keyboard works.")
+                    .defineInRange("max_keyboard_interact_distance", Config.MAX_KEYBOARD_INTERACT_DISTANCE, 1, Double.MAX_VALUE);
 
             serverSpecs = builder.build();
 

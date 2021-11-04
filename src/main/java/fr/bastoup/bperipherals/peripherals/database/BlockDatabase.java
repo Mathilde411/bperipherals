@@ -1,11 +1,9 @@
 package fr.bastoup.bperipherals.peripherals.database;
 
 import fr.bastoup.bperipherals.init.ModTileTypes;
-import fr.bastoup.bperipherals.peripherals.femeter.TileFEMeter;
 import fr.bastoup.bperipherals.util.BPeripheralsProperties;
 import fr.bastoup.bperipherals.util.blocks.BlockPeripheral;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
@@ -17,14 +15,11 @@ import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.core.BlockPos;
-import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.fml.common.Mod;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-
-import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
 
 @Mod.EventBusSubscriber(
         modid = BPeripheralsProperties.MODID
@@ -51,14 +46,14 @@ public class BlockDatabase extends BlockPeripheral {
 
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
-        return type == ModTileTypes.DATABASE ? TileDatabase::tick : null;
+        return type == ModTileTypes.DATABASE ? BlockEntityDatabase::tick : null;
     }
 
     public void onBlockPlacedBy(@Nonnull Level world, @Nonnull BlockPos pos, @Nonnull BlockState state, LivingEntity placer, ItemStack stack) {
         if (stack.hasCustomHoverName()) {
             BlockEntity tileentity = world.getBlockEntity(pos);
-            if (tileentity instanceof TileDatabase) {
-                ((TileDatabase) tileentity).setCustomName(stack.getDisplayName());
+            if (tileentity instanceof BlockEntityDatabase) {
+                ((BlockEntityDatabase) tileentity).setCustomName(stack.getDisplayName());
             }
         }
 

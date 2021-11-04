@@ -1,0 +1,34 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "bperipherals:database_disk"
+    ]
+  },
+  "criteria": {
+    "has_database": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "bperipherals:database"
+            ]
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "bperipherals:database_disk"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_database",
+      "has_the_recipe"
+    ]
+  ]
+}

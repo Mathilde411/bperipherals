@@ -3,7 +3,7 @@ package fr.bastoup.bperipherals.util.blocks;
 import fr.bastoup.bperipherals.init.ModBlocks;
 import fr.bastoup.bperipherals.init.ModItems;
 import fr.bastoup.bperipherals.util.BPeripheralsProperties;
-import fr.bastoup.bperipherals.util.tiles.TileBase;
+import fr.bastoup.bperipherals.util.tiles.BlockEntityBase;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Material;
@@ -19,8 +19,6 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.level.Level;
 
 import javax.annotation.Nonnull;
-
-import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
 
 public class BlockBase extends Block {
 
@@ -47,8 +45,8 @@ public class BlockBase extends Block {
 			BlockEntity tile = world.getBlockEntity(pos);
 			super.onRemove(block, world, pos, replace, bool);
 			world.removeBlockEntity(pos);
-			if (tile instanceof TileBase) {
-				((TileBase) tile).destroy();
+			if (tile instanceof BlockEntityBase) {
+				((BlockEntityBase) tile).destroy();
 			}
 
 		}
@@ -60,7 +58,7 @@ public class BlockBase extends Block {
 	@Override
 	public final InteractionResult use(@Nonnull BlockState state, Level world, @Nonnull BlockPos pos, @Nonnull Player player, @Nonnull InteractionHand hand, @Nonnull BlockHitResult hit) {
 		BlockEntity tile = world.getBlockEntity(pos);
-		return tile instanceof TileBase ? ((TileBase) tile).onActivate(player, hand, hit) : InteractionResult.PASS;
+		return tile instanceof BlockEntityBase ? ((BlockEntityBase) tile).onActivate(player, hand, hit) : InteractionResult.PASS;
 	}
 
 }

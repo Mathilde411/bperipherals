@@ -6,5 +6,16 @@
   "block.bperipherals.mag_card_reader": "Mag Card Reader",
 
   "item.bperipherals.database_disk": "Database Disk",
-  "item.bperipherals.mag_card": "Mag Card"
+  "item.bperipherals.database_disk.label": "Label: %s",
+
+  "item.bperipherals.keyboard": "Keyboard",
+  "item.bperipherals.keyboard.bound": "The keyboard is bound to a computer !",
+  "item.bperipherals.keyboard.cleared": "The keyboard is not bound to a computer anymore !",
+  "item.bperipherals.keyboard.connected": "You can type text. Press [ESC] to return to game.",
+  "item.bperipherals.keyboard.broken": "The bound computer is broken.",
+  "item.bperipherals.keyboard.toofar": "You are too far away from the bound computer.",
+  "item.bperipherals.keyboard.label": "Linked computer at X:%s Y:%s Z:%s",
+
+  "item.bperipherals.mag_card": "Mag Card",
+  "item.bperipherals.mag_card.label": "Label: %s"
 }

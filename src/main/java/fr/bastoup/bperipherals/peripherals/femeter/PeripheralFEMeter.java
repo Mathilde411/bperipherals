@@ -8,12 +8,12 @@ public class PeripheralFEMeter extends BPeripheral {
 
     public static final String TYPE = "fe_meter";
 
-    public PeripheralFEMeter(TileFEMeter tile) {
+    public PeripheralFEMeter(BlockEntityFEMeter tile) {
         super(tile);
     }
 
-    private TileFEMeter getTile() {
-        return ((TileFEMeter) tile);
+    private BlockEntityFEMeter getTile() {
+        return ((BlockEntityFEMeter) blockEntity);
     }
 
     @Override
@@ -23,8 +23,8 @@ public class PeripheralFEMeter extends BPeripheral {
 
     @Override
     public boolean equals(IPeripheral other) {
-        return other instanceof PeripheralFEMeter && ((TileFEMeter) other.getTarget()).getLevel().equals(tile.getLevel()) &&
-                ((TileFEMeter) other.getTarget()).getBlockPos().equals(tile.getBlockPos());
+        return other instanceof PeripheralFEMeter && ((BlockEntityFEMeter) other.getTarget()).getLevel().equals(blockEntity.getLevel()) &&
+                ((BlockEntityFEMeter) other.getTarget()).getBlockPos().equals(blockEntity.getBlockPos());
     }
 
     @LuaFunction

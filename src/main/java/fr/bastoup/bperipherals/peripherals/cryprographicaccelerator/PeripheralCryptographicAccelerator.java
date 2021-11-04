@@ -26,7 +26,7 @@ public class PeripheralCryptographicAccelerator extends BPeripheral {
     public static final String TYPE = "cryptographic_accelerator";
 
 
-    public PeripheralCryptographicAccelerator(TileCryptographicAccelerator tile) {
+    public PeripheralCryptographicAccelerator(BlockEntityCryptographicAccelerator tile) {
         super(tile);
     }
 
@@ -38,7 +38,7 @@ public class PeripheralCryptographicAccelerator extends BPeripheral {
 
     @Override
     public boolean equals(@Nullable IPeripheral other) {
-        return this == other || other instanceof PeripheralCryptographicAccelerator && ((PeripheralCryptographicAccelerator) other).tile == tile;
+        return this == other || other instanceof PeripheralCryptographicAccelerator && ((PeripheralCryptographicAccelerator) other).blockEntity == blockEntity;
     }
 
     @LuaFunction

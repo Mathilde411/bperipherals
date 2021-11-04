@@ -11,9 +11,9 @@ import javax.annotation.Nonnull;
 
 public class InventoryDatabase extends ItemStackHandler {
 
-    private final TileDatabase database;
+    private final BlockEntityDatabase database;
 
-    public InventoryDatabase(TileDatabase database) {
+    public InventoryDatabase(BlockEntityDatabase database) {
         super(1);
         this.database = database;
     }

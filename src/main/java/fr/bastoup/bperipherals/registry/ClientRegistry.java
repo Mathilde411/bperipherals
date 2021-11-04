@@ -2,6 +2,8 @@ package fr.bastoup.bperipherals.registry;
 
 import fr.bastoup.bperipherals.init.ModContainerTypes;
 import fr.bastoup.bperipherals.peripherals.database.GUIDatabase;
+import fr.bastoup.bperipherals.peripherals.keyboard.GUIKeyboard;
+import fr.bastoup.bperipherals.peripherals.keyboard.KeyboardContainer;
 import fr.bastoup.bperipherals.util.BPeripheralsProperties;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraftforge.api.distmarker.Dist;
@@ -17,5 +19,6 @@ public class ClientRegistry {
     @SubscribeEvent
     public static void setupClient(FMLClientSetupEvent event) {
         MenuScreens.register(ModContainerTypes.DATABASE, GUIDatabase::new);
+        MenuScreens.<KeyboardContainer, GUIKeyboard>register(ModContainerTypes.KEYBOARD, GUIKeyboard::new);
     }
 }

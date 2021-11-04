@@ -1,0 +1,64 @@
+{
+  "variants": {
+    "disk=false,facing=north,on=false": {
+      "model": "bperipherals:block/database_off_empty"
+    },
+    "disk=true,facing=north,on=false": {
+      "model": "bperipherals:block/database_off_inserted"
+    },
+    "disk=false,facing=south,on=false": {
+      "model": "bperipherals:block/database_off_empty",
+      "y": 180
+    },
+    "disk=true,facing=south,on=false": {
+      "model": "bperipherals:block/database_off_inserted",
+      "y": 180
+    },
+    "disk=false,facing=west,on=false": {
+      "model": "bperipherals:block/database_off_empty",
+      "y": 270
+    },
+    "disk=true,facing=west,on=false": {
+      "model": "bperipherals:block/database_off_inserted",
+      "y": 270
+    },
+    "disk=false,facing=east,on=false": {
+      "model": "bperipherals:block/database_off_empty",
+      "y": 90
+    },
+    "disk=true,facing=east,on=false": {
+      "model": "bperipherals:block/database_off_inserted",
+      "y": 90
+    },
+    "disk=false,facing=north,on=true": {
+      "model": "bperipherals:block/database_on_empty"
+    },
+    "disk=true,facing=north,on=true": {
+      "model": "bperipherals:block/database_on_inserted"
+    },
+    "disk=false,facing=south,on=true": {
+      "model": "bperipherals:block/database_on_empty",
+      "y": 180
+    },
+    "disk=true,facing=south,on=true": {
+      "model": "bperipherals:block/database_on_inserted",
+      "y": 180
+    },
+    "disk=false,facing=west,on=true": {
+      "model": "bperipherals:block/database_on_empty",
+      "y": 270
+    },
+    "disk=true,facing=west,on=true": {
+      "model": "bperipherals:block/database_on_inserted",
+      "y": 270
+    },
+    "disk=false,facing=east,on=true": {
+      "model": "bperipherals:block/database_on_empty",
+      "y": 90
+    },
+    "disk=true,facing=east,on=true": {
+      "model": "bperipherals:block/database_on_inserted",
+      "y": 90
+    }
+  }
+}

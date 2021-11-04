@@ -1,0 +1,9 @@
+{
+  "parent": "minecraft:block/orientable_with_bottom",
+  "textures": {
+    "side": "bperipherals:block/generic/machine_side",
+    "front": "bperipherals:block/fe_meter/fe_meter_front_off",
+    "bottom": "bperipherals:block/generic/machine_bottom",
+    "top": "bperipherals:block/generic/machine_top"
+  }
+}

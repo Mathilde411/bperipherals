@@ -1,0 +1,34 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "bperipherals:mag_card"
+    ]
+  },
+  "criteria": {
+    "has_mag_card_reader": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "bperipherals:mag_card_reader"
+            ]
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "bperipherals:mag_card"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_mag_card_reader",
+      "has_the_recipe"
+    ]
+  ]
+}

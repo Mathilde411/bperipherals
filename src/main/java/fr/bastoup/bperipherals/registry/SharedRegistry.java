@@ -40,7 +40,8 @@ public class SharedRegistry {
     @SubscribeEvent
     public static void onContainerRegister(RegistryEvent.Register<MenuType<?>> event) {
         event.getRegistry().registerAll(
-                ModContainerTypes.DATABASE
+                ModContainerTypes.DATABASE,
+                ModContainerTypes.KEYBOARD
         );
     }
 }

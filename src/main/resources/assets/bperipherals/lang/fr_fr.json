@@ -6,5 +6,16 @@
   "block.bperipherals.mag_card_reader": "Lecteur de Cartes Magnétiques",
 
   "item.bperipherals.database_disk": "Disque de Base de Données",
-  "item.bperipherals.mag_card": "Carte Magnétique"
+  "item.bperipherals.database_disk.database_name": "Label: %s",
+
+  "item.bperipherals.keyboard": "Clavier",
+  "item.bperipherals.keyboard.bound": "Le clavier lié à un ordinateur !",
+  "item.bperipherals.keyboard.cleared": "Le clavier n'est plus lié à un ordinateur !",
+  "item.bperipherals.keyboard.connected": "Vous pouvez taper du texte. Appuyez sur [ESC] pour retourner au jeu.",
+  "item.bperipherals.keyboard.broken": "L'ordinateur est cassé.",
+  "item.bperipherals.keyboard.toofar": "Vous êtes trop loin de l'ordinateur lié.",
+  "item.bperipherals.keyboard.label": "Ordinateur lié en X:%s Y:%s Z:%s",
+
+  "item.bperipherals.mag_card": "Carte Magnétique",
+  "item.bperipherals.mag_card.label": "Label: %s"
 }

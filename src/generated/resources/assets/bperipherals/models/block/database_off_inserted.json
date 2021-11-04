@@ -1,0 +1,9 @@
+{
+  "parent": "minecraft:block/orientable_with_bottom",
+  "textures": {
+    "side": "bperipherals:block/database/database_side",
+    "front": "bperipherals:block/database/database_front_off_inserted",
+    "bottom": "bperipherals:block/generic/machine_bottom",
+    "top": "bperipherals:block/generic/machine_top"
+  }
+}

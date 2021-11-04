@@ -2,32 +2,32 @@ package fr.bastoup.bperipherals.util.peripherals;
 
 import dan200.computercraft.api.peripheral.IComputerAccess;
 import dan200.computercraft.api.peripheral.IPeripheral;
-import fr.bastoup.bperipherals.util.tiles.TilePeripheral;
+import fr.bastoup.bperipherals.util.tiles.BlockEntityPeripheral;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 public abstract class BPeripheral implements IPeripheral {
 
-    protected TilePeripheral tile;
+    protected BlockEntityPeripheral blockEntity;
 
-    public BPeripheral(TilePeripheral tile) {
-        this.tile = tile;
+    public BPeripheral(BlockEntityPeripheral tile) {
+        this.blockEntity = tile;
     }
 
     @Override
     public void attach(@Nonnull IComputerAccess computer) {
-        tile.addComputer(computer);
+        blockEntity.addComputer(computer);
     }
 
     @Override
     public void detach(@Nonnull IComputerAccess computer) {
-        tile.removeComputer(computer);
+        blockEntity.removeComputer(computer);
     }
 
     @Nullable
     @Override
     public Object getTarget() {
-        return tile;
+        return blockEntity;
     }
 }

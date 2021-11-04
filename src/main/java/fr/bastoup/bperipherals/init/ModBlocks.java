@@ -12,8 +12,8 @@ import java.util.List;
 public class ModBlocks {
     public static final List<Block> BLOCKS = new ArrayList<>();
 
-    public static final Block FE_METER = new BlockFEMeter();
-    public static final Block DATABASE = new BlockDatabase();
-    public static final Block CRYPTOGRAPHIC_ACCELERATOR = new BlockCryptographicAccelerator();
-    public static final Block MAG_CARD_READER = new BlockMagCardReader();
+    public static final BlockFEMeter FE_METER = new BlockFEMeter();
+    public static final BlockDatabase DATABASE = new BlockDatabase();
+    public static final BlockCryptographicAccelerator CRYPTOGRAPHIC_ACCELERATOR = new BlockCryptographicAccelerator();
+    public static final BlockMagCardReader MAG_CARD_READER = new BlockMagCardReader();
 }

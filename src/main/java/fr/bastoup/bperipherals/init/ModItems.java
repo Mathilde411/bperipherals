@@ -1,6 +1,7 @@
 package fr.bastoup.bperipherals.init;
 
 import fr.bastoup.bperipherals.items.ItemDatabaseDisk;
+import fr.bastoup.bperipherals.items.ItemKeyboard;
 import fr.bastoup.bperipherals.items.ItemMagCard;
 import net.minecraft.world.item.Item;
 
@@ -12,4 +13,5 @@ public class ModItems {
 
     public static final Item DATABASE_DISK = new ItemDatabaseDisk();
     public static final Item MAG_CARD = new ItemMagCard();
+    public static final Item KEYBOARD = new ItemKeyboard();
 }

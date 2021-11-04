@@ -1,0 +1,45 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "bperipherals:database"
+    ]
+  },
+  "criteria": {
+    "has_computer": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "tag": "computercraft:computer"
+          }
+        ]
+      }
+    },
+    "has_disk_drive": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "computercraft:disk_drive"
+            ]
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "bperipherals:database"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_computer",
+      "has_disk_drive",
+      "has_the_recipe"
+    ]
+  ]
+}

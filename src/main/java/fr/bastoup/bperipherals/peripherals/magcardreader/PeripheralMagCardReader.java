@@ -16,12 +16,12 @@ public class PeripheralMagCardReader extends BPeripheral {
 
     public static final String TYPE = "mag_card_reader";
 
-    public PeripheralMagCardReader(TileMagCardReader tile) {
+    public PeripheralMagCardReader(BlockEntityMagCardReader tile) {
         super(tile);
     }
 
-    private TileMagCardReader getTile() {
-        return ((TileMagCardReader) tile);
+    private BlockEntityMagCardReader getTile() {
+        return ((BlockEntityMagCardReader) blockEntity);
     }
 
     @Nonnull
@@ -32,8 +32,8 @@ public class PeripheralMagCardReader extends BPeripheral {
 
     @Override
     public boolean equals(@Nullable IPeripheral other) {
-        return other instanceof PeripheralMagCardReader && ((TileMagCardReader) other.getTarget()).getLevel().equals(tile.getLevel()) &&
-                ((TileMagCardReader) other.getTarget()).getBlockPos().equals(tile.getBlockPos());
+        return other instanceof PeripheralMagCardReader && ((BlockEntityMagCardReader) other.getTarget()).getLevel().equals(blockEntity.getLevel()) &&
+                ((BlockEntityMagCardReader) other.getTarget()).getBlockPos().equals(blockEntity.getBlockPos());
     }
 
     @LuaFunction

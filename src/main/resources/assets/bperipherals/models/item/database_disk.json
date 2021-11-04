@@ -1,6 +1,6 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "bperipherals:items/database_disk/database_disk"
+    "layer0": "bperipherals:item/database_disk/database_disk"
   }
 }

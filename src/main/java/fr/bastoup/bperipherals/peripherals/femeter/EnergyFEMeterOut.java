@@ -17,10 +17,10 @@ public class EnergyFEMeterOut implements IEnergyStorage, INBTSerializable<Compou
 
 	private int energyStored;
 	private int transferRate;
-	private final TileFEMeter tile;
+	private final BlockEntityFEMeter tile;
 	private boolean updated = false;
 
-	public EnergyFEMeterOut(TileFEMeter tileRFMeter) {
+	public EnergyFEMeterOut(BlockEntityFEMeter tileRFMeter) {
 		energyStored = 0;
 		transferRate = Config.MAX_FE_METER_TRANSFER_RATE;
 		tile = tileRFMeter;
