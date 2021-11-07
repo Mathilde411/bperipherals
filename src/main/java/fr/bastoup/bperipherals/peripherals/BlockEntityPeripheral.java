@@ -1,9 +1,9 @@
-package fr.bastoup.bperipherals.util.tiles;
+package fr.bastoup.bperipherals.peripherals;
 
 import dan200.computercraft.api.peripheral.IComputerAccess;
 import dan200.computercraft.shared.Capabilities;
-import fr.bastoup.bperipherals.util.blocks.BlockPeripheral;
-import fr.bastoup.bperipherals.util.peripherals.BPeripheral;
+import fr.bastoup.bperipherals.common.BlockEntityBase;
+import fr.bastoup.bperipherals.common.BlockEntityOrientable;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.core.Direction;

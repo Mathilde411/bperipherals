@@ -117,6 +117,7 @@ sourceSets.main.resources { srcDir 'src/generated/resources' }
 repositories {
     mavenCentral()
     maven { url 'https://squiddev.cc/maven/' }
+    maven { url 'https://modmaven.dev/' }
 }
 
 configurations {

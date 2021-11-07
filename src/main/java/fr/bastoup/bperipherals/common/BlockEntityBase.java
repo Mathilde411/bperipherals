@@ -1,4 +1,4 @@
-package fr.bastoup.bperipherals.util.tiles;
+package fr.bastoup.bperipherals.common;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.player.Player;

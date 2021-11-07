@@ -1,8 +1,7 @@
-package fr.bastoup.bperipherals.util.tiles;
+package fr.bastoup.bperipherals.common;
 
 import fr.bastoup.bperipherals.util.BlockFaces;
 import fr.bastoup.bperipherals.util.Util;
-import fr.bastoup.bperipherals.util.blocks.BlockOrientable;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.core.Direction;

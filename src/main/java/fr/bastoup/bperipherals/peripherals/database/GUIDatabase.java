@@ -2,7 +2,7 @@ package fr.bastoup.bperipherals.peripherals.database;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.systems.RenderSystem;
-import fr.bastoup.bperipherals.util.BPeripheralsProperties;
+import fr.bastoup.bperipherals.BPeripherals;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.resources.ResourceLocation;
@@ -12,7 +12,7 @@ import javax.annotation.Nonnull;
 
 
 public class GUIDatabase extends AbstractContainerScreen<ContainerDatabase> {
-    private static final ResourceLocation BACKGROUND = new ResourceLocation(BPeripheralsProperties.MODID, "textures/gui/database.png");
+    private static final ResourceLocation BACKGROUND = new ResourceLocation(BPeripherals.MOD_ID, "textures/gui/database.png");
 
     public GUIDatabase( ContainerDatabase container, Inventory player, Component title )
     {

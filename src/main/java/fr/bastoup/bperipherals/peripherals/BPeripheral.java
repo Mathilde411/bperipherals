@@ -1,8 +1,7 @@
-package fr.bastoup.bperipherals.util.peripherals;
+package fr.bastoup.bperipherals.peripherals;
 
 import dan200.computercraft.api.peripheral.IComputerAccess;
 import dan200.computercraft.api.peripheral.IPeripheral;
-import fr.bastoup.bperipherals.util.tiles.BlockEntityPeripheral;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

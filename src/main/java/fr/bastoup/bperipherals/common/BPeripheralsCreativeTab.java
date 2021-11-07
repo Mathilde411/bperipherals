@@ -1,4 +1,4 @@
-package fr.bastoup.bperipherals.util;
+package fr.bastoup.bperipherals.common;
 
 import fr.bastoup.bperipherals.init.ModBlocks;
 import net.minecraft.world.item.CreativeModeTab;
@@ -8,8 +8,8 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nonnull;
 
-public class CreativeTab extends CreativeModeTab {
-    public CreativeTab() {
+public class BPeripheralsCreativeTab extends CreativeModeTab {
+    public BPeripheralsCreativeTab() {
         super("bperipherals");
     }
 

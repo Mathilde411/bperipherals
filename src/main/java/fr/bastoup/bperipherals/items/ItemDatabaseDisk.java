@@ -1,7 +1,6 @@
 package fr.bastoup.bperipherals.items;
 
-import fr.bastoup.bperipherals.util.items.ItemBase;
-import net.minecraft.ChatFormatting;
+import fr.bastoup.bperipherals.common.ItemBase;
 import net.minecraft.network.chat.*;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;

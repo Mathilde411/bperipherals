@@ -1,7 +1,7 @@
 package fr.bastoup.bperipherals.peripherals.femeter;
 
 import fr.bastoup.bperipherals.init.ModTileTypes;
-import fr.bastoup.bperipherals.util.tiles.BlockEntityPeripheral;
+import fr.bastoup.bperipherals.peripherals.BlockEntityPeripheral;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;

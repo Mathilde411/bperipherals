@@ -2,7 +2,7 @@ package fr.bastoup.bperipherals.peripherals.femeter;
 
 import dan200.computercraft.api.lua.LuaFunction;
 import dan200.computercraft.api.peripheral.IPeripheral;
-import fr.bastoup.bperipherals.util.peripherals.BPeripheral;
+import fr.bastoup.bperipherals.peripherals.BPeripheral;
 
 public class PeripheralFEMeter extends BPeripheral {
 

@@ -4,17 +4,14 @@ import dan200.computercraft.api.lua.LuaException;
 import dan200.computercraft.api.lua.LuaFunction;
 import dan200.computercraft.api.peripheral.IPeripheral;
 import fr.bastoup.bperipherals.BPeripherals;
-import fr.bastoup.bperipherals.beans.SQLColumn;
 import fr.bastoup.bperipherals.database.DBUtil;
 import fr.bastoup.bperipherals.database.SQLiteType;
-import fr.bastoup.bperipherals.util.peripherals.BPeripheral;
+import fr.bastoup.bperipherals.peripherals.BPeripheral;
 
 import javax.annotation.Nonnull;
 import java.io.IOException;
 import java.nio.file.Path;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class PeripheralDatabase extends BPeripheral {
@@ -79,7 +76,7 @@ public class PeripheralDatabase extends BPeripheral {
         try {
             file = getTile().getDatabaseFile();
             if (getTile().isDiskInserted()) {
-                return DBUtil.factorizeResults(BPeripherals.getDBFactory().executeSQL(file.toString(), sql));
+                return DBUtil.factorizeResults(BPeripherals.DB_FACTORY.executeSQL(file.toString(), sql));
             } else {
                 throw new LuaException("There is no disk inserted");
             }
@@ -150,7 +147,7 @@ public class PeripheralDatabase extends BPeripheral {
                 throw new LuaException("Internal Error. Please send an issue if the problem persists.");
             }
             if (tile.isDiskInserted()) {
-                return DBUtil.factorizeResults(BPeripherals.getDBFactory().executePrepared(file.toString(), this));
+                return DBUtil.factorizeResults(BPeripherals.DB_FACTORY.executePrepared(file.toString(), this));
             } else {
                 throw new LuaException("There is no disk inserted");
             }

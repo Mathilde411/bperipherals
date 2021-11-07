@@ -1,8 +1,8 @@
 package fr.bastoup.bperipherals.peripherals.database;
 
+import fr.bastoup.bperipherals.BPeripherals;
 import fr.bastoup.bperipherals.init.ModTileTypes;
-import fr.bastoup.bperipherals.util.BPeripheralsProperties;
-import fr.bastoup.bperipherals.util.blocks.BlockPeripheral;
+import fr.bastoup.bperipherals.peripherals.BlockPeripheral;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -22,7 +22,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 @Mod.EventBusSubscriber(
-        modid = BPeripheralsProperties.MODID
+        modid = BPeripherals.MOD_ID
 )
 public class BlockDatabase extends BlockPeripheral {
 

@@ -5,8 +5,7 @@ import fr.bastoup.bperipherals.init.ModBlocks;
 import fr.bastoup.bperipherals.peripherals.database.BlockDatabase;
 import fr.bastoup.bperipherals.peripherals.magcardreader.BlockMagCardReader;
 import fr.bastoup.bperipherals.peripherals.magcardreader.BlockStateMagCardReader;
-import fr.bastoup.bperipherals.util.BPeripheralsProperties;
-import fr.bastoup.bperipherals.util.blocks.BlockPeripheral;
+import fr.bastoup.bperipherals.peripherals.BlockPeripheral;
 import net.minecraft.core.Direction;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.resources.ResourceLocation;
@@ -25,7 +24,7 @@ public class BlockModelProvider extends BlockStateProvider {
 
     public BlockModelProvider(DataGenerator generator, ExistingFileHelper existingFileHelper )
     {
-        super( generator, BPeripheralsProperties.MODID, existingFileHelper );
+        super( generator, BPeripherals.MOD_ID, existingFileHelper );
     }
 
     @Override

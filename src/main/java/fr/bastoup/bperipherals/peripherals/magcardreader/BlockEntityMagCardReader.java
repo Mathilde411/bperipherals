@@ -3,7 +3,7 @@ package fr.bastoup.bperipherals.peripherals.magcardreader;
 import dan200.computercraft.api.peripheral.IComputerAccess;
 import fr.bastoup.bperipherals.init.ModItems;
 import fr.bastoup.bperipherals.init.ModTileTypes;
-import fr.bastoup.bperipherals.util.tiles.BlockEntityPeripheral;
+import fr.bastoup.bperipherals.peripherals.BlockEntityPeripheral;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;

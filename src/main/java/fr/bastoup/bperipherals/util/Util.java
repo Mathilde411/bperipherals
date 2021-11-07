@@ -3,13 +3,18 @@ package fr.bastoup.bperipherals.util;
 import net.minecraft.core.Direction;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.storage.DimensionDataStorage;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
 
 import java.io.File;
 import java.lang.reflect.Field;
 import java.nio.ByteBuffer;
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Util {
 
@@ -130,6 +135,29 @@ public class Util {
 	public static byte[] getByteBufferArray(ByteBuffer buf) {
 		byte[] res = new byte[buf.remaining()];
 		buf.get(res, 0, res.length);
+		return res;
+	}
+
+	public static <T> boolean containsSameInstance(T item, List<T> search) {
+		for(T compare : search) {
+			if(compare == item)
+				return true;
+		}
+		return false;
+	}
+
+	public static <T> void addIfNotSameInstance(T item, List<T> list) {
+		if(!containsSameInstance(item, list)) {
+			list.add(item);
+		}
+	}
+
+	public static <T> List<T> getAllCapabilities(BlockEntity tile, Capability<T> capability) {
+		List<T> res = new ArrayList<>();
+		tile.getCapability(capability).ifPresent(res::add);
+		for(Direction dir : Direction.values()) {
+			tile.getCapability(capability, dir).ifPresent(resCap -> addIfNotSameInstance(resCap, res));
+		}
 		return res;
 	}
 }

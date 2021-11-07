@@ -1,10 +1,10 @@
 package fr.bastoup.bperipherals.registry;
 
+import fr.bastoup.bperipherals.BPeripherals;
 import fr.bastoup.bperipherals.init.ModBlocks;
 import fr.bastoup.bperipherals.init.ModContainerTypes;
 import fr.bastoup.bperipherals.init.ModItems;
 import fr.bastoup.bperipherals.init.ModTileTypes;
-import fr.bastoup.bperipherals.util.BPeripheralsProperties;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.Item;
@@ -14,7 +14,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 @Mod.EventBusSubscriber(
-        modid = BPeripheralsProperties.MODID
+        modid = BPeripherals.MOD_ID
 )
 public class SharedRegistry {
     @SubscribeEvent

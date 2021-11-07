@@ -1,9 +1,8 @@
-package fr.bastoup.bperipherals.util.blocks;
+package fr.bastoup.bperipherals.common;
 
+import fr.bastoup.bperipherals.BPeripherals;
 import fr.bastoup.bperipherals.init.ModBlocks;
 import fr.bastoup.bperipherals.init.ModItems;
-import fr.bastoup.bperipherals.util.BPeripheralsProperties;
-import fr.bastoup.bperipherals.util.tiles.BlockEntityBase;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Material;
@@ -24,10 +23,10 @@ public class BlockBase extends Block {
 
 	public BlockBase(String name, Material material) {
 		super(Properties.of(material));
-		setRegistryName(new ResourceLocation(BPeripheralsProperties.MODID, name));
+		setRegistryName(new ResourceLocation(BPeripherals.MOD_ID, name));
 
 		ModBlocks.BLOCKS.add(this);
-		ModItems.ITEMS.add(new BlockItem(this, new Item.Properties().tab(BPeripheralsProperties.CREATIVE_TAB)).setRegistryName(this.getRegistryName()));
+		ModItems.ITEMS.add(new BlockItem(this, new Item.Properties().tab(BPeripherals.CREATIVE_TAB)).setRegistryName(this.getRegistryName()));
 	}
 
 	public BlockBase(final Properties properties, String name) {
@@ -35,7 +34,7 @@ public class BlockBase extends Block {
 		setRegistryName(name);
 
 		ModBlocks.BLOCKS.add(this);
-		ModItems.ITEMS.add(new BlockItem(this, new Item.Properties().tab(BPeripheralsProperties.CREATIVE_TAB)).setRegistryName(this.getRegistryName()));
+		ModItems.ITEMS.add(new BlockItem(this, new Item.Properties().tab(BPeripherals.CREATIVE_TAB)).setRegistryName(this.getRegistryName()));
 	}
 
 	@Override

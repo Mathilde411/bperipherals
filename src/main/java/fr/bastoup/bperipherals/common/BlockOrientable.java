@@ -1,4 +1,4 @@
-package fr.bastoup.bperipherals.util.blocks;
+package fr.bastoup.bperipherals.common;
 
 import fr.bastoup.bperipherals.util.Util;
 import net.minecraft.world.level.block.Block;

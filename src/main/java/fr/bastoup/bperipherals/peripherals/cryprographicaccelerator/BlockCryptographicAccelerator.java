@@ -1,17 +1,13 @@
 package fr.bastoup.bperipherals.peripherals.cryprographicaccelerator;
 
 import fr.bastoup.bperipherals.init.ModTileTypes;
-import fr.bastoup.bperipherals.util.blocks.BlockPeripheral;
+import fr.bastoup.bperipherals.peripherals.BlockPeripheral;
 import net.minecraft.core.BlockPos;
-import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Material;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.BlockGetter;
 
 import javax.annotation.Nullable;
-
-import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
 
 public class BlockCryptographicAccelerator extends BlockPeripheral {
 

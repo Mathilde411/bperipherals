@@ -3,6 +3,7 @@ package fr.bastoup.bperipherals.util;
 
 import com.electronwill.nightconfig.core.CommentedConfig;
 import com.electronwill.nightconfig.core.file.CommentedFileConfig;
+import fr.bastoup.bperipherals.BPeripherals;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.common.ForgeConfigSpec.Builder;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -11,7 +12,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.config.ModConfigEvent;
 
-@Mod.EventBusSubscriber(modid = BPeripheralsProperties.MODID)
+@Mod.EventBusSubscriber(modid = BPeripherals.MOD_ID)
 public class Config {
 
     public static int MAX_DATABASE_SIZE = 1024;

@@ -1,20 +1,16 @@
 package fr.bastoup.bperipherals.items;
 
 import dan200.computercraft.shared.computer.blocks.BlockComputer;
-import dan200.computercraft.shared.computer.blocks.BlockComputerBase;
 import dan200.computercraft.shared.computer.blocks.TileComputer;
-import dan200.computercraft.shared.computer.blocks.TileComputerBase;
 import dan200.computercraft.shared.network.container.ComputerContainerData;
-import dan200.computercraft.shared.util.NBTUtil;
 import fr.bastoup.bperipherals.peripherals.keyboard.KeyboardMenuProvider;
 import fr.bastoup.bperipherals.util.Config;
-import fr.bastoup.bperipherals.util.items.ItemBase;
+import fr.bastoup.bperipherals.common.ItemBase;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
