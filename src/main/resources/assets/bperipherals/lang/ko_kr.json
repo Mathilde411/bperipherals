@@ -1,0 +1,21 @@
+{
+  "itemGroup.bperipherals": "컴퓨터크래프트: 기본 주변장치",
+  "block.bperipherals.fe_meter": "FE 미터",
+  "block.bperipherals.database": "데이터베이스",
+  "block.bperipherals.cryptographic_accelerator": "암호화 가속기",
+  "block.bperipherals.mag_card_reader": "자기 카드 판독기",
+
+  "item.bperipherals.database_disk": "데이터베이스 디스크",
+  "item.bperipherals.database_disk.label": "레이블: %s",
+
+  "item.bperipherals.keyboard": "키보드",
+  "item.bperipherals.keyboard.bound": "키보드는 컴퓨터에 바인딩되어 있습니다!",
+  "item.bperipherals.keyboard.cleared": "키보드는 더 이상 컴퓨터에 바인딩되지 않습니다!",
+  "item.bperipherals.keyboard.connected": "텍스트를 입력할 수 있습니다. [ESC]를 눌러 게임으로 돌아갑니다.",
+  "item.bperipherals.keyboard.broken": "바인딩된 컴퓨터가 고장 났습니다.",
+  "item.bperipherals.keyboard.toofar": "당신은 바인딩된 컴퓨터에서 너무 멀리 떨어져 있습니다.",
+  "item.bperipherals.keyboard.label": "X:%s Y:%s Z:%s에서 연결된 컴퓨터",
+
+  "item.bperipherals.mag_card": "자기 카드",
+  "item.bperipherals.mag_card.label": "레이블: %s"
+}
