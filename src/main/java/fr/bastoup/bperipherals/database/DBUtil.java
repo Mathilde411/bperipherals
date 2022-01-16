@@ -63,17 +63,10 @@ public class DBUtil {
         return ret;
     }
 
-    public static void closeAll(Statement statement, Connection con, ResultSet resultSet) {
+    public static void closeAll(Statement statement, ResultSet resultSet) {
         if (statement != null) {
             try {
                 statement.close();
-            } catch (SQLException ignore) {
-            }
-        }
-
-        if (con != null) {
-            try {
-                con.close();
             } catch (SQLException ignore) {
             }
         }

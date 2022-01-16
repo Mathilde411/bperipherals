@@ -8,10 +8,13 @@ import fr.bastoup.bperipherals.peripherals.database.PeripheralDatabase;
 import fr.bastoup.bperipherals.util.Config;
 
 import java.sql.*;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
 public class DBFactory {
     private static final String URL_PREFIX = "jdbc:sqlite:";
     private static final String URL_SUFFIX = "?limit_attached=0&page_size=1024&max_page_count=%d";
+    private final SortedMap<String, Connection> conn_map=new TreeMap<>();
 
     static {
         try {
@@ -27,7 +30,17 @@ public class DBFactory {
     }
 
     public Connection getConnection(String path) throws SQLException {
-        return DriverManager.getConnection(URL_PREFIX + path + String.format(URL_SUFFIX, Config.MAX_DATABASE_SIZE), null, null);
+        Connection conn=conn_map.get(path);
+        if(conn!=null && !conn.isClosed()){
+            return conn;
+        }
+        if(conn!=null) { //if closed remove it
+            conn_map.remove(path);
+            conn=null;
+        }
+        conn=DriverManager.getConnection(URL_PREFIX + path + String.format(URL_SUFFIX, Config.MAX_DATABASE_SIZE), null, null);
+        conn_map.put(path, conn);
+        return conn;
     }
 
     public SQLResult executeSQL(String path, String sql) {
@@ -46,11 +59,11 @@ public class DBFactory {
                 res = new UpdateResult(statement.getUpdateCount());
             }
             statement.close();
-            con.close();
+            //con.close();
         } catch (SQLException e) {
             res = new ErrorResult(e.getMessage());
         } finally {
-            DBUtil.closeAll(statement, con, resultSet);
+            DBUtil.closeAll(statement, resultSet);
         }
         return res;
     }
@@ -76,7 +89,7 @@ public class DBFactory {
         } catch (SQLException e) {
             res = new ErrorResult(e.getMessage());
         } finally {
-            DBUtil.closeAll(prepStatement, con, resultSet);
+            DBUtil.closeAll(prepStatement, resultSet);
         }
         return res;
     }
