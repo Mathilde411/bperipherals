@@ -12,7 +12,7 @@ apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 
-version = '1.1.4'
+version = '1.2.0'
 group = 'fr.bastoup.bperipherals' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = 'bperipherals'
 
@@ -108,8 +108,8 @@ dependencies {
     // The userdev artifact is a special name and will get all sorts of transformations applied to it.
     minecraft 'net.minecraftforge:forge:1.16.5-36.1.0'
 
-    shade (group: 'org.xerial', name: 'sqlite-jdbc', version: '3.34.0')
-    compile (group: 'org.xerial', name: 'sqlite-jdbc', version: '3.34.0')
+    shade   (group: 'org.xerial', name: 'sqlite-jdbc', version: '3.36.0.3')
+    compile (group: 'org.xerial', name: 'sqlite-jdbc', version: '3.36.0.3')
     compile fg.deobf(group: "org.squiddev", name: "cc-tweaked-1.16.4", version: "1.95.3")
     runtime fg.deobf(group: "mezz.jei", name: "jei-1.16.5", version: "7.6.1.75")
 
